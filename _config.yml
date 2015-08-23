@@ -1,0 +1,11 @@
+# Site settings
+title: Kail's Blog
+email: your-email@domain.com
+description: > # this means to ignore newlines until "baseurl:"
+    Description of my log
+baseurl: "" # the subpath of your site, e.g. /blog/
+url: "http://blog.kail.io" # the base hostname & protocol for your site
+github_username:  akail
+
+# Build settings
+markdown: kramdown
