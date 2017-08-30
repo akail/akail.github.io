@@ -9,7 +9,8 @@
         <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootswatch/3.3.7/journal/bootstrap.min.css"/>
 
 
-    <meta name="tags" content="off topic" />
+    <meta name="tags" content="security" />
+    <meta name="tags" content="raspberry pi" />
 
 </head>
 <body id="index" class="home">
@@ -54,8 +55,8 @@
 <section id="content" class="body">
   <header>
     <h2 class="entry-title">
-      <a href="/about-this-blog.html" rel="bookmark"
-         title="Permalink to About This Blog">About This Blog</a></h2>
+      <a href="/drafts/hardening-a-raspberry-pi.html" rel="bookmark"
+         title="Permalink to Hardening a Raspberry Pi">Hardening a Raspberry Pi</a></h2>
  
   </header>
   <footer class="post-info">
@@ -67,24 +68,86 @@
     </address>
   </footer><!-- /.post-info -->
   <div class="entry-content">
-    <p>Just a short introduction, this blog is my attempt at expanding my knowledge and experiment with full stack engineering.  I will cover a lot of different topcis on hardening, security, containers, databases, monitoring, orchestration, web servers, cloud services, home automation, and continuous delivery while trying to apply some of it to the development of this blog and other applications I am working on.</p>
-<p>As of this post this blog is built on the following stack:
- * Python 3.6 and Flask web framework
- * sqlite database (possibly postgres)
- * Centos 7
- * Nginx</p>
-<p>The source code is available here on github. The stack could sightly change in the future and I will make release posts as that happens.</p>
-<p>Thank you for visiting!  Hopefully comments will be implemented soon so until then you can email me to leave some feedback.</p>
+    <p>How to harden a raspbery pi. This all assumes that you have raspbian installed on your SD card already.</p>
+<p>Start off by resetting the raspberry user.  Don't worry too much about what this password is as we will be removing the user later on.</p>
+<div class="highlight"><pre><span></span>passwd
+</pre></div>
+
+
+<p>Since its a fresh install let's also go ahead and get the system up to date and reboot the pi to make sure all the changes have taken effect</p>
+<div class="highlight"><pre><span></span>sudo apt-get update
+sudo apt-get upgrade
+sudo reboot
+</pre></div>
+
+
+<p>Once its back up lets work on getting some basic firewall settings in place. To start, we'll need to install persistent iptables.  By default the iptables install in Raspbian does not maintain changes to the firewall and an additional package must be installed. Now we can make changes to the firewall and save them in /etc/iptables directory.  Upon rebooting the changes will persist.</p>
+<div class="highlight"><pre><span></span>sudo apt-get install iptables-persitent
+</pre></div>
+
+
+<p>Now lets create a file called rules.v4 in that directory.  Here we'll define some basic rules.  </p>
+<div class="highlight"><pre><span></span>*filter
+
+<span class="c1"># Allows all loopback (lo0) traffic and drop all traffic to 127/8 that doesn&#39;t use lo0</span>
+-A INPUT -i lo -j ACCEPT
+-A INPUT ! -i lo -d <span class="m">127</span>.0.0.0/8 -j REJECT
+
+<span class="c1"># Accepts all established inbound connections</span>
+-A INPUT -m state --state ESTABLISHED,RELATED -j ACCEPT
+
+<span class="c1"># Allows all outbound traffic</span>
+<span class="c1"># You could modify this to only allow certain traffic</span>
+-A OUTPUT -j ACCEPT
+
+<span class="c1"># Allows HTTP and HTTPS connections from anywhere (the normal ports for websites)</span>
+-A INPUT -p tcp --dport <span class="m">80</span> -j ACCEPT
+-A INPUT -p tcp --dport <span class="m">443</span> -j ACCEPT
+
+<span class="c1"># Allows SSH connections </span>
+<span class="c1"># The --dport number is the same as in /etc/ssh/sshd_config</span>
+-A INPUT -p tcp -m state --state NEW --dport <span class="m">22</span> -j ACCEPT
+
+<span class="c1"># Now you should read up on iptables rules and consider whether ssh access </span>
+<span class="c1"># for everyone is really desired. Most likely you will only allow access from certain IPs.</span>
+
+<span class="c1"># Allow ping</span>
+<span class="c1">#  note that blocking other types of icmp packets is considered a bad idea by some</span>
+<span class="c1">#  remove -m icmp --icmp-type 8 from this line to allow all kinds of icmp:</span>
+<span class="c1">#  https://security.stackexchange.com/questions/22711</span>
+-A INPUT -p icmp -m icmp --icmp-type <span class="m">8</span> -j ACCEPT
+
+<span class="c1"># log iptables denied calls (access via &#39;dmesg&#39; command)</span>
+-A INPUT -m limit --limit <span class="m">5</span>/min -j LOG --log-prefix <span class="s2">&quot;iptables denied: &quot;</span> --log-level <span class="m">7</span>
+
+<span class="c1"># Reject all other inbound - default deny unless explicitly allowed policy:</span>
+-A INPUT -j REJECT
+-A FORWARD -j REJECT
+
+COMMIT
+</pre></div>
+
+
+<p>and restart the system using reboot.  Afterwards you can check the status of the rules using sudo iptables --list-rules. </p>
+<p>Change the hostname
+edit /etc/hostname and change to desired value edit /etc/hosts to reflect localhost is the new name </p>
+<h2>Secure a new user</h2>
+<div class="highlight"><pre><span></span>sudo adduser &lt;somename&gt;
+sudo adduser &lt;somename&gt; sudo <span class="c1"># adds to group sudo</span>
+</pre></div>
+
+
+<p>Now login as the new user and delete the old user from the system.</p>
+<div class="highlight"><pre><span></span>sudo deluser --remove-home pi
+</pre></div>
+
+
+<h2>Set a static IP (Optional)</h2>
   </div><!-- /.entry-content -->
   <div id="commentswrap">
       <div id="comments"></div>
   </div>
    <ul class="pager">
-         <li>
-             <a href="/my-first-review.html">
-                 Prev
-             </a>
-         </li>
     </ul>
 </section>
         </div>
