@@ -36,3 +36,6 @@ body {
                   color: inherit;
                 }
 
+.comments {
+    padding-bottom: 1em;
+}
