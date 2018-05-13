@@ -1,10 +1,15 @@
 body {
-    font: Georgia.serif;
-    font-size: 18px;
+    font-size: 16px; 
+    font-family: Verdana,Geneva,sans-serif;
+    color: #595959;
 }
 
 .blog-post {
     margin-bottom: 3.5rem;
+}
+
+.entry-content h1:not(:first-child) {
+    margin-top: 1em;
 }
 
 /*.blog-title {*/
@@ -27,6 +32,11 @@ body {
 }
 
 @import "pygment.css";
+
+.highlight {
+    margin-top: 2em;
+    margin-bottom: 2em;
+}
 
 .highlight pre { white-space: pre;
                   border-radius: inherit;

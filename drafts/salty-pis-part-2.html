@@ -5,11 +5,13 @@
         <meta charset="utf-8" />
         <link rel="stylesheet" href="/theme/css/pygment.css"/>
         <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css" integrity="sha384-BVYiiSIFeK1dGmJRAkycuHAHRg32OmUcww7on3RYdg4Va+PmSTsz/K68vbdEjh4u" crossorigin="anonymous"/>
-        <link rel="stylesheet" href="/theme/css/styles.css"/>
         <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootswatch/3.3.7/journal/bootstrap.min.css"/>
+        <link rel="stylesheet" href="/theme/css/styles.css"/>
+        <link rel="stylesheet" href="https://cdn.rawgit.com/jpswalsh/academicons/master/css/academicons.min.css">
 
 
-    <meta name="tags" content="off topic" />
+    <meta name="tags" content="raspberry pi" />
+    <meta name="tags" content="salt" />
 
 </head>
 <body id="index" class="home">
@@ -42,6 +44,7 @@
                             <a href="https://twitter.com/doubleakail"><i class="fa fa-twitter fa-2x"></i></a>
                             <a href="https://plus.google.com/109540964882796106626"><i class="fa fa-google-plus fa-2x"></i></a>
                             <a href="https://bitbucket.org/akail"><i class="fa fa-bitbucket fa-2x"></i></a>
+                            <a href="https://orcid.org/0000-0002-2243-2600"><i class="ai ai-orcid ai-2x"></i></a>
                         </p>
                     </li>
                 </ul>
@@ -49,41 +52,66 @@
         </div>
     </nav>
     <div class="container">
-        <div class="col-md-8">
+        <div class="col-md-9">
 <section id="content" class="body">
   <header>
     <h2 class="entry-title">
-      <a href="/about-this-blog.html" rel="bookmark"
-         title="Permalink to About This Blog">About This Blog</a></h2>
+      <a href="/drafts/salty-pis-part-2.html" rel="bookmark"
+         title="Permalink to Salty Pi's Part 2">Salty Pi's Part 2</a></h2>
  
   </header>
   <footer class="post-info">
-    <time class="published" datetime="2017-08-19T01:13:00-04:00">
-      Sat 19 August 2017
+    <time class="published" datetime="2018-06-22T00:00:00-04:00">
+      Fri 22 June 2018
     </time>
     <address class="vcard author">
       By           <a class="url fn" href="/author/andrew-kail.html">Andrew Kail</a>
     </address>
   </footer><!-- /.post-info -->
   <div class="entry-content">
-    <p>Just a short introduction, this blog is my attempt at expanding my knowledge and experiment with full stack engineering.  I will cover a lot of different topcis on hardening, security, containers, databases, monitoring, orchestration, web servers, cloud services, home automation, and continuous delivery while trying to apply some of it to the development of this blog and other applications I am working on.</p>
-<p>As of this post this blog is built on the following stack:
- * Python 3.6 and Flask web framework
- * sqlite database (possibly postgres)
- * Centos 7
- * Nginx</p>
-<p>The source code is available here on github. The stack could sightly change in the future and I will make release posts as that happens.</p>
-<p>Thank you for visiting!  Hopefully comments will be implemented soon so until then you can email me to leave some feedback.</p>
+    <h1>Installing Salt</h1>
+<p>Getting salt installed is pretty straightforward as an up to date version is installed in the repos.</p>
+<div class="highlight"><pre><span></span>sudo apt-get install salt-minion salt-master
+</pre></div>
+
+
+<p>Add the hostname 'salt' to the <code>hosts</code> file so that it points to the salt-master.</p>
+<div class="highlight"><pre><span></span>echo &quot;192.168.1.100 salt&quot; &gt;&gt; /etc/hosts
+</pre></div>
+
+
+<p>Restart the minion so that it connects to itself as the master</p>
+<div class="highlight"><pre><span></span>service salt-minion restart
+</pre></div>
+
+
+<h1>Master Key</h1>
+<p>list the keys
+    salt-key -L</p>
+<div class="highlight"><pre><span></span>salt-key -a pi-blue-01
+salt-key -A
+</pre></div>
+
+
+<h1>SLS files</h1>
+<p>Creating an sls files</p>
+<p>Etc /etc/salt/master on the master</p>
+<p>add /srv/salt as base directory</p>
+<p>Create a basic top.sls
+create vim.sls</p>
+<div class="highlight"><pre><span></span>salt &#39;*&#39; state apply
+</pre></div>
+
+
+<h1>Basic Hardening</h1>
+<p>Now any new pi's I add to my home network will automatically become hardened once they are connected to the master.</p>
+<p>Setting up the SLS files.</p>
+<h1>what to do to add nother node</h1>
   </div><!-- /.entry-content -->
   <div id="commentswrap">
       <div id="comments"></div>
   </div>
    <ul class="pager">
-         <li>
-             <a href="/my-first-review.html">
-                 Prev
-             </a>
-         </li>
     </ul>
     <div class="row comments">
         <div id="disqus_thread"></div>
@@ -98,12 +126,14 @@
 
          <script src="/theme/js/disqus.js"></script>
         </div>
-        <div class="col-md-3 col-md-offset-1">
+        <div class="col-md-3">
             <div class="panel panel-default">
                 <div class="panel-body">
                     <h3 style="margin-top: 0px;">Tags</h3>
-                    <a href="/"><span class="label label-info">off topic</span></a>
-                    <a href="/"><span class="label label-info">python</span></a>
+                    <a href="/"><span class="label label-info">raspberry pi</span></a>
+                    <a href="/"><span class="label label-info">saltstack</span></a>
+                    <a href="/"><span class="label label-info">raspbian</span></a>
+                    <a href="/"><span class="label label-info">linux</span></a>
                 </div>
             </div>
         </div>
