@@ -14,9 +14,9 @@
 
 
     <meta name="tags" content="raspberry pi" />
-    <meta name="tags" content="saltstack" />
     <meta name="tags" content="raspbian" />
     <meta name="tags" content="linux" />
+    <meta name="tags" content="automation" />
 
 </head>
 <body id="index" class="home">
@@ -56,8 +56,8 @@
 <section id="content" class="body">
   <header>
     <h2 class="entry-title">
-      <a href="http://ownthestack.com/salty-pis-part-1.html" rel="bookmark"
-         title="Permalink to Salty Pi's Part 1">Salty Pi's Part 1</a></h2>
+      <a href="http://ownthestack.com/whole-home-audio-with-pis.html" rel="bookmark"
+         title="Permalink to Whole Home Audio With PI's">Whole Home Audio With PI's</a></h2>
  
   </header>
   <footer class="post-info">
@@ -69,8 +69,8 @@
     </address>
   </footer><!-- /.post-info -->
   <div class="entry-content">
-    <p><a href="https://saltstack.com">Saltstack</a> is a remote execution engine and configuration management system built on top of Python and is very similar to tools like Puppet, Chef and Ansible.  I was first exposed to Salt when attending the Supercomputing conference in 2014 in New Orleans.  Since then I have started to make use of Salt at work and have started to expand my usage to a small <a href="https://reddit.com/r/homelab">homelab</a>.  In the future I may take a look at some of these other configuration management tools, especially the ones that are built on Python like <a href="http://ansible.com">Ansible</a>.  My plan is to mess with Salt and some of its features at home in the hope I can translate some of this knowledge to work. It will help with setting up my home automation system and other projects I plan to do in the future.</p>
-<p>In this first post we will install raspbian on a Raspberry Pi 3 and perform some basic configuration.  A future posts will cover setting up and configuring Salt on the Pi.</p>
+    <p>The hardware. </p>
+<p>Need an image of it</p>
 <h1>Installing Raspbian</h1>
 <p>First thing to do is download and install the image from the Raspbian <a href="https://www.raspberrypi.org/downloads/raspbian/">Download Page</a>.  At the time of this writing Debian Stretch is the current version and for our purposes lets use the Lite version since this Pi's will be headless. Once downloaded we can verify the zip file by generating the sha256 check sum and then extract our image. Please take a moment to compare the hash generated here matches the has on the download page.  If it is wrong you should re-download the image.</p>
 <div class="highlight"><pre><span></span>$ sha256sum <span class="m">2017</span>-11-29-raspbian-stretch-lite.img 
@@ -94,59 +94,85 @@ $ sudo touch ssh
 
 
 <p>Now its time to get the Pi up and running and do a few more tweaks.  Pop the SD card into the Pi and power it up.</p>
-<h1>Getting Raspbian Ready</h1>
-<p>With our Pi up and running, and connected to the network by ethernet, we will need to ssh into it. Before we can, we need to find out where it resides on the network. If you have the <code>nmap</code> tool installed you can use it to scan your subnet for any devices.  For example if my subnet is 192.168.1.0, we can use the following to scan for all local devices.</p>
-<div class="highlight"><pre><span></span>$ sudo nmap -sP <span class="m">192</span>.168.1.0/24
-    Host is up <span class="o">(</span><span class="m">0</span>.099s latency<span class="o">)</span>.
-    MAC Address: A1:A2:A2:A2:A2:A2 <span class="o">(</span>RASPBERRY PI FOUNDATION<span class="o">)</span>
-    Nmap scan report <span class="k">for</span> <span class="m">192</span>.168.1.10
+<h1>Configuring wireless</h1>
+<p>Should be able to do this before I fire up the pi</p>
+<p>edit /etc/wpa_supplicant/wpa_supplicant.conf and add a configuration for the network</p>
+<p>Add the following to the file</p>
+<div class="highlight"><pre><span></span>network={
+    ssid=&quot;MyWirelessnetwork&quot;
+    psk=&quot;igotasecret&quot;
+}
 </pre></div>
 
 
-<p>Once we have found where the Pi is on the network lets go ahead and ssh into it. Remember the default username is <code>pi</code> and the default password is <code>raspberry</code>.</p>
-<div class="highlight"><pre><span></span>$ ssh pi@192.168.1.10
+<p>and add this to /etc/dhcpcd.conf if you want a static ip address set for the new interface</p>
+<div class="highlight"><pre><span></span><span class="kr">interface</span> <span class="nx">wlan0</span>
+<span class="kr">static</span> <span class="nx">ip_address</span><span class="o">=</span><span class="mf">192.168</span><span class="p">.</span><span class="mf">2.201</span><span class="o">/</span><span class="mi">24</span>
+<span class="kr">static</span> <span class="nx">routers</span><span class="o">=</span><span class="mf">192.168</span><span class="p">.</span><span class="mf">2.1</span>
+<span class="kr">static</span> <span class="nx">domain_name_servers</span><span class="o">=</span><span class="mf">192.168</span><span class="p">.</span><span class="mf">2.1</span>
 </pre></div>
 
 
-<p>Lets Change the password before we go any further.</p>
-<div class="highlight"><pre><span></span>password
+<h1>Install snapcast</h1>
+<p>What is snapcast?  Well, glad you asked</p>
+<p>install client and server using wget,dpkg and </p>
+<div class="highlight"><pre><span></span>sudo apt-get -f install
 </pre></div>
 
 
-<p>And lets update the system, set the hostname, give it a static ip address and restart.</p>
-<div class="highlight"><pre><span></span>$ sudo su - <span class="c1"># go to root</span>
-$ apt-get update <span class="o">&amp;&amp;</span> apt-get upgrade
-$ <span class="nb">echo</span> <span class="s2">&quot;pi-blue-01&quot;</span> &gt; /etc/hostname
+<p>to fix any issues with dependencies</p>
+<p>Configuration for server at /etc/defaults/snapserver</p>
+<div class="highlight"><pre><span></span>SNAPSERVER_OPTS=&quot;-d -s pipe:///tmp/snapfifo?name=Radio&amp;mode=read&quot;
 </pre></div>
 
 
-<p>To set a static ip address we need to edit <code>/etc/dhcpcd.conf</code> for the interface.  </p>
-<div class="highlight"><pre><span></span><span class="kr">interface</span> <span class="nx">eth0</span>
-<span class="kr">static</span> <span class="nx">ip_address</span><span class="o">=</span><span class="mf">192.168</span><span class="p">.</span><span class="mf">1.100</span><span class="o">/</span><span class="mi">24</span>
-<span class="kr">static</span> <span class="nx">routers</span><span class="o">=</span><span class="mf">192.168</span><span class="p">.</span><span class="mf">1.1</span>
-<span class="kr">static</span> <span class="nx">domain_name_servers</span><span class="o">=</span><span class="mf">192.168</span><span class="p">.</span><span class="mf">1.1</span>
+<p>be sure to restart the server</p>
+<p>to fix and issue with where the audio is going</p>
+<div class="highlight"><pre><span></span>amixer cset numid=3 1
 </pre></div>
 
 
-<p>Now restart to make these changes take effect</p>
-<div class="highlight"><pre><span></span><span class="c1"># while root</span>
-$ reboot
+<h1>Install Shairport</h1>
+<div class="highlight"><pre><span></span>apt-get install shairport-sync
 </pre></div>
 
 
-<p>In the next article we will get Salt installed and configured.</p>
+<p>configure</p>
+<div class="highlight"><pre><span></span>general =
+{
+    name = &quot;Front Room&quot;;
+    password = &quot;secret&quot;;
+    interpolation = &quot;soxr&quot;;
+};
+</pre></div>
+
+
+<h1>Turn on and configure bluetooth</h1>
+<p>the a2dp needs to run with sudo privileges</p>
+<p>maybe add pi user to bluetooth group?</p>
+<div class="highlight"><pre><span></span>adduser pi bluetooth
+</pre></div>
+
+
+<h1>Testing</h1>
+<p>connect an iphone and it should work!
+it did for me after all</p>
+<h1>Reference</h1>
+<p>https://www.makeuseof.com/tag/setup-wi-fi-bluetooth-raspberry-pi-3/
+https://gist.github.com/mill1000/74c7473ee3b4a5b13f6325e9994ff84c
+shairport-sync github page
+snapcast page
+https://github.com/badaix/snapcast/blob/master/doc/player_setup.md#alsa
+https://github.com/raspberrypi/linux/issues/1402
+https://github.com/badaix/snapcast/issues/379
+https://github.com/BaReinhard/Super-Simple-Raspberry-Pi-Audio-Receiver-Install</p>
   </div><!-- /.entry-content -->
   <div id="commentswrap">
       <div id="comments"></div>
   </div>
    <ul class="pager">
          <li>
-             <a href="http://ownthestack.com/whole-home-audio-with-pis.html">
-                 Prev
-             </a>
-         </li>
-         <li>
-             <a href="http://ownthestack.com/salty-pis-part-2.html">
+             <a href="http://ownthestack.com/salty-pis-part-1.html">
                  Next
              </a>
          </li>
