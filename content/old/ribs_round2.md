@@ -5,6 +5,7 @@ Status: draft
 
 This is my second attempt at working with ribs on my smoker.  The first attempt did not turn out very well and that was all on me still not being in tune with my smoker.
 
+
 # The Smoker
 
 Can go over some of the modifications I have done to it.

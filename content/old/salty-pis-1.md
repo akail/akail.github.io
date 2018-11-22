@@ -1,4 +1,4 @@
-Title: Salty Pi's Part 1
+Title: Salty Pi Part 1
 Date: 2018-05-13 00:00
 Tags:  raspberry pi, saltstack, raspbian, linux
 

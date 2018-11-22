@@ -1,4 +1,4 @@
-Title: Salty Pi's Part 2
+Title: Salty Pis Part 2
 Date: 2018-06-22 00:00
 Tags:  raspberry pi, salt
 

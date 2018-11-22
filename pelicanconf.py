@@ -1,4 +1,5 @@
 #!/usr/bin/env python
+
 # -*- coding: utf-8 -*- #
 from __future__ import unicode_literals
 
@@ -43,3 +44,5 @@ PLUGIN_PATHS = ['pelican-plugins']
 PLUGINS = ['neighbors']
 
 STATIC_PATHS = ['images']
+
+DISQUS_SITENAME = "kail-io-1"
