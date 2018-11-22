@@ -16,11 +16,13 @@ DEFAULT_LANG = 'en'
 DISPLAY_CATEGORIES_ON_MENU = False
 
 # Feed generation is usually not desired when developing
-FEED_ALL_ATOM = None
 CATEGORY_FEED_ATOM = None
 TRANSLATION_FEED_ATOM = None
 AUTHOR_FEED_ATOM = None
 AUTHOR_FEED_RSS = None
+
+FEED_ALL_ATOM = 'feeds/all.atom.xml'
+FEED_ALL_RSS = 'feeds/rss.xml'
 
 # Blogroll
 LINKS = (('Pelican', 'http://getpelican.com/'),
@@ -45,4 +47,4 @@ PLUGINS = ['neighbors']
 
 STATIC_PATHS = ['images']
 
-DISQUS_SITENAME = "kail-io-1"
+BOOTSWATCH_THEME = 'simplex'
