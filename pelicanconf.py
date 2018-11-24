@@ -40,11 +40,20 @@ DEFAULT_PAGINATION = 10
 #RELATIVE_URLS = True
 
 THEME = 'theme'
-WITH_FUTURE_DATES = False
+WITH_FUTURE_DATES = True
 
 PLUGIN_PATHS = ['pelican-plugins']
 PLUGINS = ['neighbors']
 
-STATIC_PATHS = ['images']
+STATIC_PATHS = ['images', 'extra']
+
+EXTRA_PATH_METADATA = {
+    # 'extra/custom.css': {'path': 'custom.css'},
+    # 'extra/robots.txt': {'path': 'robots.txt'},
+    'extra/favicon.ico': {'path': 'favicon.ico'},  # and this
+    # 'extra/CNAME': {'path': 'CNAME'},
+    # 'extra/LICENSE': {'path': 'LICENSE'},
+    # 'extra/README': {'path': 'README'},
+}
 
 BOOTSWATCH_THEME = 'simplex'
