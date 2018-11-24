@@ -5,18 +5,19 @@
         <meta charset="utf-8" />
         <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
         <link href="https://kail.io/feeds/all.atom.xml" type="application/atom+xml" rel="alternate" title="kail.io Full Atom Feed" />
-        <link href="https://kail.io/feeds/misc.atom.xml" type="application/atom+xml" rel="alternate" title="kail.io Categories Atom Feed" />
+        <link href="https://kail.io/feeds/rss.xml" type="application/rss+xml" rel="alternate" title="kail.io Full RSS Feed" />
         <link rel="stylesheet" href="https://kail.io/theme/css/pygment.css"/>
         <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.1.1/css/bootstrap.min.css" integrity="sha384-WskhaSGFgHYWDcbwN70/dfYBj47jz9qbsMId/iRN3ewGhXQFZCSftd1LZCfmhktB" crossorigin="anonymous">
-        <link rel="stylesheet" href="https://bootswatch.com/4/yeti/bootstrap.min.css"/>
+        <link rel="stylesheet" href="https://bootswatch.com/4/simplex/bootstrap.min.css"/>
         <link rel="stylesheet" href="https://kail.io/theme/css/styles.css"/>
         <link rel="stylesheet" href="https://cdn.rawgit.com/jpswalsh/academicons/master/css/academicons.min.css">
+        <link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.5.0/css/all.css" integrity="sha384-B4dIYHKNBt8Bc12p+WXckhzcICo0wtJAoU8YZTY5qE0Id1GSseTk6S+L3BlXeVIU" crossorigin="anonymous">
 
 
     <meta name="tags" content="raspberry pi" />
-    <meta name="tags" content="saltstack" />
     <meta name="tags" content="raspbian" />
     <meta name="tags" content="linux" />
+    <meta name="tags" content="automation" />
 
 </head>
 <body id="index" class="home">
@@ -37,11 +38,11 @@
                 </ul>
                 <ul class="navbar-nav ml-auto">
                     <li>
-                        <a href="https://github.com/akail"><i class="fa fa-github fa-2x"></i></a>
-                        <a href="https://gitlab.com/akail"><i class="fa fa-gitlab fa-2x"></i></a>
-                        <a href="https://twitter.com/doubleakail"><i class="fa fa-twitter fa-2x"></i></a>
-                        <a href="https://bitbucket.org/akail"><i class="fa fa-bitbucket fa-2x"></i></a>
-                        <a href="https://linkedin.com/in/andrewkail"><i class="fa fa-linkedin fa-2x"></i></a>
+                        <a href="https://github.com/akail"><i class="fab fa-github fa-2x"></i></a>
+                        <a href="https://gitlab.com/akail"><i class="fab fa-gitlab fa-2x"></i></a>
+                        <a href="https://twitter.com/doubleakail"><i class="fab fa-twitter fa-2x"></i></a>
+                        <a href="https://bitbucket.org/akail"><i class="fab fa-bitbucket fa-2x"></i></a>
+                        <a href="https://linkedin.com/in/andrewkail"><i class="fab fa-linkedin fa-2x"></i></a>
                         <a href="https://orcid.org/0000-0002-2243-2600"><i class="ai ai-orcid ai-2x"></i></a>
                     </li>
 
@@ -53,25 +54,26 @@
 
     <div class="container">
         <div class="row">
-        <div class="col-9 col-md-offset-2">
+        <div class="col-8 col-md-offset-2">
 <section id="content" class="body">
   <header>
     <h2 class="entry-title">
-      <a href="https://kail.io/testing-a-page.html" rel="bookmark"
-         title="Permalink to Testing a page">Testing a page</a></h2>
+      <a href="https://kail.io/drafts/homeassistant-and-whole-room-audio.html" rel="bookmark"
+         title="Permalink to Homeassistant And Whole Room Audio">Homeassistant And Whole Room Audio</a></h2>
  
   </header>
   <footer class="post-info">
-    <time class="published" datetime="2017-11-30T00:00:00-05:00">
-      Thu 30 November 2017
+    <time class="published" datetime="2019-05-13T00:00:00-04:00">
+      Mon 13 May 2019
     </time>
     <address class="vcard author">
       By           <a class="url fn" href="https://kail.io/author/andrew-kail.html">Andrew Kail</a>
     </address>
   </footer><!-- /.post-info -->
   <div class="entry-content">
-    <h1>Testing page</h1>
-<p>hello</p>
+    <h1>Reference</h1>
+<p>https://www.home-assistant.io/blog/2016/02/18/multi-room-audio-with-snapcast/
+https://www.home-assistant.io/components/media_player.snapcast/<Paste></p>
   </div><!-- /.entry-content -->
   <div id="commentswrap">
       <div id="comments"></div>
@@ -87,8 +89,8 @@
 
 disqus_config = function () {
         <!--this.page.url = 'a unique URL for each page where Disqus is present';-->
-        this.page.identifier = 'testing-a-page.html';
-        this.page.title = 'Testing a page';
+        this.page.identifier = 'drafts/homeassistant-and-whole-room-audio.html';
+        this.page.title = 'Homeassistant And Whole Room Audio';
     };
 
     (function() {  // REQUIRED CONFIGURATION VARIABLE: EDIT THE SHORTNAME BELOW
@@ -106,14 +108,20 @@ disqus_config = function () {
 </section>
 
         </div>
-        <div class="col-2">
-            <div class="card card-default">
+        <div class="col-3">
+            <div class="card card-default" id="sidebar">
                 <div class="card-body">
+                    <div class="mx-auto" id="feedsbox" >
+                    <a href="https://kail.io/feeds/all.atom.xml"><i class="fas fa-atom fa-2x"></i></a>
+                    <a href="https://kail.io/feeds/rss.xml"><i class="fas fa-rss fa-2x"></i></a>
+                    </div>
+
                     <h3 class="card-body" >Tags</h3>
                     <a href="https://kail.io/"><span class="badge badge-info">raspberry pi</span></a>
                     <a href="https://kail.io/"><span class="badge badge-info">saltstack</span></a>
                     <a href="https://kail.io/"><span class="badge badge-info">raspbian</span></a>
                     <a href="https://kail.io/"><span class="badge badge-info">linux</span></a>
+                    <a href="https://kail.io/"><span class="badge badge-info">automation</span></a>
                 </div>
             </div>
         </div>
@@ -124,7 +132,7 @@ disqus_config = function () {
     <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.3/umd/popper.min.js" integrity="sha384-ZMP7rVo3mIykV+2+9J3UJ46jBk0WLaUAdn689aCwoqbBJiSnjAK/l8WvCWPIPm49" crossorigin="anonymous"></script>
     <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.1.1/js/bootstrap.min.js" integrity="sha384-smHYKdLADwkXOn1EmN1qk/HfnUcbVRZyYmZ4qpPea6sjB/pTJ0euyQp0Mk8ck+5T" crossorigin="anonymous"></script>
 
-         <script src="https://use.fontawesome.com/5ae78e6a14.js"></script>
+         <!--<script src="https://use.fontawesome.com/5ae78e6a14.js"></script>-->
 
 
     <!--<script src="https://kail.io/theme/js/disqus.js"></script>-->
@@ -134,6 +142,7 @@ disqus_config = function () {
         <p class="text-muted">Proudly powered by <a href="http://getpelican.com/">Pelican</a>,
         which takes great advantage of <a href="http://python.org">Python</a>.
         </p>
+
       </div>
     </footer>
 </body>

@@ -5,7 +5,7 @@ body {
 
     /* Show it is fixed to the top */
     min-height: 75rem;
-    padding-top: 4.5rem;
+    padding-top: 5.5rem;
 
 }
 
@@ -53,4 +53,12 @@ body {
 
 .comments {
     padding-bottom: 1em;
+}
+
+#sidebar {
+    border: none;
+}
+
+#feedsbox {
+    width: 100px;
 }

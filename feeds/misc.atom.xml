@@ -1,4 +1,0 @@
-<?xml version="1.0" encoding="utf-8"?>
-<feed xmlns="http://www.w3.org/2005/Atom"><title>kail.io - misc</title><link href="https://kail.io/" rel="alternate"></link><link href="https://kail.io/feeds/misc.atom.xml" rel="self"></link><id>https://kail.io/</id><updated>2017-11-30T00:00:00-05:00</updated><entry><title>Testing a page</title><link href="https://kail.io/testing-a-page.html" rel="alternate"></link><published>2017-11-30T00:00:00-05:00</published><updated>2017-11-30T00:00:00-05:00</updated><author><name>Andrew Kail</name></author><id>tag:kail.io,2017-11-30:/testing-a-page.html</id><summary type="html">&lt;h1&gt;Testing page&lt;/h1&gt;
-&lt;p&gt;hello&lt;/p&gt;</summary><content type="html">&lt;h1&gt;Testing page&lt;/h1&gt;
-&lt;p&gt;hello&lt;/p&gt;</content><category term="raspberry pi"></category><category term="saltstack"></category><category term="raspbian"></category><category term="linux"></category></entry></feed>
