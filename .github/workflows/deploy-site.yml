@@ -43,7 +43,7 @@ jobs:
 
     # Build the book
     - name: Build the book
-      run: invoke preview
+      run: pipenv run invoke preview
 
     # Push the book's HTML to github-pages
     - name: GitHub Pages action
