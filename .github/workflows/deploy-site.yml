@@ -39,7 +39,7 @@ jobs:
       run: poetry install --no-root
 
     - name: Install theme
-      run: poetry run pelican-themes -i flex-theme
+      run: poetry run pelican-themes -i Flex
 
     # Build the book
     - name: Build the book
