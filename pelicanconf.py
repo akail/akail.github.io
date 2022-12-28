@@ -1,6 +1,8 @@
 AUTHOR = 'Andrew Kail'
 SITENAME = "Andrew Kail's Blog"
 SITEURL = ''
+SITETITLE = "Andrew Kail"
+SITESUBTITLE = "Somewhat HPC related blog"
 SITELOGO = SITEURL + "/images/profile.png"
 
 PATH = 'content'
