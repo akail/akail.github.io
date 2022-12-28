@@ -23,7 +23,7 @@ jobs:
     - name: Checkout Flex theme
       uses: actions/checkout@v3
       with:
-        repository: 'https://github.com/alexandrevicenzi/Flex.git'
+        repository: 'alexandrevicenzi/Flex'
         path: flex-theme
 
     # Install dependencies
