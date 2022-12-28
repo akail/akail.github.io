@@ -1,58 +1,182 @@
+
 <!DOCTYPE html>
 <html lang="en">
 <head>
-        <title>Andrew Kail</title>
-        <meta charset="utf-8" />
-        <meta name="generator" content="Pelican" />
-        <link href="https://blog.kail.io/feeds/all.atom.xml" type="application/atom+xml" rel="alternate" title="Andrew Kail Full Atom Feed" />
+  <meta charset="utf-8" />
+  <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+  <meta name="HandheldFriendly" content="True" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <meta name="robots" content="" />
+
+  <link href="https://fonts.googleapis.com/css2?family=Source+Code+Pro:ital,wght@0,400;0,700;1,400&family=Source+Sans+Pro:ital,wght@0,300;0,400;0,700;1,400&display=swap" rel="stylesheet">
+
+    <link rel="stylesheet" type="text/css" href="https://blog.kail.io/theme/stylesheet/style.min.css">
+
+
+    <link id="pygments-light-theme" rel="stylesheet" type="text/css"
+          href="https://blog.kail.io/theme/pygments/github.min.css">
+
+
+
+  <link rel="stylesheet" type="text/css" href="https://blog.kail.io/theme/font-awesome/css/fontawesome.css">
+  <link rel="stylesheet" type="text/css" href="https://blog.kail.io/theme/font-awesome/css/brands.css">
+  <link rel="stylesheet" type="text/css" href="https://blog.kail.io/theme/font-awesome/css/solid.css">
+
+
+
+
+  <link href="https://blog.kail.io/feeds/all.atom.xml" type="application/atom+xml" rel="alternate" title="Andrew Kail Atom">
+
+
+
+
+
+
+
+
+ 
+
+    <meta name="author" content="Andrew Kail" />
+    <meta name="description" content="" />
+  <meta property="og:site_name" content="Andrew Kail"/>
+  <meta property="og:type" content="blog"/>
+  <meta property="og:title" content="Andrew Kail"/>
+  <meta property="og:description" content=""/>
+  <meta property="og:locale" content="en_US"/>
+  <meta property="og:url" content="https://blog.kail.io"/>
+
+  <title>Andrew Kail</title>
+
+
 </head>
+<body class="light-theme">
 
-<body id="index" class="home">
-        <header id="banner" class="body">
-                <h1><a href="https://blog.kail.io/">Andrew Kail</a></h1>
-        </header><!-- /#banner -->
-        <nav id="menu"><ul>
-            <li><a href="/archives.html">Archives</a></li>
-            <li><a href="/categories.html">Categories</a></li>
-            <li><a href="/tags.html">Tags</a></li>
-            <li><a href="https://blog.kail.io/category/monitoring.html">Monitoring</a></li>
-        </ul></nav><!-- /#menu -->
-<section id="content">
-<h2>All articles</h2>
+<aside>
+  <div>
+    <a href="https://blog.kail.io/">
+      <img src="https://blog.kail.io/theme/img/profile.png" alt="" title="">
+    </a>
 
-<ol id="post-list">
-        <li><article class="hentry">
-                <header> <h2 class="entry-title"><a href="https://blog.kail.io/survey-of-monitoring-in-hpc.html" rel="bookmark" title="Permalink to Survey of Monitoring in HPC">Survey of Monitoring in HPC</a></h2> </header>
-                <footer class="post-info">
-                    <time class="published" datetime="2022-12-04T10:20:00-05:00"> Sun 04 December 2022 </time>
-                    <address class="vcard author">By
-                        <a class="url fn" href="https://blog.kail.io/author/andrew-kail.html">Andrew Kail</a>
-                    </address>
-                </footer><!-- /.post-info -->
-                <div class="entry-content"> <p>Monitoring in HPC survey</p>
+    <h1>
+      <a href="https://blog.kail.io/"></a>
+    </h1>
+
+
+
+    <nav>
+      <ul class="list">
+
+
+
+          <li>
+            <a target="_self" href="https://getpelican.com/" >Pelican</a>
+          </li>
+          <li>
+            <a target="_self" href="https://www.python.org/" >Python.org</a>
+          </li>
+          <li>
+            <a target="_self" href="https://palletsprojects.com/p/jinja/" >Jinja2</a>
+          </li>
+          <li>
+            <a target="_self" href="#" >You can modify those links in your config file</a>
+          </li>
+      </ul>
+    </nav>
+
+    <ul class="social">
+      <li>
+        <a class="sc-github"
+           href="https://github.com/akail"
+           target="_blank">
+          <i class="fa-brands fa-github"></i>
+        </a>
+      </li>
+      <li>
+        <a class="sc-rss"
+           href="/feeds/all.atom.xml"
+           target="_blank">
+          <i class="fa-solid fa-rss"></i>
+        </a>
+      </li>
+      <li>
+        <a class="sc-linkedin"
+           href="https://www.linkedin.com/in/andrewkail/"
+           target="_blank">
+          <i class="fa-brands fa-linkedin"></i>
+        </a>
+      </li>
+    </ul>
+  </div>
+
+</aside>
+  <main>
+
+<nav>
+  <a href="https://blog.kail.io/">Home</a>
+
+  <a href="/archives.html">Archives</a>
+  <a href="/categories.html">Categories</a>
+  <a href="/tags.html">Tags</a>
+
+  <a href="https://blog.kail.io/feeds/all.atom.xml">Atom</a>
+
+</nav>
+
+
+
+<article>
+  <header>
+    <h2><a href="https://blog.kail.io/survey-of-monitoring-in-hpc.html#survey-of-monitoring-in-hpc">Survey of Monitoring in HPC</a></h2>
+    <p>
+      Posted on Sun 04 December 2022 in <a href="https://blog.kail.io/category/monitoring.html">Monitoring</a>
+
+
+    </p>
+  </header>
+  <div>
+      <div><p>Monitoring in HPC survey</p>
 <p>This will take a look at all of the tools currently used in HPC monitoring</p>
 <h2>Prometheus</h2>
 <ul>
 <li>Exporters</li>
-</ul> </div><!-- /.entry-content -->
-        </article></li>
-        <li><article class="hentry">
-                <header> <h2 class="entry-title"><a href="https://blog.kail.io/monitoring-hpc-with-prometheus.html" rel="bookmark" title="Permalink to Monitoring HPC with Prometheus">Monitoring HPC with Prometheus</a></h2> </header>
-                <footer class="post-info">
-                    <time class="published" datetime="2022-12-03T10:20:00-05:00"> Sat 03 December 2022 </time>
-                    <address class="vcard author">By
-                        <a class="url fn" href="https://blog.kail.io/author/andrew-kail.html">Andrew Kail</a>
-                    </address>
-                </footer><!-- /.post-info -->
-                <div class="entry-content"> <p>installing Prometheus</p> </div><!-- /.entry-content -->
-        </article></li>
-</ol><!-- /#posts-list -->
-</section><!-- /#content -->
-        <footer id="contentinfo" class="body">
-                <address id="about" class="vcard body">
-                Proudly powered by <a href="https://getpelican.com/">Pelican</a>,
-                which takes great advantage of <a href="https://www.python.org/">Python</a>.
-                </address><!-- /#about -->
-        </footer><!-- /#contentinfo -->
+</ul></div>
+  </div>
+  <hr />
+</article>
+<article>
+  <header>
+    <h2><a href="https://blog.kail.io/monitoring-hpc-with-prometheus.html#monitoring-hpc-with-prometheus">Monitoring HPC with Prometheus</a></h2>
+    <p>
+      Posted on Sat 03 December 2022 in <a href="https://blog.kail.io/category/monitoring.html">Monitoring</a>
+
+
+    </p>
+  </header>
+  <div>
+      <div><p>installing Prometheus</p></div>
+  </div>
+</article>
+
+  <div class="pagination">
+  </div>
+
+
+
+<footer>
+<p>&copy;  </p>
+<p>
+Built with <a href="http://getpelican.com" target="_blank">Pelican</a> using <a href="http://bit.ly/flex-pelican" target="_blank">Flex</a> theme
+</p></footer>  </main>
+
+<script type="application/ld+json">
+{
+  "@context" : "http://schema.org",
+  "@type" : "Blog",
+  "name": " Andrew Kail ",
+  "url" : "https://blog.kail.io",
+  "image": "",
+  "description": ""
+}
+</script>
 </body>
 </html>
