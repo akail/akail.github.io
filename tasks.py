@@ -30,7 +30,7 @@ CONFIG = {
     'commit_message': "'Publish site on {}'".format(datetime.date.today().isoformat()),
     # Host and port for `serve`
     'host': 'localhost',
-    'port': 8000,
+    'port': 9000,
     'github_cname': "blog.kail.io"
 }
 

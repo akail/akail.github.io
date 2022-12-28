@@ -1,0 +1,18 @@
+[tool.poetry]
+name = "akail-github-io"
+version = "0.1.0"
+description = "Andrew Kail's personal blog"
+authors = ["Andrew Kail <andrew@kail.io>"]
+readme = "README.md"
+
+[tool.poetry.dependencies]
+python = "^3.10"
+pelican = {extras = ["markdown"], version = "^4.8.0"}
+invoke = "^1.7.3"
+ghp-import = "^2.1.0"
+livereload = "^2.6.3"
+
+
+[build-system]
+requires = ["poetry-core"]
+build-backend = "poetry.core.masonry.api"

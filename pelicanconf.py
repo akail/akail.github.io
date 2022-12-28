@@ -9,7 +9,7 @@ TIMEZONE = 'US/Eastern'
 DEFAULT_LANG = 'en'
 
 # Feed generation is usually not desired when developing
-FEED_ALL_ATOM = None
+FEED_ALL_ATOM = 'feeds/all.atom.xml'
 CATEGORY_FEED_ATOM = None
 TRANSLATION_FEED_ATOM = None
 AUTHOR_FEED_ATOM = None
@@ -21,11 +21,23 @@ LINKS = (('Pelican', 'https://getpelican.com/'),
          ('Jinja2', 'https://palletsprojects.com/p/jinja/'),
          ('You can modify those links in your config file', '#'),)
 
-# Social widget
-SOCIAL = (('You can add links in your config file', '#'),
-          ('Another social link', '#'),)
 
 DEFAULT_PAGINATION = 10
 
 # Uncomment following line if you want document-relative URLs when developing
 #RELATIVE_URLS = True
+
+THEME = 'Flex'
+MAIN_MENU = True
+
+SOCIAL = (
+    ("github", "https://github.com/akail"),
+    ("rss", "/feeds/all.atom.xml"),
+    ("linkedin", "https://www.linkedin.com/in/andrewkail/")
+)
+
+MENUITEMS = (
+    ("Archives", "/archives.html"),
+    ("Categories", "/categories.html"),
+    ("Tags", "/tags.html"),
+)
