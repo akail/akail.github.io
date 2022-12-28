@@ -1,6 +1,7 @@
 AUTHOR = 'Andrew Kail'
 SITENAME = "Andrew Kail's Blog"
 SITEURL = ''
+SITELOGO = SITEURL + "/images/profile.png"
 
 PATH = 'content'
 
@@ -16,10 +17,10 @@ AUTHOR_FEED_ATOM = None
 AUTHOR_FEED_RSS = None
 
 # Blogroll
-LINKS = (('Pelican', 'https://getpelican.com/'),
-         ('Python.org', 'https://www.python.org/'),
-         ('Jinja2', 'https://palletsprojects.com/p/jinja/'),
-         ('You can modify those links in your config file', '#'),)
+# LINKS = (('Pelican', 'https://getpelican.com/'),
+         # ('Python.org', 'https://www.python.org/'),
+         # ('Jinja2', 'https://palletsprojects.com/p/jinja/'),
+         # ('You can modify those links in your config file', '#'),)
 
 
 DEFAULT_PAGINATION = 10
@@ -31,8 +32,17 @@ DEFAULT_PAGINATION = 10
 THEME = 'Flex'
 THEME_COLOR = "light"
 PYGMENTS_STYLE = "gruvbox-dark"
+STATIC_PATHS = ["extra/custom.css", "images"]
 
+EXTRA_PATH_METADATA = {
+    "extra/custom.css": {"path": "static/custom.css"},
+}
+CUSTOM_CSS = "static/custom.css"
+
+
+# Menu configurations
 MAIN_MENU = True
+
 
 SOCIAL = (
     ("github", "https://github.com/akail"),
