@@ -17,7 +17,14 @@ jobs:
   deploy-book:
     runs-on: ubuntu-latest
     steps:
-    - uses: actions/checkout@v2
+    - name: Checkout this repository
+      uses: actions/checkout@v2
+
+    - name: Checkout Flex theme
+      uses: actions/checkout@v3
+      with:
+        repository: 'https://github.com/alexandrevicenzi/Flex.git'
+        path: flex-theme
 
     # Install dependencies
     - name: Set up Python 3.10
@@ -30,6 +37,9 @@ jobs:
 
     - name: Install dependencies
       run: poetry install --no-root
+
+    - name: Install theme
+      run: poetry run pelican-themes -i flex-theme
 
     # Build the book
     - name: Build the book
