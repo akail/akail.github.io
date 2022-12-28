@@ -41,6 +41,9 @@ jobs:
     - name: Install theme
       run: poetry run pelican-themes -i Flex
 
+    - name: Generate pygments css
+      run: poetry run pygmentize -S gruvbox-dark -f html -a .highlight > output/theme/pygments/gruvbox-dark.min.css
+
     # Build the book
     - name: Build the book
       run: poetry run invoke preview

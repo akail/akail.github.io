@@ -1,5 +1,5 @@
 AUTHOR = 'Andrew Kail'
-SITENAME = 'Andrew Kail'
+SITENAME = "Andrew Kail's Blog"
 SITEURL = ''
 
 PATH = 'content'
@@ -27,13 +27,18 @@ DEFAULT_PAGINATION = 10
 # Uncomment following line if you want document-relative URLs when developing
 #RELATIVE_URLS = True
 
+# Theme settings
 THEME = 'Flex'
+THEME_COLOR = "light"
+PYGMENTS_STYLE = "gruvbox-dark"
+
 MAIN_MENU = True
 
 SOCIAL = (
     ("github", "https://github.com/akail"),
     ("rss", "/feeds/all.atom.xml"),
-    ("linkedin", "https://www.linkedin.com/in/andrewkail/")
+    ("linkedin", "https://www.linkedin.com/in/andrewkail/"),
+    ("mastodon", "https://fosstodon.org/@akail")
 )
 
 MENUITEMS = (
