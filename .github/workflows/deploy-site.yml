@@ -24,7 +24,7 @@ jobs:
       uses: actions/checkout@v3
       with:
         repository: 'alexandrevicenzi/Flex'
-        path: flex-theme
+        path: Flex
 
     # Install dependencies
     - name: Set up Python 3.10
