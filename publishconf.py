@@ -20,3 +20,6 @@ DELETE_OUTPUT_DIRECTORY = True
 DEFAULT_METADATA = {
     'status': 'hidden',
 }
+
+# Ignore files with unpublished in filename
+IGNORE_FILES = ["*unpublished*.md"]

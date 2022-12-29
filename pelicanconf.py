@@ -67,3 +67,4 @@ MENUITEMS = (
 DEFAULT_METADATA = {
     'status': 'draft',
 }
+
