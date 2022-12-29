@@ -1,8 +1,8 @@
-Title: Super Computing 2023 Paper Review
+Title: Spack Best Practices
 Date: 2101-01-01 12:00
 Category: HPC
 Status: draft
-Tags: hpc,slurm
+Tags: hpc,spack
 Authors: Andrew Kail
 
 Draft page

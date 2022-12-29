@@ -23,7 +23,8 @@ AUTHOR_FEED_RSS = None
          # ('Python.org', 'https://www.python.org/'),
          # ('Jinja2', 'https://palletsprojects.com/p/jinja/'),
          # ('You can modify those links in your config file', '#'),)
-
+LINKS = (("My Configs", "https://github.com/akail/Configs"),
+         ('HPC Book (WIP)', 'https://hpc.kail.io'),)
 
 DEFAULT_PAGINATION = 10
 
@@ -41,6 +42,11 @@ EXTRA_PATH_METADATA = {
 }
 CUSTOM_CSS = "static/custom.css"
 
+CC_LICENSE = {
+    "name": "Creative Commons Attribution-ShareAlike",
+    "version": "4.0",
+    "slug": "by-sa"
+}
 
 # Menu configurations
 MAIN_MENU = True
