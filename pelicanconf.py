@@ -64,3 +64,7 @@ MENUITEMS = (
     ("Categories", "/categories.html"),
     ("Tags", "/tags.html"),
 )
+
+DEFAULT_METADATA = {
+    'status': 'draft',
+}
