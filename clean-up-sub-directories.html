@@ -37,17 +37,26 @@
 
  
 
-    <meta name="author" content="Andrew Kail" />
-    <meta name="description" content="" />
+<meta name="author" content="Andrew Kail" />
+<meta name="description" content="We recently ran into an issue with a high speed scratch file system after some drive failures. While the metadata was intact we could not guarantee that any of the user data was any good. Since the metadata was good, we could keep the top level user scratch directories intact …" />
+<meta name="keywords" content="storage, snippets">
+
+
   <meta property="og:site_name" content="Andrew Kail's Blog"/>
-  <meta property="og:type" content="blog"/>
-  <meta property="og:title" content="Andrew Kail's Blog"/>
-  <meta property="og:description" content=""/>
+  <meta property="og:title" content="Clean up sub directories"/>
+  <meta property="og:description" content="We recently ran into an issue with a high speed scratch file system after some drive failures. While the metadata was intact we could not guarantee that any of the user data was any good. Since the metadata was good, we could keep the top level user scratch directories intact …"/>
   <meta property="og:locale" content="en_US"/>
-  <meta property="og:url" content="https://blog.kail.io"/>
+  <meta property="og:url" content="https://blog.kail.io/clean-up-sub-directories.html"/>
+  <meta property="og:type" content="article"/>
+  <meta property="article:published_time" content="2022-12-28 12:00:00-05:00"/>
+  <meta property="article:modified_time" content=""/>
+  <meta property="article:author" content="https://blog.kail.io/author/andrew-kail.html">
+  <meta property="article:section" content="Snippet"/>
+  <meta property="article:tag" content="storage"/>
+  <meta property="article:tag" content="snippets"/>
   <meta property="og:image" content="/images/profile.png">
 
-  <title>Andrew Kail's Blog &ndash; Posts by Andrew Kail:</title>
+  <title>Andrew Kail's Blog &ndash; Clean up sub directories</title>
 
 
 </head>
@@ -138,66 +147,39 @@ rel="me"           href="https://fosstodon.org/@akail"
 
 </nav>
 
-
-
-<article>
+<article class="single">
   <header>
-    <h2><a href="https://blog.kail.io/clean-up-sub-directories.html#clean-up-sub-directories">Clean up sub directories</a></h2>
+      
+    <h1 id="clean-up-sub-directories">Clean up sub directories</h1>
     <p>
       Posted on Wed 28 December 2022 in <a href="https://blog.kail.io/category/snippet.html">Snippet</a>
 
-          &#8226; Tagged with
-              <a href="https://blog.kail.io/tag/storage.html">storage</a>,              <a href="https://blog.kail.io/tag/snippets.html">snippets</a>
     </p>
   </header>
+
+
   <div>
-      <div><p>We recently ran into an issue with a high speed scratch file system after some drive failures.  While the metadata was intact we could not guarantee
-that any of the user data was any good.  Since the metadata was good, we could keep the top level user scratch directories intact …</p></div>
-        <br>
-        <a class="btn"
-           href="https://blog.kail.io/clean-up-sub-directories.html#clean-up-sub-directories">
-          Continue reading
-        </a>
+    <p>We recently ran into an issue with a high speed scratch file system after some drive failures.  While the metadata was intact we could not guarantee
+that any of the user data was any good.  Since the metadata was good, we could keep the top level user scratch directories intact and remove all other files
+under them, saving a bit of time recreating everything.</p>
+<div class="highlight"><pre><span></span><code><span class="nv">find</span><span class="w"> </span>.<span class="w"> </span><span class="o">-</span><span class="nv">maxdepth</span><span class="w"> </span><span class="mi">2</span><span class="w"> </span><span class="o">-</span><span class="nv">mindepth</span><span class="w"> </span><span class="mi">2</span><span class="w"> </span><span class="o">-</span><span class="k">exec</span><span class="w"> </span><span class="nv">rm</span><span class="w"> </span><span class="o">-</span><span class="nv">rf</span><span class="w"> </span>{}<span class="w"> </span>\<span class="c1">;</span><span class="w"></span>
+</code></pre></div>
+
+<p>This snippet should be run with care.</p>
   </div>
-  <hr />
-</article>
-<article>
-  <header>
-    <h2><a href="https://blog.kail.io/survey-of-monitoring-in-hpc.html#survey-of-monitoring-in-hpc">Survey of Monitoring in HPC</a></h2>
+  <div class="tag-cloud">
     <p>
-      Posted on Sun 04 December 2022 in <a href="https://blog.kail.io/category/monitoring.html">Monitoring</a>
-
-
+      <a href="https://blog.kail.io/tag/storage.html">storage</a>
+      <a href="https://blog.kail.io/tag/snippets.html">snippets</a>
     </p>
-  </header>
-  <div>
-      <div><p>Monitoring in HPC survey</p>
-<p>This will take a look at all of the tools currently used in HPC monitoring</p>
-<h2>Prometheus</h2>
-<ul>
-<li>Exporters</li>
-</ul></div>
   </div>
-  <hr />
+
+
+
+
+
+
 </article>
-<article>
-  <header>
-    <h2><a href="https://blog.kail.io/monitoring-hpc-with-prometheus.html#monitoring-hpc-with-prometheus">Monitoring HPC with Prometheus</a></h2>
-    <p>
-      Posted on Sat 03 December 2022 in <a href="https://blog.kail.io/category/monitoring.html">Monitoring</a>
-
-
-    </p>
-  </header>
-  <div>
-      <div><p>installing Prometheus</p></div>
-  </div>
-</article>
-
-  <div class="pagination">
-  </div>
-
-
 
 <footer>
 <p>
