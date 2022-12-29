@@ -38,25 +38,24 @@
  
 
 <meta name="author" content="Andrew Kail" />
-<meta name="description" content="A good example are the nersc docs" />
-<meta name="keywords" content="hpc, docs">
+<meta name="description" content="Authors: Andrew Kail While working on this website I had started to draft a lot of articles in preparation to develop some consistency and start to flesh out a book on HPC. In doing so, I found that there was no way to prevent these articles from being generated and …" />
+<meta name="keywords" content="pelican">
 
 
   <meta property="og:site_name" content="Andrew Kail's Blog"/>
-  <meta property="og:title" content="Documentation in HPC"/>
-  <meta property="og:description" content="A good example are the nersc docs"/>
+  <meta property="og:title" content="Hide Pelican Articles on Output"/>
+  <meta property="og:description" content="Authors: Andrew Kail While working on this website I had started to draft a lot of articles in preparation to develop some consistency and start to flesh out a book on HPC. In doing so, I found that there was no way to prevent these articles from being generated and …"/>
   <meta property="og:locale" content="en_US"/>
-  <meta property="og:url" content="https://blog.kail.io/documentation-in-hpc.html"/>
+  <meta property="og:url" content="https://blog.kail.io/hide-pelican-articles-on-output.html"/>
   <meta property="og:type" content="article"/>
-  <meta property="article:published_time" content="2101-01-01 12:00:00-05:00"/>
+  <meta property="article:published_time" content="2022-12-29 12:00:00-05:00"/>
   <meta property="article:modified_time" content=""/>
   <meta property="article:author" content="https://blog.kail.io/author/andrew-kail.html">
-  <meta property="article:section" content="HPC"/>
-  <meta property="article:tag" content="hpc"/>
-  <meta property="article:tag" content="docs"/>
+  <meta property="article:section" content="Python"/>
+  <meta property="article:tag" content="pelican"/>
   <meta property="og:image" content="/images/profile.png">
 
-  <title>Andrew Kail's Blog &ndash; Documentation in HPC</title>
+  <title>Andrew Kail's Blog &ndash; Hide Pelican Articles on Output</title>
 
 
 </head>
@@ -150,21 +149,39 @@ rel="me"           href="https://fosstodon.org/@akail"
 <article class="single">
   <header>
       
-    <h1 id="documentation-in-hpc">Documentation in HPC</h1>
+    <h1 id="hide-pelican-articles-on-output">Hide Pelican Articles on Output</h1>
     <p>
-      Posted on Sat 01 January 2101 in <a href="https://blog.kail.io/category/hpc.html">HPC</a>
+      Posted on Thu 29 December 2022 in <a href="https://blog.kail.io/category/python.html">Python</a>
 
     </p>
   </header>
 
 
   <div>
-    <p>A good example are the nersc docs</p>
+    <p>Authors: Andrew Kail</p>
+<p>While working on this website I had started to draft a lot of articles in preparation
+to develop some consistency and start to flesh out a book on <a href="https://hpc.kail.io">HPC</a>.</p>
+<p>In doing so, I found that there was no way to prevent these articles from being generated and could be
+accessed by anyone digging through the site or my github repository.  While not a big deal since the drafts
+themselves exist as markdown files, I wanted to keep the website out clean and began looking at how to clean things up.</p>
+<p>Pelican offers a few ways to control what gets generated on your website.  The first is by using the "Status" metadata
+tag on an article or page.  The status can be draft, hidden, or published.  If an article is in draft, it will be listed under
+the drafts directory of the web page.  If the article is hidden, it will be generated under the root directory as normal,
+but will not have any links to it via tags or categories.  Published means the article is published.  </p>
+<p>No matter which status we chose, the html for the article will be generated regardless. </p>
+<p>There have been a few <a href="https://github.com/getpelican/pelican/issues/1965">attempts</a> at adding this feature, but
+no one has stepped forward.  From reading this issue the simplest solution is to leverage the <code>IGNORE_FILES</code> setting
+in <code>publishconf.py</code> and adding some syntactical sugar to our file naming convention. <code>IGNORE_FILES</code> takes a list of regular
+expressions one can use to exclude files from generation.  What we will do here is tell Pelican to ignore markdown files with the word
+"unpublished" in its name.</p>
+<div class="highlight"><pre><span></span><code><span class="n">IGNORE_FILES</span> <span class="o">=</span> <span class="p">[</span><span class="s2">&quot;*unpublished*.md&quot;</span><span class="p">]</span>
+</code></pre></div>
+
+<p>You can now rename any files you don't want published to include "unpublished". Now when developing, those files will still be generated, but when publishing, will be ignored.</p>
   </div>
   <div class="tag-cloud">
     <p>
-      <a href="https://blog.kail.io/tag/hpc.html">hpc</a>
-      <a href="https://blog.kail.io/tag/docs.html">docs</a>
+      <a href="https://blog.kail.io/tag/pelican.html">pelican</a>
     </p>
   </div>
 
