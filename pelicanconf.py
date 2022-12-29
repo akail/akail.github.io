@@ -51,7 +51,6 @@ CC_LICENSE = {
 # Menu configurations
 MAIN_MENU = True
 
-
 SOCIAL = (
     ("github", "https://github.com/akail"),
     ("rss", "/feeds/all.atom.xml"),

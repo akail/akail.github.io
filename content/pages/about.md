@@ -1,4 +1,5 @@
 Title: About
+Status: published
 
 I'm a Chief Technology Officer, HPC Engineer, and PhD Candidate at [Data in Science Technologies](https://datainscience.com/), where I
 manage a highly experienced team of HPC Compute and Storage engineers.
