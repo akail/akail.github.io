@@ -4,3 +4,10 @@ Category: Monitoring
 tags: monitoring
 
 installing Prometheus
+
+Services to monitor
+
+* Networking
+* Infiniband
+* Cluster Manager
+* Slurm 

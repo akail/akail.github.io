@@ -73,6 +73,28 @@ python-dateutil = ">=2.8.1"
 dev = ["flake8", "markdown", "twine", "wheel"]
 
 [[package]]
+name = "html5lib"
+version = "1.1"
+description = "HTML parser based on the WHATWG HTML specification"
+category = "main"
+optional = false
+python-versions = ">=2.7, !=3.0.*, !=3.1.*, !=3.2.*, !=3.3.*, !=3.4.*"
+files = [
+    {file = "html5lib-1.1-py2.py3-none-any.whl", hash = "sha256:0d78f8fde1c230e99fe37986a60526d7049ed4bf8a9fadbad5f00e22e58e041d"},
+    {file = "html5lib-1.1.tar.gz", hash = "sha256:b2e5b40261e20f354d198eae92afc10d750afb487ed5e50f9c4eaf07c184146f"},
+]
+
+[package.dependencies]
+six = ">=1.9"
+webencodings = "*"
+
+[package.extras]
+all = ["chardet (>=2.2)", "genshi", "lxml"]
+chardet = ["chardet (>=2.2)"]
+genshi = ["genshi"]
+lxml = ["lxml"]
+
+[[package]]
 name = "invoke"
 version = "1.7.3"
 description = "Pythonic task execution"
@@ -211,6 +233,43 @@ unidecode = ">=1.1"
 markdown = ["markdown (>=3.1)"]
 
 [[package]]
+name = "pelican-series"
+version = "2.1.0"
+description = "Series is a Pelican plugin that joins multiple posts into a series"
+category = "main"
+optional = false
+python-versions = ">=3.6.2,<4.0"
+files = [
+    {file = "pelican-series-2.1.0.tar.gz", hash = "sha256:07227206f457d82ab66ec817e0af03c95cee893b1ed585abc974761f6f947e46"},
+    {file = "pelican_series-2.1.0-py3-none-any.whl", hash = "sha256:ad959e590556f4af5b3f87a3ab375e7844b63cd415025315910158f4c38f8ff8"},
+]
+
+[package.dependencies]
+pelican = ">=4.5"
+
+[package.extras]
+markdown = ["markdown (>=3.2)"]
+
+[[package]]
+name = "pelican-simple-footnotes"
+version = "1.0.2"
+description = "Pelican plugin to add footnotes to articles and pages"
+category = "main"
+optional = false
+python-versions = ">=3.6,<4.0"
+files = [
+    {file = "pelican-simple-footnotes-1.0.2.tar.gz", hash = "sha256:29e72a93922795b00dc2f0aa5e2bdfaa56b7dc17ec1c73f287316603f05f2188"},
+    {file = "pelican_simple_footnotes-1.0.2-py3-none-any.whl", hash = "sha256:f4af101cf329cb0a46eaa68faad6eb183695ba4427e988828761a70ccfec3a48"},
+]
+
+[package.dependencies]
+html5lib = ">=1.1,<2.0"
+pelican = ">=4.5,<5.0"
+
+[package.extras]
+markdown = ["markdown (>=3.2.2,<4.0.0)"]
+
+[[package]]
 name = "pygments"
 version = "2.13.0"
 description = "Pygments is a syntax highlighting package written in Python."
@@ -316,7 +375,19 @@ files = [
     {file = "Unidecode-1.3.6.tar.gz", hash = "sha256:fed09cf0be8cf415b391642c2a5addfc72194407caee4f98719e40ec2a72b830"},
 ]
 
+[[package]]
+name = "webencodings"
+version = "0.5.1"
+description = "Character encoding aliases for legacy web content"
+category = "main"
+optional = false
+python-versions = "*"
+files = [
+    {file = "webencodings-0.5.1-py2.py3-none-any.whl", hash = "sha256:a0af1213f3c2226497a97e2b3aa01a7e4bee4f403f95be16fc9acd2947514a78"},
+    {file = "webencodings-0.5.1.tar.gz", hash = "sha256:b36a1c245f2d304965eb4e0a82848379241dc04b865afcc4aab16748587e1923"},
+]
+
 [metadata]
 lock-version = "2.0"
 python-versions = "^3.10"
-content-hash = "0384d3a3a6e3596e824965e4ce13321f27d322ee471922de668b60c6ea838d0d"
+content-hash = "83b843417ebdfce6508c08dc1a24cbf7ae8460bb9efbf3a5e96f666c955bd778"

@@ -68,3 +68,5 @@ DEFAULT_METADATA = {
     'status': 'draft',
 }
 
+PLUGINS = ['pelican.plugins.series',
+           'pelican.plugins.simple_footnotes']

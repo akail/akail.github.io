@@ -1,11 +1,10 @@
-Title: Reviving Hauberk
+Title: Introducing Hauberk for Email Automation
 Date: 2101-01-01 12:00
 Category: Projects
 Tags: hauberk
 Authors: Andrew Kail
 
-# Hauberk
 
-After a having ignored emails
+I would like to take this post to introduce a project I have worked on and off on
+for the last several years.
 
-## The Problem
