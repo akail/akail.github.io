@@ -38,24 +38,25 @@
  
 
 <meta name="author" content="Andrew Kail" />
-<meta name="description" content="Monitoring in HPC survey This will take a look at all of the tools currently used in HPC monitoring Prometheus Exporters" />
-<meta name="keywords" content="monitoring">
+<meta name="description" content="My plan for 2023 is to write a blog post a week, which would amount to 52 articles! For this blog, I am using Pelican, a tool I have used before to genereate static HTML websites. Pelican puts files Since this will be a lot of markdown files in a …" />
+<meta name="keywords" content="hpc, slurm">
 
 
   <meta property="og:site_name" content="Andrew Kail's Blog"/>
-  <meta property="og:title" content="Survey of Monitoring in HPC"/>
-  <meta property="og:description" content="Monitoring in HPC survey This will take a look at all of the tools currently used in HPC monitoring Prometheus Exporters"/>
+  <meta property="og:title" content="Organizing Pelican Articles"/>
+  <meta property="og:description" content="My plan for 2023 is to write a blog post a week, which would amount to 52 articles! For this blog, I am using Pelican, a tool I have used before to genereate static HTML websites. Pelican puts files Since this will be a lot of markdown files in a …"/>
   <meta property="og:locale" content="en_US"/>
-  <meta property="og:url" content="https://blog.kail.io/survey-of-monitoring-in-hpc.html"/>
+  <meta property="og:url" content="https://blog.kail.io/organizing-pelican-articles.html"/>
   <meta property="og:type" content="article"/>
-  <meta property="article:published_time" content="2022-12-04 10:20:00-05:00"/>
+  <meta property="article:published_time" content="2101-01-01 12:00:00-05:00"/>
   <meta property="article:modified_time" content=""/>
   <meta property="article:author" content="https://blog.kail.io/author/andrew-kail.html">
-  <meta property="article:section" content="Monitoring"/>
-  <meta property="article:tag" content="monitoring"/>
+  <meta property="article:section" content="HPC"/>
+  <meta property="article:tag" content="hpc"/>
+  <meta property="article:tag" content="slurm"/>
   <meta property="og:image" content="/images/profile.png">
 
-  <title>Andrew Kail's Blog &ndash; Survey of Monitoring in HPC</title>
+  <title>Andrew Kail's Blog &ndash; Organizing Pelican Articles</title>
 
 
 </head>
@@ -155,25 +156,52 @@ rel="me"           href="https://fosstodon.org/@akail"
 <article class="single">
   <header>
       
-    <h1 id="survey-of-monitoring-in-hpc">Survey of Monitoring in HPC</h1>
+    <h1 id="organizing-pelican-articles">Organizing Pelican Articles</h1>
     <p>
-      Posted on Sun 04 December 2022 in <a href="https://blog.kail.io/category/monitoring.html">Monitoring</a>
+      Posted on Sat 01 January 2101 in <a href="https://blog.kail.io/category/hpc.html">HPC</a>
 
     </p>
   </header>
 
 
   <div>
-    <p>Monitoring in HPC survey</p>
-<p>This will take a look at all of the tools currently used in HPC monitoring</p>
-<h2>Prometheus</h2>
-<ul>
-<li>Exporters</li>
-</ul>
+    <p>My plan for 2023 is to write a blog post a week, which would amount to 52 articles!  For this blog,
+I am using <a href="https://getpelican.com">Pelican</a>, a tool I have used before to genereate static HTML websites. </p>
+<p>Pelican puts files
+Since this will be a lot of markdown files in a single directory</p>
+<div class="highlight"><pre><span></span><code>.
+├── content
+│   ├── clean_scratch_sub.md
+│   ├── extra
+│   │   └── custom.css
+│   ├── hide_pelican.md
+│   ├── images
+│   │   ├── Andrew2018.jpg
+│   │   └── profile.png
+│   ├── opensense_to_proxmox_1.md
+│   ├── opensense_to_proxmox_2.md
+│   ├── organizing_pelican_articles.md
+│   ├── pages
+│   │   ├── about.md
+│   │   ├── contact.md
+│   │   └── projects.md
+│   └── pelican_github_action.md
+├── output
+├── pelicanconf.py
+├── poetry.lock
+├── publishconf.py
+├── pyproject.toml
+└── tasks.py
+</code></pre></div>
+
+<p>Most of the articles are one level deep under the <code>content</code> directory and if I continue the pace
+of writing that I have setup for myself, it will become very crowded and difficult to read.  Instead I
+would like to organize the articles by year.</p>
   </div>
   <div class="tag-cloud">
     <p>
-      <a href="https://blog.kail.io/tag/monitoring.html">monitoring</a>
+      <a href="https://blog.kail.io/tag/hpc.html">hpc</a>
+      <a href="https://blog.kail.io/tag/slurm.html">slurm</a>
     </p>
   </div>
 

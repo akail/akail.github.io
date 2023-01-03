@@ -38,24 +38,24 @@
  
 
 <meta name="author" content="Andrew Kail" />
-<meta name="description" content="Monitoring in HPC survey This will take a look at all of the tools currently used in HPC monitoring Prometheus Exporters" />
-<meta name="keywords" content="monitoring">
+<meta name="description" content="Recently I moved back to Tennessee and have begun the process of getting the house wired up with ethernet and new wifi Access Points. Out with the Old Prior to the move, I was running a somewhat complicated setup with several points of failure, running OPNSense as my firewall on …" />
+<meta name="keywords" content="opnsense">
 
 
   <meta property="og:site_name" content="Andrew Kail's Blog"/>
-  <meta property="og:title" content="Survey of Monitoring in HPC"/>
-  <meta property="og:description" content="Monitoring in HPC survey This will take a look at all of the tools currently used in HPC monitoring Prometheus Exporters"/>
+  <meta property="og:title" content="Migrating OPNSense to Proxmox Part 1"/>
+  <meta property="og:description" content="Recently I moved back to Tennessee and have begun the process of getting the house wired up with ethernet and new wifi Access Points. Out with the Old Prior to the move, I was running a somewhat complicated setup with several points of failure, running OPNSense as my firewall on …"/>
   <meta property="og:locale" content="en_US"/>
-  <meta property="og:url" content="https://blog.kail.io/survey-of-monitoring-in-hpc.html"/>
+  <meta property="og:url" content="https://blog.kail.io/migrating-opnsense-to-proxmox-part-1.html"/>
   <meta property="og:type" content="article"/>
-  <meta property="article:published_time" content="2022-12-04 10:20:00-05:00"/>
+  <meta property="article:published_time" content="2101-01-01 12:00:00-05:00"/>
   <meta property="article:modified_time" content=""/>
   <meta property="article:author" content="https://blog.kail.io/author/andrew-kail.html">
-  <meta property="article:section" content="Monitoring"/>
-  <meta property="article:tag" content="monitoring"/>
+  <meta property="article:section" content="Homelab"/>
+  <meta property="article:tag" content="opnsense"/>
   <meta property="og:image" content="/images/profile.png">
 
-  <title>Andrew Kail's Blog &ndash; Survey of Monitoring in HPC</title>
+  <title>Andrew Kail's Blog &ndash; Migrating OPNSense to Proxmox Part 1</title>
 
 
 </head>
@@ -155,31 +155,74 @@ rel="me"           href="https://fosstodon.org/@akail"
 <article class="single">
   <header>
       
-    <h1 id="survey-of-monitoring-in-hpc">Survey of Monitoring in HPC</h1>
+    <h1 id="migrating-opnsense-to-proxmox-part-1">Migrating OPNSense to Proxmox Part 1</h1>
     <p>
-      Posted on Sun 04 December 2022 in <a href="https://blog.kail.io/category/monitoring.html">Monitoring</a>
+      Posted on Sat 01 January 2101 in <a href="https://blog.kail.io/category/homelab.html">Homelab</a>
 
     </p>
   </header>
 
 
   <div>
-    <p>Monitoring in HPC survey</p>
-<p>This will take a look at all of the tools currently used in HPC monitoring</p>
-<h2>Prometheus</h2>
+    <p>Recently I moved back to Tennessee and have begun the process of getting the house wired up
+with ethernet and new wifi Access Points.</p>
+<h2>Out with the Old</h2>
+<p>Prior to the move, I was running a somewhat complicated setup with several points of failure, running
+OPNSense as my firewall on a Qotom Mini PC, a Unifi POE switch, 3 Unifi APs, a raspberry Pi running homeassistant and Adguard,
+and a Proxmox hypervisor running Pi-Hole and the Unifi Controller.  </p>
+<p>In case the two DNS servers above was confusing, I was evaluating both Adguard and Pi-Hole at the same time and was hoping to setup some redudnancy.</p>
+<p>In the process of packing, I managed to move DNS management, Ad-blocking, and the Unifi Controller to OPNsense which allowed me to shut down my server and Homeassistant.  I was
+impressed that I found a plugin to handle the Unifi Controller available for OPNsense and didn't have any issues migrating the controller.  During the weeks leading up
+to the move everything ran without issue.</p>
+<h2>In With The...</h2>
+<p>After arriving in TN I was pleased that I was able to plug in a lot of my hardware and everything just WORKED.  Well,
+everything worked until I updated OPNSense and tried to fire up the Unifi Controller.  The controller was hosed.  After perusing the github <a href="https://github.com/mimugmail/opn-repo/issues/96">issues</a>
+for the plugin it appeared that the plugin build and OPNSense install could get a little out of sync sometimes and wreck MongoDB after an update.
+Luckily the one AP I was running was still properly configured and functioning without the controller. </p>
+<p>I had plans though to change out some hardware and have decided move OPNSense to a VM on the same hardware and then run a container or VM with the controller. I wanted 
+the heart of my networking stack to be on one device and easy to manage with snapshots.  This will also allow me to ditch a few of the unofficial plugins.</p>
+<p>Why Proxmox? I'm already familiar with proxmox running it on several servers and its a great</p>
+<h2>Planning The Install</h2>
+<p>Planning this out was not easy as I will lose my network in the process.</p>
+<p>A few things to keep in mind before starting:</p>
 <ul>
-<li>Exporters</li>
+<li>Device passthrough will not allow snapshots[ref]<a href="https://forum.proxmox.com/threads/snapshot-blocked-by-pci-e-device.53790/">Snapshot blocked by pci-e device</a>[/ref]</li>
 </ul>
+<p>I decided to go ahead with enabling PCI passthrough even though I will lose snapshots as it
+will make setting up the WAN and lan congifigurations</p>
+<p>Plan</p>
+<ol>
+<li>Run a backup of OPNSense</li>
+<li>Upgrade the RAM</li>
+<li>Download latest copy of Proxmox</li>
+<li>Write Proxmox ISO to a thumb drive</li>
+<li>Run installer on Qotom Mini PC with a head on</li>
+<li>Direct connect to Port 0 on the qotom device</li>
+<li>Import the congifiguration</li>
+<li>Label Ports!</li>
+</ol>
+<p>Big thanks to his <a href="https://www.youtube.com/watch?v=IJhlqb4iGn4">ServeTheHome</a> Video which really helped me solidify how I should manage this</p>
+<p>Port layout thanks to ServeTheHome</p>
+<p><img alt="ServeTheHome Ports" src="https://blog.kail.io/images/pve-qotom-ports.png"></p>
+<p>But... We know how the best laid plans go...</p>
+<h2>Reference</h2>
+<ul>
+<li>https://www.servethehome.com/how-to-pass-through-pcie-nics-with-proxmox-ve-on-intel-and-amd/</li>
+</ul>
+<p><img alt="Alt Text" src="https://blog.kail.io/images/gifs/mike-tyson-smile.gif"></p>
   </div>
   <div class="tag-cloud">
     <p>
-      <a href="https://blog.kail.io/tag/monitoring.html">monitoring</a>
+      <a href="https://blog.kail.io/tag/opnsense.html">opnsense</a>
     </p>
   </div>
 
 
 
 
+  <div class="related-posts">
+    <h4>Part <built-in method index of str object at 0x7f5839f0bfb0> of the  series</h4>
+  </div>
 
 
 </article>
