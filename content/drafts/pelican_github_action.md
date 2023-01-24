@@ -81,3 +81,16 @@ Below is the full github action with inline notes:
             github_token: ${{ secrets.GITHUB_TOKEN }}
             publish_dir: ./output
             cname: blog.kail.io
+
+            
+I use this to update items I need updated immediately, like new pages, corrections, or modifications to existing articles.  This however does not handle the daily updates for future articles to get published day of.  For that you can add a new directive to define a scheduled cronjob.
+
+    :::yaml
+    on:
+      push:
+        branches:
+          - master
+      schedule:
+        - cron: '45 8 * * * '
+
+This will now run each day at 8:45 AM to regenerate the website and publish new articles if they are available.  I will actually be splitting

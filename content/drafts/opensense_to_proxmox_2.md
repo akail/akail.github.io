@@ -6,3 +6,8 @@ Authors: Andrew Kail
 Series: OPNSense to VM
 
 In Action
+
+
+## References
+
+* https://www.servethehome.com/how-to-pass-through-pcie-nics-with-proxmox-ve-on-intel-and-amd/

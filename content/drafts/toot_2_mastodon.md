@@ -11,3 +11,9 @@ Get all posts in markdown
 Find posts not in Mastodon and not draft, and most recent
 Get tags
 Generate URL
+
+Make sure if you change your permissions that you regenerate your app token.
+
+Minimum permissions needed
+
+

@@ -1,0 +1,48 @@
+Title: Setting up an MLFlow Tracking Server
+Date: 2101-01-01 12:00
+Category: mlops
+Tags: mlops
+Authors: Andrew Kail
+
+Running MLflow in a Docker container can be a great way to manage your machine learning workflows and keep your dependencies isolated from your host system. In this post, we'll walk through the steps of setting up MLflow in a Docker container and show you how to use it to track your machine learning experiments.
+
+First, let's start by creating a new Docker image for MLflow. We'll use the official MLflow image from Docker Hub as the base image, and then add our own customizations. Here's an example Dockerfile:
+
+FROM mlflow/mlflow:latest
+
+RUN pip install --upgrade mlflow
+
+COPY run_mlflow.sh /
+
+CMD ["/run_mlflow.sh"]
+
+In this example, we're using the latest version of MLflow from the official Docker Hub image, upgrading it with pip, and then copying our own script run_mlflow.sh into the container. The CMD instruction tells Docker to run this script when the container starts.
+
+Next, we need to create the run_mlflow.sh script. This script will start the MLflow server and set some environment variables that we'll need later. Here's an example of what this script might look like:
+
+#!/bin/bash
+
+export MLFLOW_TRACKING_URI=http://localhost:5000
+export MLFLOW_S3_ENDPOINT_URL=http://minio:9000
+
+mlflow server \
+    --host 0.0.0.0 \
+    --port 5000 \
+    --backend-store-uri /mlflow \
+    --default-artifact-root s3://mlflow
+
+In this script, we're setting the MLFLOW_TRACKING_URI and MLFLOW_S3_ENDPOINT_URL environment variables, and then starting the MLflow server with the mlflow server command. We're also specifying that the server should listen on all IP addresses (--host 0.0.0.0), and that it should use port 5000. Additionally, we're specifying that the server should store its data in a directory named /mlflow and that it should use an S3 bucket named mlflow as the default artifact root.
+
+Once you have your Dockerfile and run_mlflow.sh files set up, you can build the Docker image by running the following command:
+
+docker build -t mlflow:latest .
+
+This will build an image with the name mlflow and the tag latest.
+
+Now that we have our image, we can start a container by running the following command:
+
+docker run -p 5000:5000 -v /path/to/mlflow-data:/mlflow mlflow:latest
+
+This command will start a new container and map port 5000 on the host to port 5000 in the container. Additionally, we're mounting the host directory /path/to/mlflow-data to the /mlflow directory in the container, so that any data stored by MLflow will be persisted on the host.
+
+Once the container is running, you can access the MLflow UI by opening a web browser and going to http://localhost:5000. From here, you can create

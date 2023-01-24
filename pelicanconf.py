@@ -39,6 +39,7 @@ STATIC_PATHS = ["extra/custom.css", "images"]
 
 EXTRA_PATH_METADATA = {
     "extra/custom.css": {"path": "static/custom.css"},
+    "drafts": {"status": "draft"}
 }
 CUSTOM_CSS = "static/custom.css"
 
@@ -64,9 +65,9 @@ MENUITEMS = (
     ("Tags", "/tags.html"),
 )
 
-DEFAULT_METADATA = {
-    'status': 'draft',
-}
+# DEFAULT_METADATA = {
+    # 'status': 'draft',
+# }
 
 PLUGINS = ['pelican.plugins.series',
            'pelican.plugins.simple_footnotes']

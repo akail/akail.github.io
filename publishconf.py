@@ -18,8 +18,9 @@ DELETE_OUTPUT_DIRECTORY = True
 # Following items are often useful when publishing
 
 DEFAULT_METADATA = {
-    'status': 'hidden',
+    'status': 'published',
 }
 
 # Ignore files with unpublished in filename
-IGNORE_FILES = ["*unpublished*.md"]
+IGNORE_FILES = [".#*", "drafts"]
+WITH_FUTURE_DATES = False
