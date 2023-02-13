@@ -1,0 +1,57 @@
+<?xml version="1.0" encoding="utf-8"?>
+<feed xmlns="http://www.w3.org/2005/Atom"><title>Andrew Kail's Blog - Jupyter</title><link href="https://blog.kail.io/" rel="alternate"></link><link href="https://blog.kail.io/feeds/jupyter.atom.xml" rel="self"></link><id>https://blog.kail.io/</id><updated>2023-02-13T12:00:00-05:00</updated><subtitle>Somewhat HPC related blog</subtitle><entry><title>Adding Anaconda Environment to Jupyter</title><link href="https://blog.kail.io/adding-anaconda-environment-to-jupyter.html" rel="alternate"></link><published>2023-02-13T12:00:00-05:00</published><updated>2023-02-13T12:00:00-05:00</updated><author><name>Andrew Kail</name></author><id>tag:blog.kail.io,2023-02-13:/adding-anaconda-environment-to-jupyter.html</id><summary type="html">&lt;p&gt;When using Jupyter, or Jupyterlab, you'll often times want to use different anaconda
+environments for different projects.  Especially when you are working on a
+personal workstation.  Unfortunately, even when installed with anaconda at the
+root level, jupyter doesn't automatically detect installed anaconda
+environments.&lt;/p&gt;
+&lt;p&gt;For example, in a default jupyterhub install …&lt;/p&gt;</summary><content type="html">&lt;p&gt;When using Jupyter, or Jupyterlab, you'll often times want to use different anaconda
+environments for different projects.  Especially when you are working on a
+personal workstation.  Unfortunately, even when installed with anaconda at the
+root level, jupyter doesn't automatically detect installed anaconda
+environments.&lt;/p&gt;
+&lt;p&gt;For example, in a default jupyterhub install you will only have a single kernel
+installed.&lt;/p&gt;
+&lt;p&gt;&lt;img alt="Default Jupyterlab" src="https://blog.kail.io/images/2023/jupyter_kernelspecs/default_kernels.png"&gt;&lt;/p&gt;
+&lt;h2&gt;Adding the Kernel&lt;/h2&gt;
+&lt;p&gt;Start be creating a new anaconda environment, or optionally a python virtual
+environment using one of the several available tools.&lt;/p&gt;
+&lt;p&gt;At a minimum, the &lt;code&gt;ipykernel&lt;/code&gt; package must be installed.&lt;/p&gt;
+&lt;div class="highlight"&gt;&lt;pre&gt;&lt;span&gt;&lt;/span&gt;&lt;code&gt;&lt;span class="c1"&gt;# create and activate a new anaconda environment&lt;/span&gt;
+conda create -n newkernel ipykernel
+conda activate 
+&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;
+
+&lt;p&gt;Now add the kernel, being sure to add the &lt;code&gt;--user&lt;/code&gt; flag if anaconda is installed
+somewhere the user does not have permission to write to.  Also, a name for the
+kernel should also be provided as the default name may conflict with the default
+kernel installed.&lt;/p&gt;
+&lt;div class="highlight"&gt;&lt;pre&gt;&lt;span&gt;&lt;/span&gt;&lt;code&gt;python3 -m ipykernel install --user --name newkernel
+&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;
+
+&lt;p&gt;Now a new kernel should be available without having to restart the jupyter
+instance.&lt;/p&gt;
+&lt;p&gt;&lt;img alt="New Kernel" src="https://blog.kail.io/images/2023/jupyter_kernelspecs/kernel_installed.png"&gt;&lt;/p&gt;
+&lt;h2&gt;How does it work?&lt;/h2&gt;
+&lt;p&gt;When a kernel is installed, a json file is installed in the user's home
+directory at &lt;code&gt;$HOME/.local/share/jupyter/kernels&lt;/code&gt;.  This json file defines where
+jupyter will look to start kernel.&lt;/p&gt;
+&lt;div class="highlight"&gt;&lt;pre&gt;&lt;span&gt;&lt;/span&gt;&lt;code&gt;&lt;span class="p"&gt;{&lt;/span&gt;&lt;span class="w"&gt;&lt;/span&gt;
+&lt;span class="w"&gt; &lt;/span&gt;&lt;span class="nt"&gt;&amp;quot;argv&amp;quot;&lt;/span&gt;&lt;span class="p"&gt;:&lt;/span&gt;&lt;span class="w"&gt; &lt;/span&gt;&lt;span class="p"&gt;[&lt;/span&gt;&lt;span class="w"&gt;&lt;/span&gt;
+&lt;span class="w"&gt;  &lt;/span&gt;&lt;span class="s2"&gt;&amp;quot;/home/akail/.conda/envs/newkernel/bin/python3&amp;quot;&lt;/span&gt;&lt;span class="p"&gt;,&lt;/span&gt;&lt;span class="w"&gt;&lt;/span&gt;
+&lt;span class="w"&gt;  &lt;/span&gt;&lt;span class="s2"&gt;&amp;quot;-m&amp;quot;&lt;/span&gt;&lt;span class="p"&gt;,&lt;/span&gt;&lt;span class="w"&gt;&lt;/span&gt;
+&lt;span class="w"&gt;  &lt;/span&gt;&lt;span class="s2"&gt;&amp;quot;ipykernel_launcher&amp;quot;&lt;/span&gt;&lt;span class="p"&gt;,&lt;/span&gt;&lt;span class="w"&gt;&lt;/span&gt;
+&lt;span class="w"&gt;  &lt;/span&gt;&lt;span class="s2"&gt;&amp;quot;-f&amp;quot;&lt;/span&gt;&lt;span class="p"&gt;,&lt;/span&gt;&lt;span class="w"&gt;&lt;/span&gt;
+&lt;span class="w"&gt;  &lt;/span&gt;&lt;span class="s2"&gt;&amp;quot;{connection_file}&amp;quot;&lt;/span&gt;&lt;span class="w"&gt;&lt;/span&gt;
+&lt;span class="w"&gt; &lt;/span&gt;&lt;span class="p"&gt;],&lt;/span&gt;&lt;span class="w"&gt;&lt;/span&gt;
+&lt;span class="w"&gt; &lt;/span&gt;&lt;span class="nt"&gt;&amp;quot;display_name&amp;quot;&lt;/span&gt;&lt;span class="p"&gt;:&lt;/span&gt;&lt;span class="w"&gt; &lt;/span&gt;&lt;span class="s2"&gt;&amp;quot;testing&amp;quot;&lt;/span&gt;&lt;span class="p"&gt;,&lt;/span&gt;&lt;span class="w"&gt;&lt;/span&gt;
+&lt;span class="w"&gt; &lt;/span&gt;&lt;span class="nt"&gt;&amp;quot;language&amp;quot;&lt;/span&gt;&lt;span class="p"&gt;:&lt;/span&gt;&lt;span class="w"&gt; &lt;/span&gt;&lt;span class="s2"&gt;&amp;quot;python&amp;quot;&lt;/span&gt;&lt;span class="p"&gt;,&lt;/span&gt;&lt;span class="w"&gt;&lt;/span&gt;
+&lt;span class="w"&gt; &lt;/span&gt;&lt;span class="nt"&gt;&amp;quot;metadata&amp;quot;&lt;/span&gt;&lt;span class="p"&gt;:&lt;/span&gt;&lt;span class="w"&gt; &lt;/span&gt;&lt;span class="p"&gt;{&lt;/span&gt;&lt;span class="w"&gt;&lt;/span&gt;
+&lt;span class="w"&gt;  &lt;/span&gt;&lt;span class="nt"&gt;&amp;quot;debugger&amp;quot;&lt;/span&gt;&lt;span class="p"&gt;:&lt;/span&gt;&lt;span class="w"&gt; &lt;/span&gt;&lt;span class="kc"&gt;true&lt;/span&gt;&lt;span class="w"&gt;&lt;/span&gt;
+&lt;span class="w"&gt; &lt;/span&gt;&lt;span class="p"&gt;}&lt;/span&gt;&lt;span class="w"&gt;&lt;/span&gt;
+&lt;span class="p"&gt;}&lt;/span&gt;&lt;span class="w"&gt;&lt;/span&gt;
+&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;
+
+&lt;h2&gt;References&lt;/h2&gt;
+&lt;ul&gt;
+&lt;li&gt;&lt;a href="https://jupyter-client.readthedocs.io/en/latest/kernels.html#kernelspecs"&gt;Jupyter Documentation&lt;/a&gt;&lt;/li&gt;
+&lt;/ul&gt;</content><category term="Jupyter"></category><category term="jupyter"></category><category term="python"></category></entry></feed>
