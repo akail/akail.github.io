@@ -59,7 +59,7 @@ Now we need to enable the dhcp server to allow network booting.
 Navigate to `Services > DHCPv4 > [Name of you boot network]`.  Making sure to
 select the network you wish to boot from.  In my case, its my Internal network.
 
-![Configure Network Booting]({static}/images/2023/opnsense-pxe/opnsense-pxe-3.png){: width="300"}
+![Configure Network Booting]({static}/images/2023/opnsense-pxe/opnsense-pxe-3.png){: width="300" class="center-img" }
 
 Scroll down till you see  `Network Booting` and click the `Advanced` button to
 show all the full settings.
