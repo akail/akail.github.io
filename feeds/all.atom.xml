@@ -1,5 +1,93 @@
 <?xml version="1.0" encoding="utf-8"?>
-<feed xmlns="http://www.w3.org/2005/Atom"><title>Andrew Kail's Blog</title><link href="https://blog.kail.io/" rel="alternate"></link><link href="https://blog.kail.io/feeds/all.atom.xml" rel="self"></link><id>https://blog.kail.io/</id><updated>2023-02-13T12:00:00-05:00</updated><subtitle>Somewhat HPC related blog</subtitle><entry><title>Adding Anaconda Environment to Jupyter</title><link href="https://blog.kail.io/adding-anaconda-environment-to-jupyter.html" rel="alternate"></link><published>2023-02-13T12:00:00-05:00</published><updated>2023-02-13T12:00:00-05:00</updated><author><name>Andrew Kail</name></author><id>tag:blog.kail.io,2023-02-13:/adding-anaconda-environment-to-jupyter.html</id><summary type="html">&lt;p&gt;When using Jupyter, or Jupyterlab, you'll often times want to use different anaconda
+<feed xmlns="http://www.w3.org/2005/Atom"><title>Andrew Kail's Blog</title><link href="https://blog.kail.io/" rel="alternate"></link><link href="https://blog.kail.io/feeds/all.atom.xml" rel="self"></link><id>https://blog.kail.io/</id><updated>2023-03-29T01:00:00-04:00</updated><subtitle>Somewhat HPC related blog</subtitle><entry><title>Running Netboot.xyz From OPNSense</title><link href="https://blog.kail.io/running-netbootxyz-from-opnsense.html" rel="alternate"></link><published>2023-03-29T01:00:00-04:00</published><updated>2023-03-29T01:00:00-04:00</updated><author><name>Andrew Kail</name></author><id>tag:blog.kail.io,2023-03-29:/running-netbootxyz-from-opnsense.html</id><summary type="html">&lt;p&gt;After working with some PXE booting at work recently, I decided to pick up a
+long standing todo of installing netboot.xyz on my network.  When I started to
+take a deeper look into it I realized I could probably install it on my OPNSense
+VM as it is the …&lt;/p&gt;</summary><content type="html">&lt;p&gt;After working with some PXE booting at work recently, I decided to pick up a
+long standing todo of installing netboot.xyz on my network.  When I started to
+take a deeper look into it I realized I could probably install it on my OPNSense
+VM as it is the DHCP server and comes with a TFTP plugin.&lt;/p&gt;
+&lt;h2&gt;Install TFTP&lt;/h2&gt;
+&lt;p&gt;The first thing we need to do is install the TFTP plugin.  One note about this
+plugin is that it is no longer maintained so there is a possibility it may go
+away in the future.  Hopefully that is not the case.&lt;/p&gt;
+&lt;p&gt;Navigate to &lt;code&gt;System &amp;gt; Firmware &amp;gt; Plugins&lt;/code&gt; and search for &lt;code&gt;os-tftp&lt;/code&gt;, then click
+the &lt;code&gt;+&lt;/code&gt; button to install the plugin.&lt;/p&gt;
+&lt;p&gt;&lt;img alt="Install TFTP Plugin" src="https://blog.kail.io/images/2023/opnsense-pxe/opnsense-pxe-1.png"&gt;&lt;/p&gt;
+&lt;p&gt;Once we have the plugin installed we'll need to create the tftp directory and
+install netboot before enabling the service.  Otherwise it will fail. This step
+requires ssh access.&lt;/p&gt;
+&lt;div class="highlight"&gt;&lt;pre&gt;&lt;span&gt;&lt;/span&gt;&lt;code&gt;&lt;span class="n"&gt;ssh&lt;/span&gt;&lt;span class="w"&gt; &lt;/span&gt;&lt;span class="n"&gt;root&lt;/span&gt;&lt;span class="err"&gt;@&lt;/span&gt;&lt;span class="n"&gt;opnsense&lt;/span&gt;&lt;span class="w"&gt;&lt;/span&gt;
+
+&lt;span class="c1"&gt;# Select &amp;#39;8&amp;#39; at the menu to enter the shell&lt;/span&gt;&lt;span class="w"&gt;&lt;/span&gt;
+
+&lt;span class="n"&gt;mkdir&lt;/span&gt;&lt;span class="w"&gt; &lt;/span&gt;&lt;span class="o"&gt;/&lt;/span&gt;&lt;span class="n"&gt;usr&lt;/span&gt;&lt;span class="o"&gt;/&lt;/span&gt;&lt;span class="n"&gt;local&lt;/span&gt;&lt;span class="o"&gt;/&lt;/span&gt;&lt;span class="n"&gt;tftp&lt;/span&gt;&lt;span class="w"&gt;&lt;/span&gt;
+&lt;span class="n"&gt;cd&lt;/span&gt;&lt;span class="w"&gt; &lt;/span&gt;&lt;span class="o"&gt;/&lt;/span&gt;&lt;span class="n"&gt;usr&lt;/span&gt;&lt;span class="o"&gt;/&lt;/span&gt;&lt;span class="n"&gt;local&lt;/span&gt;&lt;span class="o"&gt;/&lt;/span&gt;&lt;span class="n"&gt;tftp&lt;/span&gt;&lt;span class="w"&gt;&lt;/span&gt;
+
+&lt;span class="c1"&gt;# Download netboot files&lt;/span&gt;&lt;span class="w"&gt;&lt;/span&gt;
+&lt;span class="n"&gt;fetch&lt;/span&gt;&lt;span class="w"&gt; &lt;/span&gt;&lt;span class="n"&gt;https&lt;/span&gt;&lt;span class="p"&gt;:&lt;/span&gt;&lt;span class="o"&gt;//&lt;/span&gt;&lt;span class="n"&gt;boot&lt;/span&gt;&lt;span class="o"&gt;.&lt;/span&gt;&lt;span class="n"&gt;netboot&lt;/span&gt;&lt;span class="o"&gt;.&lt;/span&gt;&lt;span class="n"&gt;xyz&lt;/span&gt;&lt;span class="o"&gt;/&lt;/span&gt;&lt;span class="n"&gt;ipxe&lt;/span&gt;&lt;span class="o"&gt;/&lt;/span&gt;&lt;span class="n"&gt;netboot&lt;/span&gt;&lt;span class="o"&gt;.&lt;/span&gt;&lt;span class="n"&gt;xyz&lt;/span&gt;&lt;span class="o"&gt;.&lt;/span&gt;&lt;span class="n"&gt;kpxe&lt;/span&gt;&lt;span class="w"&gt;&lt;/span&gt;
+&lt;span class="n"&gt;fetch&lt;/span&gt;&lt;span class="w"&gt; &lt;/span&gt;&lt;span class="n"&gt;https&lt;/span&gt;&lt;span class="p"&gt;:&lt;/span&gt;&lt;span class="o"&gt;//&lt;/span&gt;&lt;span class="n"&gt;boot&lt;/span&gt;&lt;span class="o"&gt;.&lt;/span&gt;&lt;span class="n"&gt;netboot&lt;/span&gt;&lt;span class="o"&gt;.&lt;/span&gt;&lt;span class="n"&gt;xyz&lt;/span&gt;&lt;span class="o"&gt;/&lt;/span&gt;&lt;span class="n"&gt;ipxe&lt;/span&gt;&lt;span class="o"&gt;/&lt;/span&gt;&lt;span class="n"&gt;netboot&lt;/span&gt;&lt;span class="o"&gt;.&lt;/span&gt;&lt;span class="n"&gt;xyz&lt;/span&gt;&lt;span class="o"&gt;.&lt;/span&gt;&lt;span class="n"&gt;efi&lt;/span&gt;&lt;span class="w"&gt;&lt;/span&gt;
+&lt;span class="n"&gt;fetch&lt;/span&gt;&lt;span class="w"&gt; &lt;/span&gt;&lt;span class="n"&gt;https&lt;/span&gt;&lt;span class="p"&gt;:&lt;/span&gt;&lt;span class="o"&gt;//&lt;/span&gt;&lt;span class="n"&gt;boot&lt;/span&gt;&lt;span class="o"&gt;.&lt;/span&gt;&lt;span class="n"&gt;netboot&lt;/span&gt;&lt;span class="o"&gt;.&lt;/span&gt;&lt;span class="n"&gt;xyz&lt;/span&gt;&lt;span class="o"&gt;/&lt;/span&gt;&lt;span class="n"&gt;ipxe&lt;/span&gt;&lt;span class="o"&gt;/&lt;/span&gt;&lt;span class="n"&gt;netboot&lt;/span&gt;&lt;span class="o"&gt;.&lt;/span&gt;&lt;span class="n"&gt;xyz&lt;/span&gt;&lt;span class="o"&gt;-&lt;/span&gt;&lt;span class="n"&gt;arm64&lt;/span&gt;&lt;span class="o"&gt;.&lt;/span&gt;&lt;span class="n"&gt;efi&lt;/span&gt;&lt;span class="w"&gt;&lt;/span&gt;
+&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;
+
+&lt;p&gt;I downloaded three files above to support the main types of network booting I
+expect on my home network.  Namely Bios, EFI, and ARM EFI.  If you feel you need
+to use a different bootloader you'll want to read the netboot documenation for
+that.&lt;/p&gt;
+&lt;p&gt;Now we can enable the service, making sure to set the "Listen Address" to the ip
+we expect to boot from. &lt;/p&gt;
+&lt;p&gt;&lt;img alt="Enalbe TFTP" src="https://blog.kail.io/images/2023/opnsense-pxe/opnsense-pxe-2.png"&gt;&lt;/p&gt;
+&lt;p&gt;Click save and make sure the TFTP service has properly started.  You should see
+a green play button in the top right indicating the service is running.&lt;/p&gt;
+&lt;h2&gt;Configure DHCP&lt;/h2&gt;
+&lt;p&gt;Now we need to enable the dhcp server to allow network booting.&lt;/p&gt;
+&lt;p&gt;Navigate to &lt;code&gt;Services &amp;gt; DHCPv4 &amp;gt; [Name of you boot network]&lt;/code&gt;.  Making sure to
+select the network you wish to boot from.  In my case, its my Internal network.&lt;/p&gt;
+&lt;p&gt;&lt;img alt="Configure Network Booting" src="https://blog.kail.io/images/2023/opnsense-pxe/opnsense-pxe-3.png" width="300"&gt;&lt;/p&gt;
+&lt;p&gt;Scroll down till you see  &lt;code&gt;Network Booting&lt;/code&gt; and click the &lt;code&gt;Advanced&lt;/code&gt; button to
+show all the full settings.&lt;/p&gt;
+&lt;p&gt;&lt;img alt="Advanced Settings" src="https://blog.kail.io/images/2023/opnsense-pxe/opnsense-pxe-4.png"&gt;&lt;/p&gt;
+&lt;p&gt;Fill out the form with the IP Address we configured for the TFTP service.  For
+the filenames, you can do the following:&lt;/p&gt;
+&lt;table&gt;
+&lt;thead&gt;
+&lt;tr&gt;
+&lt;th&gt;Setting&lt;/th&gt;
+&lt;th&gt;Filename&lt;/th&gt;
+&lt;/tr&gt;
+&lt;/thead&gt;
+&lt;tbody&gt;
+&lt;tr&gt;
+&lt;td&gt;bios&lt;/td&gt;
+&lt;td&gt;netboot.xyz.kpxe&lt;/td&gt;
+&lt;/tr&gt;
+&lt;tr&gt;
+&lt;td&gt;x86 UEFI (32-bit)&lt;/td&gt;
+&lt;td&gt;netboot.xyz.efi&lt;/td&gt;
+&lt;/tr&gt;
+&lt;tr&gt;
+&lt;td&gt;x86 UEFI (64-bit)&lt;/td&gt;
+&lt;td&gt;netboot.xyz.efi&lt;/td&gt;
+&lt;/tr&gt;
+&lt;tr&gt;
+&lt;td&gt;ARM x86 UEFI (32-bit)&lt;/td&gt;
+&lt;td&gt;netboot.xyz-arm64.efi&lt;/td&gt;
+&lt;/tr&gt;
+&lt;tr&gt;
+&lt;td&gt;ARM x86 UEFI (64-bit)&lt;/td&gt;
+&lt;td&gt;netboot.xyz-arm64.efi&lt;/td&gt;
+&lt;/tr&gt;
+&lt;/tbody&gt;
+&lt;/table&gt;
+&lt;p&gt;&lt;img alt="Boot Filenames" src="https://blog.kail.io/images/2023/opnsense-pxe/opnsense-pxe-5.png"&gt;&lt;/p&gt;
+&lt;p&gt;Scrool down to click save and the DHCP service should restart.  Now when you do
+network booting with a system on the network it will bring up a slick menu to
+boot your favorite distribution.&lt;/p&gt;
+&lt;h2&gt;References&lt;/h2&gt;
+&lt;ul&gt;
+&lt;li&gt;&lt;a href="https://netboot.xyz/docs/booting/tftp"&gt;Netboot.xyz&lt;/a&gt;&lt;/li&gt;
+&lt;li&gt;&lt;a href="https://www.reddit.com/r/OPNsenseFirewall/comments/zx86ve/how_to_configure_opnsense_for_netbootxyz/"&gt;Reddit
+Thread&lt;/a&gt;&lt;/li&gt;
+&lt;/ul&gt;</content><category term="OPNSense"></category><category term="opnsense"></category><category term="netboot"></category></entry><entry><title>Adding Anaconda Environment to Jupyter</title><link href="https://blog.kail.io/adding-anaconda-environment-to-jupyter.html" rel="alternate"></link><published>2023-02-13T12:00:00-05:00</published><updated>2023-02-13T12:00:00-05:00</updated><author><name>Andrew Kail</name></author><id>tag:blog.kail.io,2023-02-13:/adding-anaconda-environment-to-jupyter.html</id><summary type="html">&lt;p&gt;When using Jupyter, or Jupyterlab, you'll often times want to use different anaconda
 environments for different projects.  Especially when you are working on a
 personal workstation.  Unfortunately, even when installed with anaconda at the
 root level, jupyter doesn't automatically detect installed anaconda
