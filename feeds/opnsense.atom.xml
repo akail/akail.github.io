@@ -42,7 +42,7 @@ a green play button in the top right indicating the service is running.&lt;/p&gt
 &lt;p&gt;Now we need to enable the dhcp server to allow network booting.&lt;/p&gt;
 &lt;p&gt;Navigate to &lt;code&gt;Services &amp;gt; DHCPv4 &amp;gt; [Name of you boot network]&lt;/code&gt;.  Making sure to
 select the network you wish to boot from.  In my case, its my Internal network.&lt;/p&gt;
-&lt;p&gt;&lt;img alt="Configure Network Booting" src="https://blog.kail.io/images/2023/opnsense-pxe/opnsense-pxe-3.png" width="300"&gt;&lt;/p&gt;
+&lt;p&gt;&lt;img alt="Configure Network Booting" class="center-img" src="https://blog.kail.io/images/2023/opnsense-pxe/opnsense-pxe-3.png" width="300"&gt;&lt;/p&gt;
 &lt;p&gt;Scroll down till you see  &lt;code&gt;Network Booting&lt;/code&gt; and click the &lt;code&gt;Advanced&lt;/code&gt; button to
 show all the full settings.&lt;/p&gt;
 &lt;p&gt;&lt;img alt="Advanced Settings" src="https://blog.kail.io/images/2023/opnsense-pxe/opnsense-pxe-4.png"&gt;&lt;/p&gt;
