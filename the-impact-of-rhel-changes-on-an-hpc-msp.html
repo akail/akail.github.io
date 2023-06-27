@@ -1,0 +1,244 @@
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="utf-8" />
+  <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+  <meta name="HandheldFriendly" content="True" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <meta name="robots" content="" />
+
+  <link href="https://fonts.googleapis.com/css2?family=Source+Code+Pro:ital,wght@0,400;0,700;1,400&family=Source+Sans+Pro:ital,wght@0,300;0,400;0,700;1,400&display=swap" rel="stylesheet">
+
+    <link rel="stylesheet" type="text/css" href="https://blog.kail.io/theme/stylesheet/style.min.css">
+
+
+    <link id="pygments-light-theme" rel="stylesheet" type="text/css"
+          href="https://blog.kail.io/theme/pygments/gruvbox-dark.min.css">
+
+
+
+  <link rel="stylesheet" type="text/css" href="https://blog.kail.io/theme/font-awesome/css/fontawesome.css">
+  <link rel="stylesheet" type="text/css" href="https://blog.kail.io/theme/font-awesome/css/brands.css">
+  <link rel="stylesheet" type="text/css" href="https://blog.kail.io/theme/font-awesome/css/solid.css">
+
+  <link rel="stylesheet" type="text/css" href="https://blog.kail.io/static/custom.css">
+
+
+
+  <link href="https://blog.kail.io/feeds/all.atom.xml" type="application/atom+xml" rel="alternate" title="Andrew Kail's Blog Atom">
+
+
+
+
+
+
+
+
+ 
+
+<meta name="author" content="Andrew Kail" />
+<meta name="description" content="Its been nearly a week now and after having stewed on it I think its time tp speak my piece on this debacle. The recent changes to how Red Hat Enterprise Linux (RHEL) distributes their source code has caused quite a stir in the Linux and HPC community. While I …" />
+<meta name="keywords" content="hpc, linux">
+
+
+  <meta property="og:site_name" content="Andrew Kail's Blog"/>
+  <meta property="og:title" content="The Impact of RHEL Changes on an HPC MSP"/>
+  <meta property="og:description" content="Its been nearly a week now and after having stewed on it I think its time tp speak my piece on this debacle. The recent changes to how Red Hat Enterprise Linux (RHEL) distributes their source code has caused quite a stir in the Linux and HPC community. While I …"/>
+  <meta property="og:locale" content="en_US"/>
+  <meta property="og:url" content="https://blog.kail.io/the-impact-of-rhel-changes-on-an-hpc-msp.html"/>
+  <meta property="og:type" content="article"/>
+  <meta property="article:published_time" content="2023-06-27 12:00:00-04:00"/>
+  <meta property="article:modified_time" content=""/>
+  <meta property="article:author" content="https://blog.kail.io/author/andrew-kail.html">
+  <meta property="article:section" content="HPC"/>
+  <meta property="article:tag" content="hpc"/>
+  <meta property="article:tag" content="linux"/>
+  <meta property="og:image" content="/images/profile.png">
+
+  <title>Andrew Kail's Blog &ndash; The Impact of RHEL Changes on an HPC MSP</title>
+
+
+</head>
+<body class="light-theme">
+
+<aside>
+  <div>
+    <a href="https://blog.kail.io/">
+      <img src="/images/profile.png" alt="Andrew Kail" title="Andrew Kail">
+    </a>
+
+    <h1>
+      <a href="https://blog.kail.io/">Andrew Kail</a>
+    </h1>
+
+    <p>Somewhat HPC related blog</p>
+
+
+    <nav>
+      <ul class="list">
+
+
+            <li>
+              <a target="_self"
+                 href="https://blog.kail.io/pages/about.html#about">
+                About
+              </a>
+            </li>
+            <li>
+              <a target="_self"
+                 href="https://blog.kail.io/pages/get-in-touch.html#get-in-touch">
+                Get in Touch
+              </a>
+            </li>
+            <li>
+              <a target="_self"
+                 href="https://blog.kail.io/pages/projects.html#projects">
+                Projects
+              </a>
+            </li>
+
+          <li>
+            <a target="_self" href="https://github.com/akail/Configs" >My Configs</a>
+          </li>
+          <li>
+            <a target="_self" href="https://hpc.kail.io" >HPC Book (WIP)</a>
+          </li>
+      </ul>
+    </nav>
+
+    <ul class="social">
+      <li>
+        <a class="sc-github"
+           href="https://github.com/akail"
+           target="_blank">
+          <i class="fa-brands fa-github"></i>
+        </a>
+      </li>
+      <li>
+        <a class="sc-rss"
+           href="/feeds/all.atom.xml"
+           target="_blank">
+          <i class="fa-solid fa-rss"></i>
+        </a>
+      </li>
+      <li>
+        <a class="sc-linkedin"
+           href="https://www.linkedin.com/in/andrewkail/"
+           target="_blank">
+          <i class="fa-brands fa-linkedin"></i>
+        </a>
+      </li>
+      <li>
+        <a class="sc-mastodon"
+rel="me"           href="https://fosstodon.org/@akail"
+           target="_blank">
+          <i class="fa-brands fa-mastodon"></i>
+        </a>
+      </li>
+    </ul>
+  </div>
+
+</aside>
+  <main>
+
+<nav>
+  <a href="https://blog.kail.io/">Home</a>
+
+  <a href="/archives.html">Archives</a>
+  <a href="/categories.html">Categories</a>
+  <a href="/tags.html">Tags</a>
+
+  <a href="https://blog.kail.io/feeds/all.atom.xml">Atom</a>
+
+</nav>
+
+<article class="single">
+  <header>
+      
+    <h1 id="the-impact-of-rhel-changes-on-an-hpc-msp">The Impact of RHEL Changes on an HPC MSP</h1>
+    <p>
+      Posted on Tue 27 June 2023 in <a href="https://blog.kail.io/category/hpc.html">HPC</a>
+
+    </p>
+  </header>
+
+
+  <div>
+    <p>Its been nearly a week now and after having stewed on it I think its time tp speak my piece on this debacle.</p>
+<p>The recent changes to how Red Hat Enterprise Linux (RHEL) distributes their
+source code has caused quite a stir in the Linux and HPC community.  </p>
+<p>While I can't fault RedHat/IBM for the business decision they have made, it does
+leave us in a bit of a pickle with regard to the support we provide long term.</p>
+<h2>What Happened</h2>
+<p>This feels like beating a dead horse really, so I'll just leave a few links on the situation:</p>
+<ul>
+<li><a href="https://www.redhat.com/en/blog/furthering-evolution-centos-stream">The initial announcement</a></li>
+<li><a href="https://www.redhat.com/en/blog/red-hats-commitment-open-source-response-gitcentosorg-changes">The RedHat response to Cricism</a></li>
+<li>Rocky Linux <a href="https://rockylinux.org/news/2023-06-22-press-release/">1</a> <a href="https://rockylinux.org/news/brave-new-world-path-forward/">2</a></li>
+<li><a href="https://almalinux.org/blog/impact-of-rhel-changes/">Alma Linux</a></li>
+<li><a href="https://sfconservancy.org/blog/2023/jun/23/rhel-gpl-analysis/">Software Freedom Conservancy</a></li>
+<li>Jeff Geerling <a href="https://www.jeffgeerling.com/blog/2023/dear-red-hat-are-you-dumb">1</a> <a href="https://www.jeffgeerling.com/blog/2023/removing-official-support-red-hat-enterprise-linux">2</a> <a href="https://www.jeffgeerling.com/blog/2023/im-done-red-hat-enterprise-linux">3</a></li>
+</ul>
+<p><strong>tldr</strong> - RedHad sees no value in allowing rebuilds, so they're closing it off.</p>
+<h2>How This Impacts Us</h2>
+<p>At the moment it doesn't thanks to the engineering teams at CIQ stepping up to provide continued updates which we are extremelly grateful for.  We are currently in the process of migrating customers from CentOS 7 clusters to Rocky 8 or 9 depending on the environment, with plans to migrate several more over the course of the year. This, of course, excludes the several we have that are running RHEL which will not be impacted at all by the change.</p>
+<p>The big question is how long can CIQ keep these updates going? Or how long can Alma maintain cherry picking updates out of CentOS Stream? Once RedHat realizes they didn't kill off the derivative rebuilds will they pursue other legal or more drastic actions?  Going a step further, what about other open source projects from RedHat?  Looking at you Ansible, Podman, etc.</p>
+<p>And what will IBM be doing for their products running on RHEL and OpenShift?  I'm worried about IBM Storage Scale (GPFS) only support clients on RHEL.</p>
+<p>The bigger blow for our engineering or is Jeff Geerling dropping support for Enterprise Linux with his ansible roles,
+which are used heavily for some of our deployments.  Who will follow in dropping support?  We've already seen some application developers, namely GROMACS, state they will only officially support container stacks.</p>
+<p>Then, for so many of our clients, they can't absorb the licensing costs for the number of licenses they need.  Many are smaller clients on a budget and a huge increase in license costs will reduce the value they can provide to their users.  </p>
+<h2>What next</h2>
+<p>We honestly don't know what the future holds for us in our space.  Most of our clients are on CentOS, Rocky, or RHEL spanning multiple versions.  Most of our storage stack are supported only on Enterprise Linux or heavily favor it.  If Rocky or Alma eventually go away we'll have to make some decisions on those clients.</p>
+<p>In the meantime, we'll be prioritizing containerization of user applications via Singularity, Shifter, or CharlieCloud (Upcoming Article on this), as well as experiment with containerization of our supporting infrastructure.  While some pieces like the majority of the monitoring stack are easy to containerize, I am even looking at moving tools like Warewulf to a container which should be interesting.</p>
+<p>Our other option is to migrate some of our customer base to OpenSuse Leap and offer paid support if they need it. Leap is the CentOS/Rocky equiavalent of Suse Enterprise Linux (SLES) and is maintained directly by Suse.  We've met with their team in the past and have dedicated resources and packages for HPC environments.  I think this is their opportunity to step into the HPC space for many institutions and I really hope they don't miss it.  I'll be exploring openSuseLeap and warewulf in the coming weeks with some blog posts I hope.</p>
+<h2>Conclusion</h2>
+<p>This announcement hit me right before bed unfortunately what followed was not a good night's sleep as I wrestled with the implications.</p>
+<p>We'll be fine for now and we have some work to do to support our customers in the long term. </p>
+<p>Also, what they have done doesn't appear to be illegal nor violate the GPL license. Time will tell, but I'm starting to see some bleedover of Big Blue into RedHat more and more and have deep concerns about how we can support our clients long term. I hope I'm wrong.</p>
+  </div>
+  <div class="tag-cloud">
+    <p>
+      <a href="https://blog.kail.io/tag/hpc.html">hpc</a>
+      <a href="https://blog.kail.io/tag/linux.html">linux</a>
+    </p>
+  </div>
+
+
+
+
+
+
+</article>
+
+<footer>
+<p>
+  &copy;   - This work is licensed under a <a rel="license" href="http://creativecommons.org/licenses/by-sa/4.0/deed.en_US" target="_blank">Creative Commons Attribution-ShareAlike</a>
+</p>
+<p>
+Built with <a href="http://getpelican.com" target="_blank">Pelican</a> using <a href="http://bit.ly/flex-pelican" target="_blank">Flex</a> theme
+</p><p>
+  <a rel="license"
+     href="http://creativecommons.org/licenses/by-sa/4.0/"
+     target="_blank">
+    <img alt="Creative Commons License"
+         title="Creative Commons License"
+         style="border-width:0"
+           src="https://i.creativecommons.org/l/by-sa/4.0/80x15.png"
+         width="80"
+         height="15"/>
+  </a>
+</p></footer>  </main>
+
+<script type="application/ld+json">
+{
+  "@context" : "http://schema.org",
+  "@type" : "Blog",
+  "name": " Andrew Kail's Blog ",
+  "url" : "https://blog.kail.io",
+  "image": "/images/profile.png",
+  "description": ""
+}
+</script>
+</body>
+</html>

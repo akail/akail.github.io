@@ -1,5 +1,62 @@
 <?xml version="1.0" encoding="utf-8"?>
-<feed xmlns="http://www.w3.org/2005/Atom"><title>Andrew Kail's Blog</title><link href="https://blog.kail.io/" rel="alternate"></link><link href="https://blog.kail.io/feeds/all.atom.xml" rel="self"></link><id>https://blog.kail.io/</id><updated>2023-03-29T01:00:00-04:00</updated><subtitle>Somewhat HPC related blog</subtitle><entry><title>Running Netboot.xyz From OPNSense</title><link href="https://blog.kail.io/running-netbootxyz-from-opnsense.html" rel="alternate"></link><published>2023-03-29T01:00:00-04:00</published><updated>2023-03-29T01:00:00-04:00</updated><author><name>Andrew Kail</name></author><id>tag:blog.kail.io,2023-03-29:/running-netbootxyz-from-opnsense.html</id><summary type="html">&lt;p&gt;After working with some PXE booting at work recently, I decided to pick up a
+<feed xmlns="http://www.w3.org/2005/Atom"><title>Andrew Kail's Blog</title><link href="https://blog.kail.io/" rel="alternate"></link><link href="https://blog.kail.io/feeds/all.atom.xml" rel="self"></link><id>https://blog.kail.io/</id><updated>2023-06-27T12:00:00-04:00</updated><subtitle>Somewhat HPC related blog</subtitle><entry><title>The Impact of RHEL Changes on an HPC MSP</title><link href="https://blog.kail.io/the-impact-of-rhel-changes-on-an-hpc-msp.html" rel="alternate"></link><published>2023-06-27T12:00:00-04:00</published><updated>2023-06-27T12:00:00-04:00</updated><author><name>Andrew Kail</name></author><id>tag:blog.kail.io,2023-06-27:/the-impact-of-rhel-changes-on-an-hpc-msp.html</id><summary type="html">&lt;p&gt;Its been nearly a week now and after having stewed on it I think its time tp speak my piece on this debacle.&lt;/p&gt;
+&lt;p&gt;The recent changes to how Red Hat Enterprise Linux (RHEL) distributes their
+source code has caused quite a stir in the Linux and HPC community.  &lt;/p&gt;
+&lt;p&gt;While I …&lt;/p&gt;</summary><content type="html">&lt;p&gt;Its been nearly a week now and after having stewed on it I think its time tp speak my piece on this debacle.&lt;/p&gt;
+&lt;p&gt;The recent changes to how Red Hat Enterprise Linux (RHEL) distributes their
+source code has caused quite a stir in the Linux and HPC community.  &lt;/p&gt;
+&lt;p&gt;While I can't fault RedHat/IBM for the business decision they have made, it does
+leave us in a bit of a pickle with regard to the support we provide long term.&lt;/p&gt;
+&lt;h2&gt;What Happened&lt;/h2&gt;
+&lt;p&gt;This feels like beating a dead horse really, so I'll just leave a few links on the situation:&lt;/p&gt;
+&lt;ul&gt;
+&lt;li&gt;&lt;a href="https://www.redhat.com/en/blog/furthering-evolution-centos-stream"&gt;The initial announcement&lt;/a&gt;&lt;/li&gt;
+&lt;li&gt;&lt;a href="https://www.redhat.com/en/blog/red-hats-commitment-open-source-response-gitcentosorg-changes"&gt;The RedHat response to Cricism&lt;/a&gt;&lt;/li&gt;
+&lt;li&gt;Rocky Linux &lt;a href="https://rockylinux.org/news/2023-06-22-press-release/"&gt;1&lt;/a&gt; &lt;a href="https://rockylinux.org/news/brave-new-world-path-forward/"&gt;2&lt;/a&gt;&lt;/li&gt;
+&lt;li&gt;&lt;a href="https://almalinux.org/blog/impact-of-rhel-changes/"&gt;Alma Linux&lt;/a&gt;&lt;/li&gt;
+&lt;li&gt;&lt;a href="https://sfconservancy.org/blog/2023/jun/23/rhel-gpl-analysis/"&gt;Software Freedom Conservancy&lt;/a&gt;&lt;/li&gt;
+&lt;li&gt;Jeff Geerling &lt;a href="https://www.jeffgeerling.com/blog/2023/dear-red-hat-are-you-dumb"&gt;1&lt;/a&gt; &lt;a href="https://www.jeffgeerling.com/blog/2023/removing-official-support-red-hat-enterprise-linux"&gt;2&lt;/a&gt; &lt;a href="https://www.jeffgeerling.com/blog/2023/im-done-red-hat-enterprise-linux"&gt;3&lt;/a&gt;&lt;/li&gt;
+&lt;/ul&gt;
+&lt;p&gt;&lt;strong&gt;tldr&lt;/strong&gt; - RedHad sees no value in allowing rebuilds, so they're closing it off.&lt;/p&gt;
+&lt;h2&gt;How This Impacts Us&lt;/h2&gt;
+&lt;p&gt;At the moment it doesn't thanks to the engineering teams at CIQ stepping up to provide continued updates which we are extremelly grateful for.  We are currently in the process of migrating customers from CentOS 7 clusters to Rocky 8 or 9 depending on the environment, with plans to migrate several more over the course of the year. This, of course, excludes the several we have that are running RHEL which will not be impacted at all by the change.&lt;/p&gt;
+&lt;p&gt;The big question is how long can CIQ keep these updates going? Or how long can Alma maintain cherry picking updates out of CentOS Stream? Once RedHat realizes they didn't kill off the derivative rebuilds will they pursue other legal or more drastic actions?  Going a step further, what about other open source projects from RedHat?  Looking at you Ansible, Podman, etc.&lt;/p&gt;
+&lt;p&gt;And what will IBM be doing for their products running on RHEL and OpenShift?  I'm worried about IBM Storage Scale (GPFS) only support clients on RHEL.&lt;/p&gt;
+&lt;p&gt;The bigger blow for our engineering or is Jeff Geerling dropping support for Enterprise Linux with his ansible roles,
+which are used heavily for some of our deployments.  Who will follow in dropping support?  We've already seen some application developers, namely GROMACS, state they will only officially support container stacks.&lt;/p&gt;
+&lt;p&gt;Then, for so many of our clients, they can't absorb the licensing costs for the number of licenses they need.  Many are smaller clients on a budget and a huge increase in license costs will reduce the value they can provide to their users.  &lt;/p&gt;
+&lt;h2&gt;What next&lt;/h2&gt;
+&lt;p&gt;We honestly don't know what the future holds for us in our space.  Most of our clients are on CentOS, Rocky, or RHEL spanning multiple versions.  Most of our storage stack are supported only on Enterprise Linux or heavily favor it.  If Rocky or Alma eventually go away we'll have to make some decisions on those clients.&lt;/p&gt;
+&lt;p&gt;In the meantime, we'll be prioritizing containerization of user applications via Singularity, Shifter, or CharlieCloud (Upcoming Article on this), as well as experiment with containerization of our supporting infrastructure.  While some pieces like the majority of the monitoring stack are easy to containerize, I am even looking at moving tools like Warewulf to a container which should be interesting.&lt;/p&gt;
+&lt;p&gt;Our other option is to migrate some of our customer base to OpenSuse Leap and offer paid support if they need it. Leap is the CentOS/Rocky equiavalent of Suse Enterprise Linux (SLES) and is maintained directly by Suse.  We've met with their team in the past and have dedicated resources and packages for HPC environments.  I think this is their opportunity to step into the HPC space for many institutions and I really hope they don't miss it.  I'll be exploring openSuseLeap and warewulf in the coming weeks with some blog posts I hope.&lt;/p&gt;
+&lt;h2&gt;Conclusion&lt;/h2&gt;
+&lt;p&gt;This announcement hit me right before bed unfortunately what followed was not a good night's sleep as I wrestled with the implications.&lt;/p&gt;
+&lt;p&gt;We'll be fine for now and we have some work to do to support our customers in the long term. &lt;/p&gt;
+&lt;p&gt;Also, what they have done doesn't appear to be illegal nor violate the GPL license. Time will tell, but I'm starting to see some bleedover of Big Blue into RedHat more and more and have deep concerns about how we can support our clients long term. I hope I'm wrong.&lt;/p&gt;</content><category term="HPC"></category><category term="hpc"></category><category term="linux"></category></entry><entry><title>PXE Booting on Proxmox</title><link href="https://blog.kail.io/pxe-booting-on-proxmox.html" rel="alternate"></link><published>2023-04-05T01:00:00-04:00</published><updated>2023-04-05T01:00:00-04:00</updated><author><name>Andrew Kail</name></author><id>tag:blog.kail.io,2023-04-05:/pxe-booting-on-proxmox.html</id><summary type="html">&lt;p&gt;In last's week post I &lt;a href="https://blog.kail.io/running-netbootxyz-from-opnsense.html"&gt;installed netboot.xyz on an OPNSense firewall&lt;/a&gt;. Now its
+time to test the PXE boot process on a VM on my Proxmox Host.  Its very
+straightforward, but there are a few caveats I found with netboot.&lt;/p&gt;
+&lt;p&gt;First, start the VM Creation process in Proxmox.  You …&lt;/p&gt;</summary><content type="html">&lt;p&gt;In last's week post I &lt;a href="https://blog.kail.io/running-netbootxyz-from-opnsense.html"&gt;installed netboot.xyz on an OPNSense firewall&lt;/a&gt;. Now its
+time to test the PXE boot process on a VM on my Proxmox Host.  Its very
+straightforward, but there are a few caveats I found with netboot.&lt;/p&gt;
+&lt;p&gt;First, start the VM Creation process in Proxmox.  You will use the defaults on
+most of the pages, but there are two important menu's you'll need to fill out.&lt;/p&gt;
+&lt;p&gt;&lt;img alt="Create VM" src="https://blog.kail.io/images/2023/proxmox-pxe/proxmox-pxe-1.png"&gt;&lt;/p&gt;
+&lt;p&gt;The first is in the OS menu.  Instead of selecting an ISO which has been loaded
+to the node, you'll want to select &lt;code&gt;Do no use any media&lt;/code&gt;&lt;/p&gt;
+&lt;p&gt;&lt;img alt="Select Install Media" src="https://blog.kail.io/images/2023/proxmox-pxe/proxmox-pxe-2.png"&gt;&lt;/p&gt;
+&lt;p&gt;The second caveat is when configuring the RAM.  During testing, I found there is
+a minimum amount of RAM you need with PXE booting.  This is due to downloaded
+media having to be stored in RAM before starting. Usually happens when running a
+live OS like EndeavourOS.  You'll want to configure at least 4 Gigabytes of RAM.&lt;/p&gt;
+&lt;p&gt;&lt;img alt="Select Ram" src="https://blog.kail.io/images/2023/proxmox-pxe/proxmox-pxe-3.png"&gt;&lt;/p&gt;
+&lt;p&gt;Finish creating the VM and go to the VM's console menu to start the VM.&lt;/p&gt;
+&lt;p&gt;&lt;img alt="Start VM" src="https://blog.kail.io/images/2023/proxmox-pxe/proxmox-pxe-4.png"&gt;&lt;/p&gt;
+&lt;p&gt;Without any media configured and nothing installed to the virtual disk the VM
+will automatically network boot and should pick up netboot.xyz right away.
+You'll the be able to select from the menu what you want to boot.&lt;/p&gt;
+&lt;p&gt;&lt;img alt="Netboot" src="https://blog.kail.io/images/2023/proxmox-pxe/proxmox-pxe-5.png"&gt;&lt;/p&gt;
+&lt;p&gt;I'm really impressed with how easy netboot.xyz was to install and use and I look
+forward to using it.&lt;/p&gt;</content><category term="Proxmox"></category><category term="proxmox"></category><category term="netboot"></category></entry><entry><title>Running Netboot.xyz From OPNSense</title><link href="https://blog.kail.io/running-netbootxyz-from-opnsense.html" rel="alternate"></link><published>2023-03-29T01:00:00-04:00</published><updated>2023-03-29T01:00:00-04:00</updated><author><name>Andrew Kail</name></author><id>tag:blog.kail.io,2023-03-29:/running-netbootxyz-from-opnsense.html</id><summary type="html">&lt;p&gt;After working with some PXE booting at work recently, I decided to pick up a
 long standing todo of installing netboot.xyz on my network.  When I started to
 take a deeper look into it I realized I could probably install it on my OPNSense
 VM as it is the …&lt;/p&gt;</summary><content type="html">&lt;p&gt;After working with some PXE booting at work recently, I decided to pick up a

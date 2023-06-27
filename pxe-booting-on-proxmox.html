@@ -37,17 +37,26 @@
 
  
 
-    <meta name="author" content="Andrew Kail" />
-    <meta name="description" content="" />
+<meta name="author" content="Andrew Kail" />
+<meta name="description" content="In last&#39;s week post I installed netboot.xyz on an OPNSense firewall. Now its time to test the PXE boot process on a VM on my Proxmox Host. Its very straightforward, but there are a few caveats I found with netboot. First, start the VM Creation process in Proxmox. You …" />
+<meta name="keywords" content="proxmox, netboot">
+
+
   <meta property="og:site_name" content="Andrew Kail's Blog"/>
-  <meta property="og:type" content="blog"/>
-  <meta property="og:title" content="Andrew Kail's Blog"/>
-  <meta property="og:description" content=""/>
+  <meta property="og:title" content="PXE Booting on Proxmox"/>
+  <meta property="og:description" content="In last&#39;s week post I installed netboot.xyz on an OPNSense firewall. Now its time to test the PXE boot process on a VM on my Proxmox Host. Its very straightforward, but there are a few caveats I found with netboot. First, start the VM Creation process in Proxmox. You …"/>
   <meta property="og:locale" content="en_US"/>
-  <meta property="og:url" content="https://blog.kail.io"/>
+  <meta property="og:url" content="https://blog.kail.io/pxe-booting-on-proxmox.html"/>
+  <meta property="og:type" content="article"/>
+  <meta property="article:published_time" content="2023-04-05 01:00:00-04:00"/>
+  <meta property="article:modified_time" content=""/>
+  <meta property="article:author" content="https://blog.kail.io/author/andrew-kail.html">
+  <meta property="article:section" content="Proxmox"/>
+  <meta property="article:tag" content="proxmox"/>
+  <meta property="article:tag" content="netboot"/>
   <meta property="og:image" content="/images/profile.png">
 
-  <title>Andrew Kail's Blog &ndash; Tags</title>
+  <title>Andrew Kail's Blog &ndash; PXE Booting on Proxmox</title>
 
 
 </head>
@@ -146,21 +155,51 @@ rel="me"           href="https://fosstodon.org/@akail"
 
 <article class="single">
   <header>
-    <h1 id="tags">Tags</h1>
+      
+    <h1 id="pxe-booting-on-proxmox">PXE Booting on Proxmox</h1>
+    <p>
+      Posted on Wed 05 April 2023 in <a href="https://blog.kail.io/category/proxmox.html">Proxmox</a>
+
+    </p>
   </header>
+
+
   <div>
-    <ul class="list">          <li><a href="https://blog.kail.io/tag/hpc.html">hpc</a> (1)</li>
-          <li><a href="https://blog.kail.io/tag/jupyter.html">jupyter</a> (1)</li>
-          <li><a href="https://blog.kail.io/tag/linux.html">linux</a> (1)</li>
-          <li><a href="https://blog.kail.io/tag/netboot.html">netboot</a> (2)</li>
-          <li><a href="https://blog.kail.io/tag/opnsense.html">opnsense</a> (1)</li>
-          <li><a href="https://blog.kail.io/tag/pelican.html">pelican</a> (1)</li>
-          <li><a href="https://blog.kail.io/tag/proxmox.html">proxmox</a> (1)</li>
-          <li><a href="https://blog.kail.io/tag/python.html">python</a> (1)</li>
-          <li><a href="https://blog.kail.io/tag/snippets.html">snippets</a> (1)</li>
-          <li><a href="https://blog.kail.io/tag/storage.html">storage</a> (1)</li>
-    </ul>
+    <p>In last's week post I <a href="https://blog.kail.io/running-netbootxyz-from-opnsense.html">installed netboot.xyz on an OPNSense firewall</a>. Now its
+time to test the PXE boot process on a VM on my Proxmox Host.  Its very
+straightforward, but there are a few caveats I found with netboot.</p>
+<p>First, start the VM Creation process in Proxmox.  You will use the defaults on
+most of the pages, but there are two important menu's you'll need to fill out.</p>
+<p><img alt="Create VM" src="https://blog.kail.io/images/2023/proxmox-pxe/proxmox-pxe-1.png"></p>
+<p>The first is in the OS menu.  Instead of selecting an ISO which has been loaded
+to the node, you'll want to select <code>Do no use any media</code></p>
+<p><img alt="Select Install Media" src="https://blog.kail.io/images/2023/proxmox-pxe/proxmox-pxe-2.png"></p>
+<p>The second caveat is when configuring the RAM.  During testing, I found there is
+a minimum amount of RAM you need with PXE booting.  This is due to downloaded
+media having to be stored in RAM before starting. Usually happens when running a
+live OS like EndeavourOS.  You'll want to configure at least 4 Gigabytes of RAM.</p>
+<p><img alt="Select Ram" src="https://blog.kail.io/images/2023/proxmox-pxe/proxmox-pxe-3.png"></p>
+<p>Finish creating the VM and go to the VM's console menu to start the VM.</p>
+<p><img alt="Start VM" src="https://blog.kail.io/images/2023/proxmox-pxe/proxmox-pxe-4.png"></p>
+<p>Without any media configured and nothing installed to the virtual disk the VM
+will automatically network boot and should pick up netboot.xyz right away.
+You'll the be able to select from the menu what you want to boot.</p>
+<p><img alt="Netboot" src="https://blog.kail.io/images/2023/proxmox-pxe/proxmox-pxe-5.png"></p>
+<p>I'm really impressed with how easy netboot.xyz was to install and use and I look
+forward to using it.</p>
   </div>
+  <div class="tag-cloud">
+    <p>
+      <a href="https://blog.kail.io/tag/proxmox.html">proxmox</a>
+      <a href="https://blog.kail.io/tag/netboot.html">netboot</a>
+    </p>
+  </div>
+
+
+
+
+
+
 </article>
 
 <footer>
