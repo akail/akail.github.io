@@ -4,7 +4,7 @@ Category: HPC
 Tags: hpc,linux
 Authors: Andrew Kail
 
-Its been nearly a week now and after having stewed on it I think its time tp speak my piece on this debacle.
+Its been nearly a week now and after having stewed on it I think its time to speak my piece on this debacle.
 
 The recent changes to how Red Hat Enterprise Linux (RHEL) distributes their
 source code has caused quite a stir in the Linux and HPC community.  

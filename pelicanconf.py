@@ -23,8 +23,8 @@ AUTHOR_FEED_RSS = None
          # ('Python.org', 'https://www.python.org/'),
          # ('Jinja2', 'https://palletsprojects.com/p/jinja/'),
          # ('You can modify those links in your config file', '#'),)
-LINKS = (("My Configs", "https://github.com/akail/Configs"),
-         ('HPC Book (WIP)', 'https://hpc.kail.io'),)
+LINKS = (("My Configs", "https://github.com/akail/Configs"),)
+         # ('HPC Book (WIP)', 'https://hpc.kail.io'),)
 
 DEFAULT_PAGINATION = 10
 
