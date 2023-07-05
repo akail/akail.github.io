@@ -1,0 +1,288 @@
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="utf-8" />
+  <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+  <meta name="HandheldFriendly" content="True" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <meta name="robots" content="" />
+
+  <link href="https://fonts.googleapis.com/css2?family=Source+Code+Pro:ital,wght@0,400;0,700;1,400&family=Source+Sans+Pro:ital,wght@0,300;0,400;0,700;1,400&display=swap" rel="stylesheet">
+
+    <link rel="stylesheet" type="text/css" href="https://blog.kail.io/theme/stylesheet/style.min.css">
+
+
+    <link id="pygments-light-theme" rel="stylesheet" type="text/css"
+          href="https://blog.kail.io/theme/pygments/gruvbox-dark.min.css">
+
+
+
+  <link rel="stylesheet" type="text/css" href="https://blog.kail.io/theme/font-awesome/css/fontawesome.css">
+  <link rel="stylesheet" type="text/css" href="https://blog.kail.io/theme/font-awesome/css/brands.css">
+  <link rel="stylesheet" type="text/css" href="https://blog.kail.io/theme/font-awesome/css/solid.css">
+
+  <link rel="stylesheet" type="text/css" href="https://blog.kail.io/static/custom.css">
+
+
+
+  <link href="https://blog.kail.io/feeds/all.atom.xml" type="application/atom+xml" rel="alternate" title="Andrew Kail's Blog Atom">
+
+
+
+
+
+
+
+
+ 
+
+<meta name="author" content="Andrew Kail" />
+<meta name="description" content="I have recently set up an IOT VLAN on my OPNsense router to move some devices to. How to block the outbound took a little work to figure out but finally found the rule settings to get it working. In my example below I&#39;ll be blocking all outbound network traffic …" />
+<meta name="keywords" content="opnsense">
+
+
+  <meta property="og:site_name" content="Andrew Kail's Blog"/>
+  <meta property="og:title" content="Block IOT Network Outbound on OpnSense"/>
+  <meta property="og:description" content="I have recently set up an IOT VLAN on my OPNsense router to move some devices to. How to block the outbound took a little work to figure out but finally found the rule settings to get it working. In my example below I&#39;ll be blocking all outbound network traffic …"/>
+  <meta property="og:locale" content="en_US"/>
+  <meta property="og:url" content="https://blog.kail.io/drafts/block-iot-network-outbound-on-opnsense.html"/>
+  <meta property="og:type" content="article"/>
+  <meta property="article:published_time" content="2023-07-05 12:00:00-04:00"/>
+  <meta property="article:modified_time" content=""/>
+  <meta property="article:author" content="https://blog.kail.io/author/andrew-kail.html">
+  <meta property="article:section" content="Homelab"/>
+  <meta property="article:tag" content="opnsense"/>
+  <meta property="og:image" content="/images/profile.png">
+
+  <title>Andrew Kail's Blog &ndash; Block IOT Network Outbound on OpnSense</title>
+
+
+</head>
+<body class="light-theme">
+
+<aside>
+  <div>
+    <a href="https://blog.kail.io/">
+      <img src="/images/profile.png" alt="Andrew Kail" title="Andrew Kail">
+    </a>
+
+    <h1>
+      <a href="https://blog.kail.io/">Andrew Kail</a>
+    </h1>
+
+    <p>Somewhat HPC related blog</p>
+
+
+    <nav>
+      <ul class="list">
+
+
+            <li>
+              <a target="_self"
+                 href="https://blog.kail.io/pages/about.html#about">
+                About
+              </a>
+            </li>
+            <li>
+              <a target="_self"
+                 href="https://blog.kail.io/pages/get-in-touch.html#get-in-touch">
+                Get in Touch
+              </a>
+            </li>
+            <li>
+              <a target="_self"
+                 href="https://blog.kail.io/pages/projects.html#projects">
+                Projects
+              </a>
+            </li>
+
+          <li>
+            <a target="_self" href="https://github.com/akail/Configs" >My Configs</a>
+          </li>
+      </ul>
+    </nav>
+
+    <ul class="social">
+      <li>
+        <a class="sc-github"
+           href="https://github.com/akail"
+           target="_blank">
+          <i class="fa-brands fa-github"></i>
+        </a>
+      </li>
+      <li>
+        <a class="sc-rss"
+           href="/feeds/all.atom.xml"
+           target="_blank">
+          <i class="fa-solid fa-rss"></i>
+        </a>
+      </li>
+      <li>
+        <a class="sc-linkedin"
+           href="https://www.linkedin.com/in/andrewkail/"
+           target="_blank">
+          <i class="fa-brands fa-linkedin"></i>
+        </a>
+      </li>
+      <li>
+        <a class="sc-mastodon"
+rel="me"           href="https://fosstodon.org/@akail"
+           target="_blank">
+          <i class="fa-brands fa-mastodon"></i>
+        </a>
+      </li>
+    </ul>
+  </div>
+
+</aside>
+  <main>
+
+<nav>
+  <a href="https://blog.kail.io/">Home</a>
+
+  <a href="/archives.html">Archives</a>
+  <a href="/categories.html">Categories</a>
+  <a href="/tags.html">Tags</a>
+
+  <a href="https://blog.kail.io/feeds/all.atom.xml">Atom</a>
+
+</nav>
+
+<article class="single">
+  <header>
+      
+    <h1 id="block-iot-network-outbound-on-opnsense">Block IOT Network Outbound on OpnSense</h1>
+    <p>
+      Posted on Wed 05 July 2023 in <a href="https://blog.kail.io/category/homelab.html">Homelab</a>
+
+    </p>
+  </header>
+
+
+  <div>
+    <p>I have recently set up an IOT VLAN on my OPNsense router to move some devices to. How to block
+the outbound took a little work to figure out but finally found the rule settings to get it working.</p>
+<p>In my example below I'll be blocking all outbound network traffic on the IOT Vlan except to a single
+host I expect the devices to talk to.  </p>
+<p>The difficult part for me to wrap my brain around was blocking "inbound" traffic to the interface.  Once I understood
+I would be blocking IOT "network" traffic to the interface it was relatively easy to finish setting up.</p>
+<p>Relevant rule settings:</p>
+<table>
+<thead>
+<tr>
+<th>Setting</th>
+<th>Value</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>Action</td>
+<td>Reject</td>
+</tr>
+<tr>
+<td>Quick</td>
+<td>True</td>
+</tr>
+<tr>
+<td>Interface</td>
+<td>IOT</td>
+</tr>
+<tr>
+<td>Direction</td>
+<td>in</td>
+</tr>
+<tr>
+<td>TCP/IP Version</td>
+<td>IPv4</td>
+</tr>
+<tr>
+<td>Protocol</td>
+<td>any</td>
+</tr>
+<tr>
+<td>Source</td>
+<td>IOT net</td>
+</tr>
+<tr>
+<td>Destination Invert</td>
+<td>True</td>
+</tr>
+<tr>
+<td>Destination</td>
+<td>Single host or Network</td>
+</tr>
+<tr>
+<td>Destination IP</td>
+<td>192.168.1.100</td>
+</tr>
+</tbody>
+</table>
+<p><img alt="Example Rule" src="https://blog.kail.io/images/2023/opnsense-iot-fw/opnsense-iot-fw-1.png"></p>
+<p>Once the rule is created be sure to apply the changes.</p>
+<p>Now all devices on the IOT network will only be able to access the ip address defined above.  This was just the first step
+in getting my IOT network up and will need to open up to other things I'm sure but its a start.</p>
+<h2>Notes</h2>
+<ul>
+<li>TCP/IP Version will be limited to IPv4 if you Destination IP is IPv4.</li>
+</ul>
+<h2>Versions</h2>
+<table>
+<thead>
+<tr>
+<th>Software</th>
+<th>Version</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>OPNsense</td>
+<td>23.1.9</td>
+</tr>
+</tbody>
+</table>
+  </div>
+  <div class="tag-cloud">
+    <p>
+      <a href="https://blog.kail.io/tag/opnsense.html">opnsense</a>
+    </p>
+  </div>
+
+
+
+
+
+
+</article>
+
+<footer>
+<p>
+  &copy;   - This work is licensed under a <a rel="license" href="http://creativecommons.org/licenses/by-sa/4.0/deed.en_US" target="_blank">Creative Commons Attribution-ShareAlike</a>
+</p>
+<p>
+Built with <a href="http://getpelican.com" target="_blank">Pelican</a> using <a href="http://bit.ly/flex-pelican" target="_blank">Flex</a> theme
+</p><p>
+  <a rel="license"
+     href="http://creativecommons.org/licenses/by-sa/4.0/"
+     target="_blank">
+    <img alt="Creative Commons License"
+         title="Creative Commons License"
+         style="border-width:0"
+           src="https://i.creativecommons.org/l/by-sa/4.0/80x15.png"
+         width="80"
+         height="15"/>
+  </a>
+</p></footer>  </main>
+
+<script type="application/ld+json">
+{
+  "@context" : "http://schema.org",
+  "@type" : "Blog",
+  "name": " Andrew Kail's Blog ",
+  "url" : "https://blog.kail.io",
+  "image": "/images/profile.png",
+  "description": ""
+}
+</script>
+</body>
+</html>
