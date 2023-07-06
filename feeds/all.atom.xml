@@ -1,5 +1,86 @@
 <?xml version="1.0" encoding="utf-8"?>
-<feed xmlns="http://www.w3.org/2005/Atom"><title>Andrew Kail's Blog</title><link href="https://blog.kail.io/" rel="alternate"></link><link href="https://blog.kail.io/feeds/all.atom.xml" rel="self"></link><id>https://blog.kail.io/</id><updated>2023-06-27T12:00:00-04:00</updated><subtitle>Somewhat HPC related blog</subtitle><entry><title>The Impact of RHEL Changes on an HPC MSP</title><link href="https://blog.kail.io/the-impact-of-rhel-changes-on-an-hpc-msp.html" rel="alternate"></link><published>2023-06-27T12:00:00-04:00</published><updated>2023-06-27T12:00:00-04:00</updated><author><name>Andrew Kail</name></author><id>tag:blog.kail.io,2023-06-27:/the-impact-of-rhel-changes-on-an-hpc-msp.html</id><summary type="html">&lt;p&gt;Its been nearly a week now and after having stewed on it I think its time to speak my piece on this debacle.&lt;/p&gt;
+<feed xmlns="http://www.w3.org/2005/Atom"><title>Andrew Kail's Blog</title><link href="https://blog.kail.io/" rel="alternate"></link><link href="https://blog.kail.io/feeds/all.atom.xml" rel="self"></link><id>https://blog.kail.io/</id><updated>2023-07-05T12:00:00-04:00</updated><subtitle>Somewhat HPC related blog</subtitle><entry><title>Block IOT Network Outbound on OpnSense</title><link href="https://blog.kail.io/block-iot-network-outbound-on-opnsense.html" rel="alternate"></link><published>2023-07-05T12:00:00-04:00</published><updated>2023-07-05T12:00:00-04:00</updated><author><name>Andrew Kail</name></author><id>tag:blog.kail.io,2023-07-05:/block-iot-network-outbound-on-opnsense.html</id><summary type="html">&lt;p&gt;I have recently set up an IOT VLAN on my OPNsense router to move some devices to. How to block
+the outbound took a little work to figure out but finally found the rule settings to get it working.&lt;/p&gt;
+&lt;p&gt;In my example below I'll be blocking all outbound network traffic …&lt;/p&gt;</summary><content type="html">&lt;p&gt;I have recently set up an IOT VLAN on my OPNsense router to move some devices to. How to block
+the outbound took a little work to figure out but finally found the rule settings to get it working.&lt;/p&gt;
+&lt;p&gt;In my example below I'll be blocking all outbound network traffic on the IOT Vlan except to a single
+host I expect the devices to talk to.  &lt;/p&gt;
+&lt;p&gt;The difficult part for me to wrap my brain around was blocking "inbound" traffic to the interface.  Once I understood
+I would be blocking IOT "network" traffic to the interface it was relatively easy to finish setting up.&lt;/p&gt;
+&lt;p&gt;Relevant rule settings:&lt;/p&gt;
+&lt;table&gt;
+&lt;thead&gt;
+&lt;tr&gt;
+&lt;th&gt;Setting&lt;/th&gt;
+&lt;th&gt;Value&lt;/th&gt;
+&lt;/tr&gt;
+&lt;/thead&gt;
+&lt;tbody&gt;
+&lt;tr&gt;
+&lt;td&gt;Action&lt;/td&gt;
+&lt;td&gt;Reject&lt;/td&gt;
+&lt;/tr&gt;
+&lt;tr&gt;
+&lt;td&gt;Quick&lt;/td&gt;
+&lt;td&gt;True&lt;/td&gt;
+&lt;/tr&gt;
+&lt;tr&gt;
+&lt;td&gt;Interface&lt;/td&gt;
+&lt;td&gt;IOT&lt;/td&gt;
+&lt;/tr&gt;
+&lt;tr&gt;
+&lt;td&gt;Direction&lt;/td&gt;
+&lt;td&gt;in&lt;/td&gt;
+&lt;/tr&gt;
+&lt;tr&gt;
+&lt;td&gt;TCP/IP Version&lt;/td&gt;
+&lt;td&gt;IPv4&lt;/td&gt;
+&lt;/tr&gt;
+&lt;tr&gt;
+&lt;td&gt;Protocol&lt;/td&gt;
+&lt;td&gt;any&lt;/td&gt;
+&lt;/tr&gt;
+&lt;tr&gt;
+&lt;td&gt;Source&lt;/td&gt;
+&lt;td&gt;IOT net&lt;/td&gt;
+&lt;/tr&gt;
+&lt;tr&gt;
+&lt;td&gt;Destination Invert&lt;/td&gt;
+&lt;td&gt;True&lt;/td&gt;
+&lt;/tr&gt;
+&lt;tr&gt;
+&lt;td&gt;Destination&lt;/td&gt;
+&lt;td&gt;Single host or Network&lt;/td&gt;
+&lt;/tr&gt;
+&lt;tr&gt;
+&lt;td&gt;Destination IP&lt;/td&gt;
+&lt;td&gt;192.168.1.100&lt;/td&gt;
+&lt;/tr&gt;
+&lt;/tbody&gt;
+&lt;/table&gt;
+&lt;p&gt;&lt;img alt="Example Rule" src="https://blog.kail.io/images/2023/opnsense-iot-fw/opnsense-iot-fw-1.png"&gt;&lt;/p&gt;
+&lt;p&gt;Once the rule is created be sure to apply the changes.&lt;/p&gt;
+&lt;p&gt;Now all devices on the IOT network will only be able to access the ip address defined above.  This was just the first step
+in getting my IOT network up and will need to open up to other things I'm sure but its a start.&lt;/p&gt;
+&lt;h2&gt;Notes&lt;/h2&gt;
+&lt;ul&gt;
+&lt;li&gt;TCP/IP Version will be limited to IPv4 if you Destination IP is IPv4.&lt;/li&gt;
+&lt;/ul&gt;
+&lt;h2&gt;Versions&lt;/h2&gt;
+&lt;table&gt;
+&lt;thead&gt;
+&lt;tr&gt;
+&lt;th&gt;Software&lt;/th&gt;
+&lt;th&gt;Version&lt;/th&gt;
+&lt;/tr&gt;
+&lt;/thead&gt;
+&lt;tbody&gt;
+&lt;tr&gt;
+&lt;td&gt;OPNsense&lt;/td&gt;
+&lt;td&gt;23.1.9&lt;/td&gt;
+&lt;/tr&gt;
+&lt;/tbody&gt;
+&lt;/table&gt;</content><category term="Homelab"></category><category term="opnsense"></category></entry><entry><title>The Impact of RHEL Changes on an HPC MSP</title><link href="https://blog.kail.io/the-impact-of-rhel-changes-on-an-hpc-msp.html" rel="alternate"></link><published>2023-06-27T12:00:00-04:00</published><updated>2023-06-27T12:00:00-04:00</updated><author><name>Andrew Kail</name></author><id>tag:blog.kail.io,2023-06-27:/the-impact-of-rhel-changes-on-an-hpc-msp.html</id><summary type="html">&lt;p&gt;Its been nearly a week now and after having stewed on it I think its time to speak my piece on this debacle.&lt;/p&gt;
 &lt;p&gt;The recent changes to how Red Hat Enterprise Linux (RHEL) distributes their
 source code has caused quite a stir in the Linux and HPC community.  &lt;/p&gt;
 &lt;p&gt;While I …&lt;/p&gt;</summary><content type="html">&lt;p&gt;Its been nearly a week now and after having stewed on it I think its time to speak my piece on this debacle.&lt;/p&gt;

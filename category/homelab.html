@@ -37,25 +37,17 @@
 
  
 
-<meta name="author" content="Andrew Kail" />
-<meta name="description" content="I have recently set up an IOT VLAN on my OPNsense router to move some devices to. How to block the outbound took a little work to figure out but finally found the rule settings to get it working. In my example below I&#39;ll be blocking all outbound network traffic …" />
-<meta name="keywords" content="opnsense">
-
-
+    <meta name="author" content="Andrew Kail" />
+    <meta name="description" content="" />
   <meta property="og:site_name" content="Andrew Kail's Blog"/>
-  <meta property="og:title" content="Block IOT Network Outbound on OpnSense"/>
-  <meta property="og:description" content="I have recently set up an IOT VLAN on my OPNsense router to move some devices to. How to block the outbound took a little work to figure out but finally found the rule settings to get it working. In my example below I&#39;ll be blocking all outbound network traffic …"/>
+  <meta property="og:type" content="blog"/>
+  <meta property="og:title" content="Andrew Kail's Blog"/>
+  <meta property="og:description" content=""/>
   <meta property="og:locale" content="en_US"/>
-  <meta property="og:url" content="https://blog.kail.io/drafts/block-iot-network-outbound-on-opnsense.html"/>
-  <meta property="og:type" content="article"/>
-  <meta property="article:published_time" content="2023-07-05 12:00:00-04:00"/>
-  <meta property="article:modified_time" content=""/>
-  <meta property="article:author" content="https://blog.kail.io/author/andrew-kail.html">
-  <meta property="article:section" content="Homelab"/>
-  <meta property="article:tag" content="opnsense"/>
+  <meta property="og:url" content="https://blog.kail.io"/>
   <meta property="og:image" content="/images/profile.png">
 
-  <title>Andrew Kail's Blog &ndash; Block IOT Network Outbound on OpnSense</title>
+  <title>Andrew Kail's Blog &ndash; Category Homelab</title>
 
 
 </head>
@@ -149,111 +141,34 @@ rel="me"           href="https://fosstodon.org/@akail"
 
 </nav>
 
-<article class="single">
+
+
+<article>
   <header>
-      
-    <h1 id="block-iot-network-outbound-on-opnsense">Block IOT Network Outbound on OpnSense</h1>
+    <h2><a href="https://blog.kail.io/block-iot-network-outbound-on-opnsense.html#block-iot-network-outbound-on-opnsense">Block IOT Network Outbound on OpnSense</a></h2>
     <p>
       Posted on Wed 05 July 2023 in <a href="https://blog.kail.io/category/homelab.html">Homelab</a>
 
+          &#8226; Tagged with
+              <a href="https://blog.kail.io/tag/opnsense.html">opnsense</a>
     </p>
   </header>
-
-
   <div>
-    <p>I have recently set up an IOT VLAN on my OPNsense router to move some devices to. How to block
+      <div><p>I have recently set up an IOT VLAN on my OPNsense router to move some devices to. How to block
 the outbound took a little work to figure out but finally found the rule settings to get it working.</p>
-<p>In my example below I'll be blocking all outbound network traffic on the IOT Vlan except to a single
-host I expect the devices to talk to.  </p>
-<p>The difficult part for me to wrap my brain around was blocking "inbound" traffic to the interface.  Once I understood
-I would be blocking IOT "network" traffic to the interface it was relatively easy to finish setting up.</p>
-<p>Relevant rule settings:</p>
-<table>
-<thead>
-<tr>
-<th>Setting</th>
-<th>Value</th>
-</tr>
-</thead>
-<tbody>
-<tr>
-<td>Action</td>
-<td>Reject</td>
-</tr>
-<tr>
-<td>Quick</td>
-<td>True</td>
-</tr>
-<tr>
-<td>Interface</td>
-<td>IOT</td>
-</tr>
-<tr>
-<td>Direction</td>
-<td>in</td>
-</tr>
-<tr>
-<td>TCP/IP Version</td>
-<td>IPv4</td>
-</tr>
-<tr>
-<td>Protocol</td>
-<td>any</td>
-</tr>
-<tr>
-<td>Source</td>
-<td>IOT net</td>
-</tr>
-<tr>
-<td>Destination Invert</td>
-<td>True</td>
-</tr>
-<tr>
-<td>Destination</td>
-<td>Single host or Network</td>
-</tr>
-<tr>
-<td>Destination IP</td>
-<td>192.168.1.100</td>
-</tr>
-</tbody>
-</table>
-<p><img alt="Example Rule" src="https://blog.kail.io/images/2023/opnsense-iot-fw/opnsense-iot-fw-1.png"></p>
-<p>Once the rule is created be sure to apply the changes.</p>
-<p>Now all devices on the IOT network will only be able to access the ip address defined above.  This was just the first step
-in getting my IOT network up and will need to open up to other things I'm sure but its a start.</p>
-<h2>Notes</h2>
-<ul>
-<li>TCP/IP Version will be limited to IPv4 if you Destination IP is IPv4.</li>
-</ul>
-<h2>Versions</h2>
-<table>
-<thead>
-<tr>
-<th>Software</th>
-<th>Version</th>
-</tr>
-</thead>
-<tbody>
-<tr>
-<td>OPNsense</td>
-<td>23.1.9</td>
-</tr>
-</tbody>
-</table>
+<p>In my example below I'll be blocking all outbound network traffic …</p></div>
+        <br>
+        <a class="btn"
+           href="https://blog.kail.io/block-iot-network-outbound-on-opnsense.html#block-iot-network-outbound-on-opnsense">
+          Continue reading
+        </a>
   </div>
-  <div class="tag-cloud">
-    <p>
-      <a href="https://blog.kail.io/tag/opnsense.html">opnsense</a>
-    </p>
-  </div>
-
-
-
-
-
-
 </article>
+
+  <div class="pagination">
+  </div>
+
+
 
 <footer>
 <p>
