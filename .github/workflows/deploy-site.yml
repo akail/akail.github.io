@@ -25,7 +25,7 @@ jobs:
       - name: Checkout Flex theme
         uses: actions/checkout@v3
         with:
-          repository: 'alexandrevicenzi/Flex'
+          repository: 'akail/Flex'
           path: Flex
 
       # Install dependencies
