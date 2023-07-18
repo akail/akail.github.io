@@ -24,6 +24,8 @@
 
   <link rel="stylesheet" type="text/css" href="https://blog.kail.io/static/custom.css">
 
+  <link rel="shortcut icon" href="/images/favicon.ico" type="image/x-icon">
+  <link rel="icon" href="/images/favicon.ico" type="image/x-icon">
 
 
   <link href="https://blog.kail.io/feeds/all.atom.xml" type="application/atom+xml" rel="alternate" title="Andrew Kail's Blog Atom">
@@ -55,7 +57,7 @@
   <meta property="article:section" content="Jupyter"/>
   <meta property="article:tag" content="jupyter"/>
   <meta property="article:tag" content="python"/>
-  <meta property="og:image" content="/images/profile.png">
+  <meta property="og:image" content="http://localhost:9000/images/profile.png">
 
   <title>Andrew Kail's Blog &ndash; Adding Anaconda Environment to Jupyter</title>
 
@@ -66,11 +68,11 @@
 <aside>
   <div>
     <a href="https://blog.kail.io/">
-      <img src="/images/profile.png" alt="Andrew Kail" title="Andrew Kail">
+      <img src="http://localhost:9000/images/profile.png" alt="Andrew Kail's Blog" title="Andrew Kail's Blog">
     </a>
 
     <h1>
-      <a href="https://blog.kail.io/">Andrew Kail</a>
+      <a href="https://blog.kail.io/">Andrew Kail's Blog</a>
     </h1>
 
     <p>Somewhat HPC related blog</p>
@@ -176,15 +178,15 @@ installed.</p>
 environment using one of the several available tools.</p>
 <p>At a minimum, the <code>ipykernel</code> package must be installed.</p>
 <div class="highlight"><pre><span></span><code><span class="c1"># create and activate a new anaconda environment</span>
-conda create -n newkernel ipykernel
-conda activate 
+conda<span class="w"> </span>create<span class="w"> </span>-n<span class="w"> </span>newkernel<span class="w"> </span>ipykernel
+conda<span class="w"> </span>activate<span class="w"> </span>
 </code></pre></div>
 
 <p>Now add the kernel, being sure to add the <code>--user</code> flag if anaconda is installed
 somewhere the user does not have permission to write to.  Also, a name for the
 kernel should also be provided as the default name may conflict with the default
 kernel installed.</p>
-<div class="highlight"><pre><span></span><code>python3 -m ipykernel install --user --name newkernel
+<div class="highlight"><pre><span></span><code>python3<span class="w"> </span>-m<span class="w"> </span>ipykernel<span class="w"> </span>install<span class="w"> </span>--user<span class="w"> </span>--name<span class="w"> </span>newkernel
 </code></pre></div>
 
 <p>Now a new kernel should be available without having to restart the jupyter
@@ -194,20 +196,20 @@ instance.</p>
 <p>When a kernel is installed, a json file is installed in the user's home
 directory at <code>$HOME/.local/share/jupyter/kernels</code>.  This json file defines where
 jupyter will look to start kernel.</p>
-<div class="highlight"><pre><span></span><code><span class="p">{</span><span class="w"></span>
-<span class="w"> </span><span class="nt">&quot;argv&quot;</span><span class="p">:</span><span class="w"> </span><span class="p">[</span><span class="w"></span>
-<span class="w">  </span><span class="s2">&quot;/home/akail/.conda/envs/newkernel/bin/python3&quot;</span><span class="p">,</span><span class="w"></span>
-<span class="w">  </span><span class="s2">&quot;-m&quot;</span><span class="p">,</span><span class="w"></span>
-<span class="w">  </span><span class="s2">&quot;ipykernel_launcher&quot;</span><span class="p">,</span><span class="w"></span>
-<span class="w">  </span><span class="s2">&quot;-f&quot;</span><span class="p">,</span><span class="w"></span>
-<span class="w">  </span><span class="s2">&quot;{connection_file}&quot;</span><span class="w"></span>
-<span class="w"> </span><span class="p">],</span><span class="w"></span>
-<span class="w"> </span><span class="nt">&quot;display_name&quot;</span><span class="p">:</span><span class="w"> </span><span class="s2">&quot;testing&quot;</span><span class="p">,</span><span class="w"></span>
-<span class="w"> </span><span class="nt">&quot;language&quot;</span><span class="p">:</span><span class="w"> </span><span class="s2">&quot;python&quot;</span><span class="p">,</span><span class="w"></span>
-<span class="w"> </span><span class="nt">&quot;metadata&quot;</span><span class="p">:</span><span class="w"> </span><span class="p">{</span><span class="w"></span>
-<span class="w">  </span><span class="nt">&quot;debugger&quot;</span><span class="p">:</span><span class="w"> </span><span class="kc">true</span><span class="w"></span>
-<span class="w"> </span><span class="p">}</span><span class="w"></span>
-<span class="p">}</span><span class="w"></span>
+<div class="highlight"><pre><span></span><code><span class="p">{</span>
+<span class="w"> </span><span class="nt">&quot;argv&quot;</span><span class="p">:</span><span class="w"> </span><span class="p">[</span>
+<span class="w">  </span><span class="s2">&quot;/home/akail/.conda/envs/newkernel/bin/python3&quot;</span><span class="p">,</span>
+<span class="w">  </span><span class="s2">&quot;-m&quot;</span><span class="p">,</span>
+<span class="w">  </span><span class="s2">&quot;ipykernel_launcher&quot;</span><span class="p">,</span>
+<span class="w">  </span><span class="s2">&quot;-f&quot;</span><span class="p">,</span>
+<span class="w">  </span><span class="s2">&quot;{connection_file}&quot;</span>
+<span class="w"> </span><span class="p">],</span>
+<span class="w"> </span><span class="nt">&quot;display_name&quot;</span><span class="p">:</span><span class="w"> </span><span class="s2">&quot;testing&quot;</span><span class="p">,</span>
+<span class="w"> </span><span class="nt">&quot;language&quot;</span><span class="p">:</span><span class="w"> </span><span class="s2">&quot;python&quot;</span><span class="p">,</span>
+<span class="w"> </span><span class="nt">&quot;metadata&quot;</span><span class="p">:</span><span class="w"> </span><span class="p">{</span>
+<span class="w">  </span><span class="nt">&quot;debugger&quot;</span><span class="p">:</span><span class="w"> </span><span class="kc">true</span>
+<span class="w"> </span><span class="p">}</span>
+<span class="p">}</span>
 </code></pre></div>
 
 <h2>References</h2>
@@ -254,8 +256,8 @@ Built with <a href="http://getpelican.com" target="_blank">Pelican</a> using <a 
   "@type" : "Blog",
   "name": " Andrew Kail's Blog ",
   "url" : "https://blog.kail.io",
-  "image": "/images/profile.png",
-  "description": ""
+  "image": "http://localhost:9000/images/profile.png",
+  "description": "The personal blog of Andrew Kail, an HPC enthusiast, PhD Student, and homelaber."
 }
 </script>
 </body>

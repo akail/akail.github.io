@@ -24,6 +24,8 @@
 
   <link rel="stylesheet" type="text/css" href="https://blog.kail.io/static/custom.css">
 
+  <link rel="shortcut icon" href="/images/favicon.ico" type="image/x-icon">
+  <link rel="icon" href="/images/favicon.ico" type="image/x-icon">
 
 
   <link href="https://blog.kail.io/feeds/all.atom.xml" type="application/atom+xml" rel="alternate" title="Andrew Kail's Blog Atom">
@@ -55,7 +57,7 @@
   <meta property="article:section" content="OPNSense"/>
   <meta property="article:tag" content="opnsense"/>
   <meta property="article:tag" content="netboot"/>
-  <meta property="og:image" content="/images/profile.png">
+  <meta property="og:image" content="http://localhost:9000/images/profile.png">
 
   <title>Andrew Kail's Blog &ndash; Running Netboot.xyz From OPNSense</title>
 
@@ -66,11 +68,11 @@
 <aside>
   <div>
     <a href="https://blog.kail.io/">
-      <img src="/images/profile.png" alt="Andrew Kail" title="Andrew Kail">
+      <img src="http://localhost:9000/images/profile.png" alt="Andrew Kail's Blog" title="Andrew Kail's Blog">
     </a>
 
     <h1>
-      <a href="https://blog.kail.io/">Andrew Kail</a>
+      <a href="https://blog.kail.io/">Andrew Kail's Blog</a>
     </h1>
 
     <p>Somewhat HPC related blog</p>
@@ -177,17 +179,17 @@ the <code>+</code> button to install the plugin.</p>
 <p>Once we have the plugin installed we'll need to create the tftp directory and
 install netboot before enabling the service.  Otherwise it will fail. This step
 requires ssh access.</p>
-<div class="highlight"><pre><span></span><code><span class="n">ssh</span><span class="w"> </span><span class="n">root</span><span class="err">@</span><span class="n">opnsense</span><span class="w"></span>
+<div class="highlight"><pre><span></span><code><span class="n">ssh</span><span class="w"> </span><span class="n">root</span><span class="err">@</span><span class="n">opnsense</span>
 
-<span class="c1"># Select &#39;8&#39; at the menu to enter the shell</span><span class="w"></span>
+<span class="c1"># Select &#39;8&#39; at the menu to enter the shell</span>
 
-<span class="n">mkdir</span><span class="w"> </span><span class="o">/</span><span class="n">usr</span><span class="o">/</span><span class="n">local</span><span class="o">/</span><span class="n">tftp</span><span class="w"></span>
-<span class="n">cd</span><span class="w"> </span><span class="o">/</span><span class="n">usr</span><span class="o">/</span><span class="n">local</span><span class="o">/</span><span class="n">tftp</span><span class="w"></span>
+<span class="n">mkdir</span><span class="w"> </span><span class="o">/</span><span class="n">usr</span><span class="o">/</span><span class="n">local</span><span class="o">/</span><span class="n">tftp</span>
+<span class="n">cd</span><span class="w"> </span><span class="o">/</span><span class="n">usr</span><span class="o">/</span><span class="n">local</span><span class="o">/</span><span class="n">tftp</span>
 
-<span class="c1"># Download netboot files</span><span class="w"></span>
-<span class="n">fetch</span><span class="w"> </span><span class="n">https</span><span class="p">:</span><span class="o">//</span><span class="n">boot</span><span class="o">.</span><span class="n">netboot</span><span class="o">.</span><span class="n">xyz</span><span class="o">/</span><span class="n">ipxe</span><span class="o">/</span><span class="n">netboot</span><span class="o">.</span><span class="n">xyz</span><span class="o">.</span><span class="n">kpxe</span><span class="w"></span>
-<span class="n">fetch</span><span class="w"> </span><span class="n">https</span><span class="p">:</span><span class="o">//</span><span class="n">boot</span><span class="o">.</span><span class="n">netboot</span><span class="o">.</span><span class="n">xyz</span><span class="o">/</span><span class="n">ipxe</span><span class="o">/</span><span class="n">netboot</span><span class="o">.</span><span class="n">xyz</span><span class="o">.</span><span class="n">efi</span><span class="w"></span>
-<span class="n">fetch</span><span class="w"> </span><span class="n">https</span><span class="p">:</span><span class="o">//</span><span class="n">boot</span><span class="o">.</span><span class="n">netboot</span><span class="o">.</span><span class="n">xyz</span><span class="o">/</span><span class="n">ipxe</span><span class="o">/</span><span class="n">netboot</span><span class="o">.</span><span class="n">xyz</span><span class="o">-</span><span class="n">arm64</span><span class="o">.</span><span class="n">efi</span><span class="w"></span>
+<span class="c1"># Download netboot files</span>
+<span class="n">fetch</span><span class="w"> </span><span class="n">https</span><span class="p">:</span><span class="o">//</span><span class="n">boot</span><span class="o">.</span><span class="n">netboot</span><span class="o">.</span><span class="n">xyz</span><span class="o">/</span><span class="n">ipxe</span><span class="o">/</span><span class="n">netboot</span><span class="o">.</span><span class="n">xyz</span><span class="o">.</span><span class="n">kpxe</span>
+<span class="n">fetch</span><span class="w"> </span><span class="n">https</span><span class="p">:</span><span class="o">//</span><span class="n">boot</span><span class="o">.</span><span class="n">netboot</span><span class="o">.</span><span class="n">xyz</span><span class="o">/</span><span class="n">ipxe</span><span class="o">/</span><span class="n">netboot</span><span class="o">.</span><span class="n">xyz</span><span class="o">.</span><span class="n">efi</span>
+<span class="n">fetch</span><span class="w"> </span><span class="n">https</span><span class="p">:</span><span class="o">//</span><span class="n">boot</span><span class="o">.</span><span class="n">netboot</span><span class="o">.</span><span class="n">xyz</span><span class="o">/</span><span class="n">ipxe</span><span class="o">/</span><span class="n">netboot</span><span class="o">.</span><span class="n">xyz</span><span class="o">-</span><span class="n">arm64</span><span class="o">.</span><span class="n">efi</span>
 </code></pre></div>
 
 <p>I downloaded three files above to support the main types of network booting I
@@ -289,8 +291,8 @@ Built with <a href="http://getpelican.com" target="_blank">Pelican</a> using <a 
   "@type" : "Blog",
   "name": " Andrew Kail's Blog ",
   "url" : "https://blog.kail.io",
-  "image": "/images/profile.png",
-  "description": ""
+  "image": "http://localhost:9000/images/profile.png",
+  "description": "The personal blog of Andrew Kail, an HPC enthusiast, PhD Student, and homelaber."
 }
 </script>
 </body>

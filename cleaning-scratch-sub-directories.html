@@ -24,6 +24,8 @@
 
   <link rel="stylesheet" type="text/css" href="https://blog.kail.io/static/custom.css">
 
+  <link rel="shortcut icon" href="/images/favicon.ico" type="image/x-icon">
+  <link rel="icon" href="/images/favicon.ico" type="image/x-icon">
 
 
   <link href="https://blog.kail.io/feeds/all.atom.xml" type="application/atom+xml" rel="alternate" title="Andrew Kail's Blog Atom">
@@ -55,7 +57,7 @@
   <meta property="article:section" content="Snippet"/>
   <meta property="article:tag" content="storage"/>
   <meta property="article:tag" content="snippets"/>
-  <meta property="og:image" content="/images/profile.png">
+  <meta property="og:image" content="http://localhost:9000/images/profile.png">
 
   <title>Andrew Kail's Blog &ndash; Cleaning Scratch Sub-directories</title>
 
@@ -66,11 +68,11 @@
 <aside>
   <div>
     <a href="https://blog.kail.io/">
-      <img src="/images/profile.png" alt="Andrew Kail" title="Andrew Kail">
+      <img src="http://localhost:9000/images/profile.png" alt="Andrew Kail's Blog" title="Andrew Kail's Blog">
     </a>
 
     <h1>
-      <a href="https://blog.kail.io/">Andrew Kail</a>
+      <a href="https://blog.kail.io/">Andrew Kail's Blog</a>
     </h1>
 
     <p>Somewhat HPC related blog</p>
@@ -166,7 +168,7 @@ rel="me"           href="https://fosstodon.org/@akail"
     <p>We recently ran into an issue with a high speed scratch file system after some drive failures.  While the metadata was intact we could not guarantee
 that any of the user data was any good.  Since the metadata was good, we could keep the top level user scratch directories intact and remove all other files
 under them, saving a bit of time recreating everything.</p>
-<div class="highlight"><pre><span></span><code><span class="nv">find</span><span class="w"> </span>.<span class="w"> </span><span class="o">-</span><span class="nv">maxdepth</span><span class="w"> </span><span class="mi">2</span><span class="w"> </span><span class="o">-</span><span class="nv">mindepth</span><span class="w"> </span><span class="mi">2</span><span class="w"> </span><span class="o">-</span><span class="k">exec</span><span class="w"> </span><span class="nv">rm</span><span class="w"> </span><span class="o">-</span><span class="nv">rf</span><span class="w"> </span>{}<span class="w"> </span>\<span class="c1">;</span><span class="w"></span>
+<div class="highlight"><pre><span></span><code><span class="nv">find</span><span class="w"> </span>.<span class="w"> </span><span class="o">-</span><span class="nv">maxdepth</span><span class="w"> </span><span class="mi">2</span><span class="w"> </span><span class="o">-</span><span class="nv">mindepth</span><span class="w"> </span><span class="mi">2</span><span class="w"> </span><span class="o">-</span><span class="k">exec</span><span class="w"> </span><span class="nv">rm</span><span class="w"> </span><span class="o">-</span><span class="nv">rf</span><span class="w"> </span>{}<span class="w"> </span>\<span class="c1">;</span>
 </code></pre></div>
 
 <p>This snippet should be run with care.</p>
@@ -210,8 +212,8 @@ Built with <a href="http://getpelican.com" target="_blank">Pelican</a> using <a 
   "@type" : "Blog",
   "name": " Andrew Kail's Blog ",
   "url" : "https://blog.kail.io",
-  "image": "/images/profile.png",
-  "description": ""
+  "image": "http://localhost:9000/images/profile.png",
+  "description": "The personal blog of Andrew Kail, an HPC enthusiast, PhD Student, and homelaber."
 }
 </script>
 </body>
