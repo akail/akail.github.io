@@ -27,3 +27,4 @@ WITH_FUTURE_DATES = False
 
 PLAUSIBLE_DOMAIN = "blog.kail.io"
 PLAUSIBLE_SRC = "https://plausible.kail.io/js/script.js"
+

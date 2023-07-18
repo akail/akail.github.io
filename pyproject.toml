@@ -8,7 +8,7 @@ readme = "README.md"
 [tool.poetry.dependencies]
 python = "^3.10"
 pelican = {extras = ["markdown"], version = "^4.8.0"}
-invoke = "^1.7.3"
+invoke = "^2.1.1"
 ghp-import = "^2.1.0"
 livereload = "^2.6.3"
 pelican-series = "^2.1.0"

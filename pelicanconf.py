@@ -1,7 +1,8 @@
 AUTHOR = 'Andrew Kail'
 SITENAME = "Andrew Kail's Blog"
-SITEURL = ''
-SITETITLE = "Andrew Kail"
+SITEURL = "http://localhost:9000"
+SITETITLE = "Andrew Kail's Blog"
+SITEDESCRIPTION = "The personal blog of Andrew Kail, an HPC enthusiast, PhD Student, and homelaber."
 SITESUBTITLE = "Somewhat HPC related blog"
 SITELOGO = SITEURL + "/images/profile.png"
 
@@ -33,6 +34,7 @@ DEFAULT_PAGINATION = 10
 
 # Theme settings
 THEME = 'Flex'
+# THEME = 'mytheme'
 THEME_COLOR = "light"
 PYGMENTS_STYLE = "gruvbox-dark"
 STATIC_PATHS = ["extra/custom.css", "images"]
@@ -71,3 +73,7 @@ MENUITEMS = (
 
 PLUGINS = ['pelican.plugins.series',
            'pelican.plugins.simple_footnotes']
+
+## Pelican seo
+SEO_REPORT = True
+FAVICON = "/images/favicon.ico"

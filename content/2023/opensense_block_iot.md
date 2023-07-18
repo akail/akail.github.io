@@ -1,6 +1,6 @@
 Title: Block IOT Network Outbound on OpnSense
 Date: 2023-07-05 12:00
-Category: Homelab
+Category: OPNsense
 Tags: opnsense
 Authors: Andrew Kail
 
