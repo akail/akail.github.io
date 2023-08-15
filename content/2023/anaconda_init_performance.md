@@ -13,6 +13,7 @@ without without a customized modulefile.
 The cause of this is conda requiring environment variables and fuctions be defined in order
 for it to function.  Usually a user will be asked to run `conda init` when these variables do not exist.  On linux in bash, it adds the following to the users `.bashrc`.
 
+    #!bash 
     # >>> conda initialize >>>
     # !! Contents within this block are managed by 'conda init' !!
     __conda_setup="$('/data/apps/anaconda/3.9/bin/conda' 'shell.bash' 'hook' 2> /dev/null)"
@@ -33,6 +34,7 @@ The issue on our systems has been line 5, where the conda python executable is c
 
 Using the python trace module, we can see how many files are accessed.
 
+    :::bash linenums=True
     mkdir cover; cd cover
     python -m trace -c -C /data/apps/anaconda/3.9/bin/conda shell.bash hook
     # Get the number of files generated
@@ -42,6 +44,7 @@ This will generate a `.cover` file for each python file that is executed.  In th
 
 For some empirical measurement on a cluster we know this is a problem I ran an ssh test from a local node 10 times with and 10 times without call the `__conda_setup`, both ending up with the same environment configuration.
 
+    :::bash linenums=True
     time ssh login uptime
 
 |      | SSH Setup Call | SSH Direct Source |
