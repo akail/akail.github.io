@@ -1,0 +1,366 @@
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="utf-8" />
+  <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+  <meta name="HandheldFriendly" content="True" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <meta name="robots" content="" />
+  <meta name="google-site-verification" content="ZlfC6LPbIl8QMogAf9hWUt9xNqocwt4niXcpc56reIs" />
+
+  <link href="https://fonts.googleapis.com/css2?family=Source+Code+Pro:ital,wght@0,400;0,700;1,400&family=Source+Sans+Pro:ital,wght@0,300;0,400;0,700;1,400&display=swap" rel="stylesheet">
+
+    <link rel="stylesheet" type="text/css" href="https://blog.kail.io/theme/stylesheet/style.min.css">
+
+
+    <link id="pygments-light-theme" rel="stylesheet" type="text/css"
+          href="https://blog.kail.io/theme/pygments/gruvbox-dark.min.css">
+
+
+
+  <link rel="stylesheet" type="text/css" href="https://blog.kail.io/theme/font-awesome/css/fontawesome.css">
+  <link rel="stylesheet" type="text/css" href="https://blog.kail.io/theme/font-awesome/css/brands.css">
+  <link rel="stylesheet" type="text/css" href="https://blog.kail.io/theme/font-awesome/css/solid.css">
+
+  <link rel="stylesheet" type="text/css" href="https://blog.kail.io/static/custom.css">
+
+  <link rel="shortcut icon" href="/images/favicon.ico" type="image/x-icon">
+  <link rel="icon" href="/images/favicon.ico" type="image/x-icon">
+
+
+  <link href="https://blog.kail.io/feeds/all.atom.xml" type="application/atom+xml" rel="alternate" title="Andrew Kail's Blog Atom">
+
+
+
+
+<script defer data-domain="blog.kail.io" src="https://plausible.kail.io/js/script.js"></script>
+
+
+
+
+ 
+
+<meta name="author" content="Andrew Kail" />
+<meta name="description" content="One of the biggest complaints we get from many users is a delayed login when they initially get into the cluster. In most cases, we have narrowed it down to users either installing their own version of Anaconda or they&#39;re using an existing install without without a customized modulefile. The …" />
+<meta name="keywords" content="hpc, slurm, anaconda">
+
+
+  <meta property="og:site_name" content="Andrew Kail's Blog"/>
+  <meta property="og:title" content="Performance Impact of Anaconda Initialization"/>
+  <meta property="og:description" content="One of the biggest complaints we get from many users is a delayed login when they initially get into the cluster. In most cases, we have narrowed it down to users either installing their own version of Anaconda or they&#39;re using an existing install without without a customized modulefile. The …"/>
+  <meta property="og:locale" content="en_US"/>
+  <meta property="og:url" content="https://blog.kail.io/performance-impact-of-anaconda-initialization.html"/>
+  <meta property="og:type" content="article"/>
+  <meta property="article:published_time" content="2023-08-15 12:00:00-04:00"/>
+  <meta property="article:modified_time" content=""/>
+  <meta property="article:author" content="https://blog.kail.io/author/andrew-kail.html">
+  <meta property="article:section" content="HPC,Python"/>
+  <meta property="article:tag" content="hpc"/>
+  <meta property="article:tag" content="slurm"/>
+  <meta property="article:tag" content="anaconda"/>
+  <meta property="og:image" content="http://localhost:9000/images/profile.png">
+
+  <title>Andrew Kail's Blog &ndash; Performance Impact of Anaconda Initialization</title>
+
+
+</head>
+<body class="light-theme">
+
+<aside>
+  <div>
+    <a href="https://blog.kail.io/">
+      <img src="http://localhost:9000/images/profile.png" alt="Andrew Kail's Blog" title="Andrew Kail's Blog">
+    </a>
+
+    <h1>
+      <a href="https://blog.kail.io/">Andrew Kail's Blog</a>
+    </h1>
+
+    <p>Somewhat HPC related blog</p>
+
+
+    <nav>
+      <ul class="list">
+
+
+            <li>
+              <a target="_self"
+                 href="https://blog.kail.io/pages/about.html#about">
+                About
+              </a>
+            </li>
+            <li>
+              <a target="_self"
+                 href="https://blog.kail.io/pages/get-in-touch.html#get-in-touch">
+                Get in Touch
+              </a>
+            </li>
+            <li>
+              <a target="_self"
+                 href="https://blog.kail.io/pages/projects.html#projects">
+                Projects
+              </a>
+            </li>
+
+          <li>
+            <a target="_self" href="https://github.com/akail/Configs" >My Configs</a>
+          </li>
+      </ul>
+    </nav>
+
+    <ul class="social">
+      <li>
+        <a class="sc-github"
+           href="https://github.com/akail"
+           target="_blank">
+          <i class="fa-brands fa-github"></i>
+        </a>
+      </li>
+      <li>
+        <a class="sc-rss"
+           href="/feeds/all.atom.xml"
+           target="_blank">
+          <i class="fa-solid fa-rss"></i>
+        </a>
+      </li>
+      <li>
+        <a class="sc-linkedin"
+           href="https://www.linkedin.com/in/andrewkail/"
+           target="_blank">
+          <i class="fa-brands fa-linkedin"></i>
+        </a>
+      </li>
+      <li>
+        <a class="sc-mastodon"
+rel="me"           href="https://fosstodon.org/@akail"
+           target="_blank">
+          <i class="fa-brands fa-mastodon"></i>
+        </a>
+      </li>
+    </ul>
+  </div>
+
+</aside>
+  <main>
+
+<nav>
+  <a href="https://blog.kail.io/">Home</a>
+
+  <a href="/archives.html">Archives</a>
+  <a href="/categories.html">Categories</a>
+  <a href="/tags.html">Tags</a>
+
+  <a href="https://blog.kail.io/feeds/all.atom.xml">Atom</a>
+
+</nav>
+
+<article class="single">
+  <header>
+      
+    <h1 id="performance-impact-of-anaconda-initialization">Performance Impact of Anaconda Initialization</h1>
+    <p>
+      Posted on Tue 15 August 2023 in <a href="https://blog.kail.io/category/hpcpython.html">HPC,Python</a>
+
+    </p>
+  </header>
+
+
+  <div>
+    <p>One of the biggest complaints we get from many users is a delayed login when they initially
+get into the cluster.  In most cases, we have narrowed it down to users either installing
+their own version of <a href="https://anaconda.org">Anaconda</a> or they're using an existing install
+without without a customized modulefile.</p>
+<p>The cause of this is conda requiring environment variables and fuctions be defined in order
+for it to function.  Usually a user will be asked to run <code>conda init</code> when these variables do not exist.  On linux in bash, it adds the following to the users <code>.bashrc</code>.</p>
+<div class="highlight"><pre><span></span><code><span class="c1"># &gt;&gt;&gt; conda initialize &gt;&gt;&gt;</span>
+<span class="c1"># !! Contents within this block are managed by &#39;conda init&#39; !!</span>
+<span class="n">__conda_setup</span><span class="o">=</span><span class="s2">&quot;$(&#39;/data/apps/anaconda/3.9/bin/conda&#39; &#39;shell.bash&#39; &#39;hook&#39; 2&gt; /dev/null)&quot;</span>
+<span class="k">if</span><span class="w"> </span><span class="p">[</span><span class="w"> </span><span class="o">$</span><span class="err">?</span><span class="w"> </span><span class="o">-</span><span class="n">eq</span><span class="w"> </span><span class="mi">0</span><span class="w"> </span><span class="p">];</span><span class="w"> </span><span class="n">then</span>
+<span class="w">    </span><span class="n">eval</span><span class="w"> </span><span class="s2">&quot;$__conda_setup&quot;</span>
+<span class="k">else</span>
+<span class="w">    </span><span class="k">if</span><span class="w"> </span><span class="p">[</span><span class="w"> </span><span class="o">-</span><span class="n">f</span><span class="w"> </span><span class="s2">&quot;/data/apps/anaconda/3.9/etc/profile.d/conda.sh&quot;</span><span class="w"> </span><span class="p">];</span><span class="w"> </span><span class="n">then</span>
+<span class="w">        </span><span class="o">.</span><span class="w"> </span><span class="s2">&quot;/data/apps/anaconda/3.9/etc/profile.d/conda.sh&quot;</span>
+<span class="w">    </span><span class="k">else</span>
+<span class="w">        </span><span class="k">export</span><span class="w"> </span><span class="n">PATH</span><span class="o">=</span><span class="s2">&quot;/data/apps/anaconda/3.9/bin:$PATH&quot;</span>
+<span class="w">    </span><span class="n">fi</span>
+<span class="n">fi</span>
+<span class="n">unset</span><span class="w"> </span><span class="n">__conda_setup</span>
+<span class="c1"># &lt;&lt;&lt; conda initialize &lt;&lt;&lt;</span>
+</code></pre></div>
+
+<p>The issue on our systems has been line 5, where the conda python executable is called every time the the user logs in.  Essentially every time the user logs in conda is called to generate the proper environment variables.  This launches python, loads conda and other libraires, and possibly writes many <code>.pyc</code> files depending on where anaconda is installed.</p>
+<p>Using the python trace module, we can see how many files are accessed.</p>
+<div class="highlight"><pre><span></span><code>mkdir cover; cd cover
+python -m trace -c -C /data/apps/anaconda/3.9/bin/conda shell.bash hook
+# Get the number of files generated
+ls -al | wc -l
+</code></pre></div>
+
+<p>This will generate a <code>.cover</code> file for each python file that is executed.  In this particular case I had 146 Python files executed.  While this doesn't mean that each file was actually used, in Python, each file is read and byte compiled when imported if not already done so.  Thankfully most of these are byte compiled already so there shouldn't bee too many writes, just a few reads. Depending on the filesystem, such as a parallel filesystem, this could be less performant if on a shared filesystem.  Many small file access has always been a little problematic for us, even with some optimizations.</p>
+<p>For some empirical measurement on a cluster we know this is a problem I ran an ssh test from a local node 10 times with and 10 times without call the <code>__conda_setup</code>, both ending up with the same environment configuration.</p>
+<div class="highlight"><pre><span></span><code><span class="nv">time</span><span class="w"> </span><span class="nv">ssh</span><span class="w"> </span><span class="nv">login</span><span class="w"> </span><span class="k">uptime</span>
+</code></pre></div>
+
+<table>
+<thead>
+<tr>
+<th></th>
+<th>SSH Setup Call</th>
+<th>SSH Direct Source</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>Min</td>
+<td>8.8936</td>
+<td>3.562</td>
+</tr>
+<tr>
+<td>Max</td>
+<td>10.049</td>
+<td>4.558</td>
+</tr>
+<tr>
+<td>Mean</td>
+<td>9.7646</td>
+<td>4.0282</td>
+</tr>
+</tbody>
+</table>
+<p>I also took a look at the timing for running the setup directly and got the following times:</p>
+<table>
+<thead>
+<tr>
+<th></th>
+<th>Local Setup</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>Min</td>
+<td>2.324</td>
+</tr>
+<tr>
+<td>Max</td>
+<td>4.199</td>
+</tr>
+<tr>
+<td>Mean</td>
+<td>3.2227</td>
+</tr>
+</tbody>
+</table>
+<p>Now, there are a few caveats about my tests above I noticed when taking a look at performance on other nodes:</p>
+<ol>
+<li>This login node is very busy with a lot of small IO operations in progress</li>
+<li>There is an existing performance issue on this file system client</li>
+</ol>
+<p>Looking at another server in the same cluster I got the following timing profiles:</p>
+<table>
+<thead>
+<tr>
+<th></th>
+<th>SSH Setup Call</th>
+<th>SSH Direct Source</th>
+<th>Local Setup</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>Min</td>
+<td>3.582</td>
+<td>2.256</td>
+<td>0.396</td>
+</tr>
+<tr>
+<td>Max</td>
+<td>5.548</td>
+<td>3.284</td>
+<td>0.884</td>
+</tr>
+<tr>
+<td>Mean</td>
+<td>4.2926</td>
+<td>2.7692</td>
+<td>0.516</td>
+</tr>
+</tbody>
+</table>
+<p>While definitely better than the login node, there is still a 1-2 second performance hit when doing the conda setup over ssh. </p>
+<p>On my local machine the performance for local setup matches that of the second node above and definitely more consistent.</p>
+<table>
+<thead>
+<tr>
+<th></th>
+<th>Local Setup</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>Min</td>
+<td>0.17</td>
+</tr>
+<tr>
+<td>Max</td>
+<td>2.14</td>
+</tr>
+<tr>
+<td>Mean</td>
+<td>0.1797</td>
+</tr>
+</tbody>
+</table>
+<p>I'm going to continue to look into why the <code>__conda_setup</code> call takes up to 3 times longer over ssh as opposed to being run locally. 
+I have a feeling there is something else going on under the hood and there may be a way to squeak out better performance.</p>
+<p>I'm a little confused though by the auto-generated initialization above.  By default, it executes conda to generate the environment variables and if that fails, it then sources a pre-generated file directly without executing any python code.  I would recommend it instead attempt to source the files directly first then fall back to generating the bash initialization after that.   I'm sure the Anaconda developers have their reason for doing it in that order but it just doesn't seem necessary to me.</p>
+<p>In my opinion the performance hit over ssh is more than I care for and I wish conda did not require this in order to properly function.  Our recommendation  to prevent this is to use a centrally managed 
+anaconda install with a custom modulefile to manage these environment variables, then follow up with the users to make sure they're <code>.bashrc</code> files are cleaned up.</p>
+<p>I'll be following up this article with a brief look at a modulefile to handle this on HPC clusters using Lmod.</p>
+  </div>
+  <div class="tag-cloud">
+    <p>
+      <a href="https://blog.kail.io/tag/hpc.html">hpc</a>
+      <a href="https://blog.kail.io/tag/slurm.html">slurm</a>
+      <a href="https://blog.kail.io/tag/anaconda.html">anaconda</a>
+    </p>
+  </div>
+
+
+
+
+
+
+</article>
+
+<footer>
+<p>
+  &copy;   - This work is licensed under a <a rel="license" href="http://creativecommons.org/licenses/by-sa/4.0/deed.en_US" target="_blank">Creative Commons Attribution-ShareAlike</a>
+</p>
+<p>
+Built with <a href="http://getpelican.com" target="_blank">Pelican</a> using <a href="http://bit.ly/flex-pelican" target="_blank">Flex</a> theme
+</p><p>
+  <a rel="license"
+     href="http://creativecommons.org/licenses/by-sa/4.0/"
+     target="_blank">
+    <img alt="Creative Commons License"
+         title="Creative Commons License"
+         style="border-width:0"
+           src="https://i.creativecommons.org/l/by-sa/4.0/80x15.png"
+         width="80"
+         height="15"/>
+  </a>
+</p></footer>  </main>
+
+<script type="application/ld+json">
+{
+  "@context" : "http://schema.org",
+  "@type" : "Blog",
+  "name": " Andrew Kail's Blog ",
+  "url" : "https://blog.kail.io",
+  "image": "http://localhost:9000/images/profile.png",
+  "description": "The personal blog of Andrew Kail, an HPC enthusiast, PhD Student, and homelaber."
+}
+</script>
+</body>
+</html>
