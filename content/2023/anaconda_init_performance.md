@@ -1,7 +1,7 @@
 Title: Performance Impact of Anaconda Initialization
 Date: 2023-08-15 12:00
 Category: HPC,Python
-Tags: hpc,slurm,anaconda
+Tags: hpc,anaconda
 Authors: Andrew Kail
 
 
