@@ -173,33 +173,46 @@ their own version of <a href="https://anaconda.org">Anaconda</a> or they're usin
 without without a customized modulefile.</p>
 <p>The cause of this is conda requiring environment variables and fuctions be defined in order
 for it to function.  Usually a user will be asked to run <code>conda init</code> when these variables do not exist.  On linux in bash, it adds the following to the users <code>.bashrc</code>.</p>
-<div class="highlight"><pre><span></span><code><span class="c1"># &gt;&gt;&gt; conda initialize &gt;&gt;&gt;</span>
+<div class="highlight"><table class="highlighttable"><tr><td class="linenos"><div class="linenodiv"><pre><span class="normal"> 1</span>
+<span class="normal"> 2</span>
+<span class="normal"> 3</span>
+<span class="normal"> 4</span>
+<span class="normal"> 5</span>
+<span class="normal"> 6</span>
+<span class="normal"> 7</span>
+<span class="normal"> 8</span>
+<span class="normal"> 9</span>
+<span class="normal">10</span>
+<span class="normal">11</span>
+<span class="normal">12</span>
+<span class="normal">13</span>
+<span class="normal">14</span></pre></div></td><td class="code"><div><pre><span></span><code><span class="c1"># &gt;&gt;&gt; conda initialize &gt;&gt;&gt;</span>
 <span class="c1"># !! Contents within this block are managed by &#39;conda init&#39; !!</span>
-<span class="n">__conda_setup</span><span class="o">=</span><span class="s2">&quot;$(&#39;/data/apps/anaconda/3.9/bin/conda&#39; &#39;shell.bash&#39; &#39;hook&#39; 2&gt; /dev/null)&quot;</span>
-<span class="k">if</span><span class="w"> </span><span class="p">[</span><span class="w"> </span><span class="o">$</span><span class="err">?</span><span class="w"> </span><span class="o">-</span><span class="n">eq</span><span class="w"> </span><span class="mi">0</span><span class="w"> </span><span class="p">];</span><span class="w"> </span><span class="n">then</span>
-<span class="w">    </span><span class="n">eval</span><span class="w"> </span><span class="s2">&quot;$__conda_setup&quot;</span>
+<span class="nv">__conda_setup</span><span class="o">=</span><span class="s2">&quot;</span><span class="k">$(</span><span class="s1">&#39;/data/apps/anaconda/3.9/bin/conda&#39;</span><span class="w"> </span><span class="s1">&#39;shell.bash&#39;</span><span class="w"> </span><span class="s1">&#39;hook&#39;</span><span class="w"> </span><span class="m">2</span>&gt;<span class="w"> </span>/dev/null<span class="k">)</span><span class="s2">&quot;</span>
+<span class="k">if</span><span class="w"> </span><span class="o">[</span><span class="w"> </span><span class="nv">$?</span><span class="w"> </span>-eq<span class="w"> </span><span class="m">0</span><span class="w"> </span><span class="o">]</span><span class="p">;</span><span class="w"> </span><span class="k">then</span>
+<span class="w">    </span><span class="nb">eval</span><span class="w"> </span><span class="s2">&quot;</span><span class="nv">$__conda_setup</span><span class="s2">&quot;</span>
 <span class="k">else</span>
-<span class="w">    </span><span class="k">if</span><span class="w"> </span><span class="p">[</span><span class="w"> </span><span class="o">-</span><span class="n">f</span><span class="w"> </span><span class="s2">&quot;/data/apps/anaconda/3.9/etc/profile.d/conda.sh&quot;</span><span class="w"> </span><span class="p">];</span><span class="w"> </span><span class="n">then</span>
-<span class="w">        </span><span class="o">.</span><span class="w"> </span><span class="s2">&quot;/data/apps/anaconda/3.9/etc/profile.d/conda.sh&quot;</span>
+<span class="w">    </span><span class="k">if</span><span class="w"> </span><span class="o">[</span><span class="w"> </span>-f<span class="w"> </span><span class="s2">&quot;/data/apps/anaconda/3.9/etc/profile.d/conda.sh&quot;</span><span class="w"> </span><span class="o">]</span><span class="p">;</span><span class="w"> </span><span class="k">then</span>
+<span class="w">        </span>.<span class="w"> </span><span class="s2">&quot;/data/apps/anaconda/3.9/etc/profile.d/conda.sh&quot;</span>
 <span class="w">    </span><span class="k">else</span>
-<span class="w">        </span><span class="k">export</span><span class="w"> </span><span class="n">PATH</span><span class="o">=</span><span class="s2">&quot;/data/apps/anaconda/3.9/bin:$PATH&quot;</span>
-<span class="w">    </span><span class="n">fi</span>
-<span class="n">fi</span>
-<span class="n">unset</span><span class="w"> </span><span class="n">__conda_setup</span>
+<span class="w">        </span><span class="nb">export</span><span class="w"> </span><span class="nv">PATH</span><span class="o">=</span><span class="s2">&quot;/data/apps/anaconda/3.9/bin:</span><span class="nv">$PATH</span><span class="s2">&quot;</span>
+<span class="w">    </span><span class="k">fi</span>
+<span class="k">fi</span>
+<span class="nb">unset</span><span class="w"> </span>__conda_setup
 <span class="c1"># &lt;&lt;&lt; conda initialize &lt;&lt;&lt;</span>
-</code></pre></div>
+</code></pre></div></td></tr></table></div>
 
 <p>The issue on our systems has been line 5, where the conda python executable is called every time the the user logs in.  Essentially every time the user logs in conda is called to generate the proper environment variables.  This launches python, loads conda and other libraires, and possibly writes many <code>.pyc</code> files depending on where anaconda is installed.</p>
 <p>Using the python trace module, we can see how many files are accessed.</p>
-<div class="highlight"><pre><span></span><code>mkdir cover; cd cover
-python -m trace -c -C /data/apps/anaconda/3.9/bin/conda shell.bash hook
-# Get the number of files generated
-ls -al | wc -l
+<div class="highlight"><pre><span></span><code>mkdir<span class="w"> </span>cover<span class="p">;</span><span class="w"> </span><span class="nb">cd</span><span class="w"> </span>cover
+python<span class="w"> </span>-m<span class="w"> </span>trace<span class="w"> </span>-c<span class="w"> </span>-C<span class="w"> </span>/data/apps/anaconda/3.9/bin/conda<span class="w"> </span>shell.bash<span class="w"> </span>hook
+<span class="c1"># Get the number of files generated</span>
+ls<span class="w"> </span>-al<span class="w"> </span><span class="p">|</span><span class="w"> </span>wc<span class="w"> </span>-l
 </code></pre></div>
 
 <p>This will generate a <code>.cover</code> file for each python file that is executed.  In this particular case I had 146 Python files executed.  While this doesn't mean that each file was actually used, in Python, each file is read and byte compiled when imported if not already done so.  Thankfully most of these are byte compiled already so there shouldn't bee too many writes, just a few reads. Depending on the filesystem, such as a parallel filesystem, this could be less performant if on a shared filesystem.  Many small file access has always been a little problematic for us, even with some optimizations.</p>
 <p>For some empirical measurement on a cluster we know this is a problem I ran an ssh test from a local node 10 times with and 10 times without call the <code>__conda_setup</code>, both ending up with the same environment configuration.</p>
-<div class="highlight"><pre><span></span><code><span class="nv">time</span><span class="w"> </span><span class="nv">ssh</span><span class="w"> </span><span class="nv">login</span><span class="w"> </span><span class="k">uptime</span>
+<div class="highlight"><pre><span></span><code><span class="nb">time</span><span class="w"> </span>ssh<span class="w"> </span>login<span class="w"> </span>uptime
 </code></pre></div>
 
 <table>
