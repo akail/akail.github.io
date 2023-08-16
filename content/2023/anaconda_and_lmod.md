@@ -50,3 +50,6 @@ fuctions it needs.  This works for both bash and csh.
 
 Users can even add the `module load anaconda` to their bashrc safely as this will initialize
 anaconda without the penalty of running the `__conda_setup` function from the last article.
+
+This also has the added benefit of allowing for multiple Anaconda installations in single environment
+as a users `.bashrc` will not point to a hard-coded location.
