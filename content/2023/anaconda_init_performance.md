@@ -30,7 +30,7 @@ for it to function.  Usually a user will be asked to run `conda init` when these
     # <<< conda initialize <<<
 
 
-The issue on our systems has been line 5, where the conda python executable is called every time the the user logs in.  Essentially every time the user logs in conda is called to generate the proper environment variables.  This launches python, loads conda and other libraires, and possibly writes many `.pyc` files depending on where anaconda is installed.
+The issue on our systems has been line 3, where the conda python executable is called every time the the user logs in.  Essentially every time the user logs in conda is called to generate the proper environment variables.  This launches python, loads conda and other libraires, and possibly writes many `.pyc` files depending on where anaconda is installed.
 
 Using the python trace module, we can see how many files are accessed.
 
