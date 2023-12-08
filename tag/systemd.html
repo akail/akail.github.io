@@ -52,7 +52,7 @@
   <meta property="og:url" content="https://blog.kail.io"/>
   <meta property="og:image" content="https://blog.kail.io/images/profile.png">
 
-  <title>Andrew Kail's Blog &ndash; Category HPC</title>
+  <title>Andrew Kail's Blog &ndash; Tag systemd</title>
 
 
 </head>
@@ -150,47 +150,22 @@ rel="me"           href="https://fosstodon.org/@akail"
 
 <article>
   <header>
-    <h2><a href="https://blog.kail.io/comparison-of-provisioningcluster-managers-in-hpc.html#comparison-of-provisioningcluster-managers-in-hpc">Comparison of Provisioning/Cluster Managers in HPC</a></h2>
+    <h2><a href="https://blog.kail.io/some-systemd-root-mount-confusion.html#some-systemd-root-mount-confusion">Some Systemd Root Mount Confusion</a></h2>
     <p>
-      Posted on Fri 08 December 2023 in <a href="https://blog.kail.io/category/hpc.html">HPC</a>
+      Posted on Thu 14 September 2023 in <a href="https://blog.kail.io/category/linux.html">Linux</a>
 
           &#8226; Tagged with
-              <a href="https://blog.kail.io/tag/hpc.html">hpc</a>,              <a href="https://blog.kail.io/tag/linux.html">linux</a>,              <a href="https://blog.kail.io/tag/provisioning.html">provisioning</a>
+              <a href="https://blog.kail.io/tag/linux.html">linux</a>,              <a href="https://blog.kail.io/tag/systemd.html">systemd</a>,              <a href="https://blog.kail.io/tag/bright.html">bright</a>
     </p>
   </header>
   <div>
-      <div><p>We are primarily a <del>Bright Cluster Manager</del> Base Command Manager (BCM) 
-shop and recently some
-uncertainty has arisen around the future of BCM after its purchase by Nvidia last year.
-More specifically how 
-pricing will be handled and whether BCM will only be available with Nvidia
-superpods and DGX systems …</p></div>
+      <div><p>I recently ran into an interesting issue with systemd on a Bright Cluster. </p>
+<p>Bright Cluster Manager (BCM) has a tendency to restart the Slurm Daemons when
+certain changes are made, such as adding a new partition.  Recently when we did this,
+we found the daemon failed to restart on a …</p></div>
         <br>
         <a class="btn"
-           href="https://blog.kail.io/comparison-of-provisioningcluster-managers-in-hpc.html#comparison-of-provisioningcluster-managers-in-hpc">
-          Continue reading
-        </a>
-  </div>
-  <hr />
-</article>
-<article>
-  <header>
-    <h2><a href="https://blog.kail.io/the-impact-of-rhel-changes-on-an-hpc-msp.html#the-impact-of-rhel-changes-on-an-hpc-msp">The Impact of RHEL Changes on an HPC MSP</a></h2>
-    <p>
-      Posted on Tue 27 June 2023 in <a href="https://blog.kail.io/category/hpc.html">HPC</a>
-
-          &#8226; Tagged with
-              <a href="https://blog.kail.io/tag/hpc.html">hpc</a>,              <a href="https://blog.kail.io/tag/linux.html">linux</a>
-    </p>
-  </header>
-  <div>
-      <div><p>Its been nearly a week now and after having stewed on it I think its time to speak my piece on this debacle.</p>
-<p>The recent changes to how Red Hat Enterprise Linux (RHEL) distributes their
-source code has caused quite a stir in the Linux and HPC community.  </p>
-<p>While I …</p></div>
-        <br>
-        <a class="btn"
-           href="https://blog.kail.io/the-impact-of-rhel-changes-on-an-hpc-msp.html#the-impact-of-rhel-changes-on-an-hpc-msp">
+           href="https://blog.kail.io/some-systemd-root-mount-confusion.html#some-systemd-root-mount-confusion">
           Continue reading
         </a>
   </div>

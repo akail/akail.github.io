@@ -52,7 +52,7 @@
   <meta property="og:url" content="https://blog.kail.io"/>
   <meta property="og:image" content="https://blog.kail.io/images/profile.png">
 
-  <title>Andrew Kail's Blog &ndash; Category HPC</title>
+  <title>Andrew Kail's Blog &ndash; Tag apptainer</title>
 
 
 </head>
@@ -150,47 +150,32 @@ rel="me"           href="https://fosstodon.org/@akail"
 
 <article>
   <header>
-    <h2><a href="https://blog.kail.io/comparison-of-provisioningcluster-managers-in-hpc.html#comparison-of-provisioningcluster-managers-in-hpc">Comparison of Provisioning/Cluster Managers in HPC</a></h2>
+    <h2><a href="https://blog.kail.io/running-a-jupyter-kernel-in-apptainer.html#running-a-jupyter-kernel-in-apptainer">Running A Jupyter Kernel In Apptainer</a></h2>
     <p>
-      Posted on Fri 08 December 2023 in <a href="https://blog.kail.io/category/hpc.html">HPC</a>
+      Posted on Wed 30 August 2023 in <a href="https://blog.kail.io/category/python.html">Python</a>
 
           &#8226; Tagged with
-              <a href="https://blog.kail.io/tag/hpc.html">hpc</a>,              <a href="https://blog.kail.io/tag/linux.html">linux</a>,              <a href="https://blog.kail.io/tag/provisioning.html">provisioning</a>
+              <a href="https://blog.kail.io/tag/apptainer.html">apptainer</a>,              <a href="https://blog.kail.io/tag/jupyter.html">jupyter</a>
     </p>
   </header>
   <div>
-      <div><p>We are primarily a <del>Bright Cluster Manager</del> Base Command Manager (BCM) 
-shop and recently some
-uncertainty has arisen around the future of BCM after its purchase by Nvidia last year.
-More specifically how 
-pricing will be handled and whether BCM will only be available with Nvidia
-superpods and DGX systems …</p></div>
-        <br>
-        <a class="btn"
-           href="https://blog.kail.io/comparison-of-provisioningcluster-managers-in-hpc.html#comparison-of-provisioningcluster-managers-in-hpc">
-          Continue reading
-        </a>
-  </div>
-  <hr />
-</article>
-<article>
-  <header>
-    <h2><a href="https://blog.kail.io/the-impact-of-rhel-changes-on-an-hpc-msp.html#the-impact-of-rhel-changes-on-an-hpc-msp">The Impact of RHEL Changes on an HPC MSP</a></h2>
-    <p>
-      Posted on Tue 27 June 2023 in <a href="https://blog.kail.io/category/hpc.html">HPC</a>
+      <div><p>Just a quick example of running a Jupyter kernel inside an <del>Singularity</del> 
+Apptainer container.</p>
+<p>First define a container with all the required applications, in particular <code>ipykernel</code>.</p>
+<div class="highlight"><pre><span></span><code><span class="k">bootstrap</span>:<span class="w"> </span>docker
+<span class="k">From</span>:<span class="w"> </span>python:<span class="m">3.11</span>-slim-buster
 
-          &#8226; Tagged with
-              <a href="https://blog.kail.io/tag/hpc.html">hpc</a>,              <a href="https://blog.kail.io/tag/linux.html">linux</a>
-    </p>
-  </header>
-  <div>
-      <div><p>Its been nearly a week now and after having stewed on it I think its time to speak my piece on this debacle.</p>
-<p>The recent changes to how Red Hat Enterprise Linux (RHEL) distributes their
-source code has caused quite a stir in the Linux and HPC community.  </p>
-<p>While I …</p></div>
+<span class="gh">%runscript</span>
+<span class="w">    </span><span class="nb">echo</span><span class="w"> </span><span class="s2">&quot;Hello... I am a new Singularity container&quot;</span>
+
+<span class="gh">%labels</span>
+<span class="w">    </span>AUTHOR<span class="w"> </span>andrew@kail.io
+
+<span class="gh">%post</span>
+<span class="w">    </span>apt-get<span class="w"> </span>update …</code></pre></div></div>
         <br>
         <a class="btn"
-           href="https://blog.kail.io/the-impact-of-rhel-changes-on-an-hpc-msp.html#the-impact-of-rhel-changes-on-an-hpc-msp">
+           href="https://blog.kail.io/running-a-jupyter-kernel-in-apptainer.html#running-a-jupyter-kernel-in-apptainer">
           Continue reading
         </a>
   </div>

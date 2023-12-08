@@ -202,7 +202,7 @@ for it to function.  Usually a user will be asked to run <code>conda init</code>
 <span class="c1"># &lt;&lt;&lt; conda initialize &lt;&lt;&lt;</span>
 </code></pre></div></td></tr></table></div>
 
-<p>The issue on our systems has been line 5, where the conda python executable is called every time the the user logs in.  Essentially every time the user logs in conda is called to generate the proper environment variables.  This launches python, loads conda and other libraires, and possibly writes many <code>.pyc</code> files depending on where anaconda is installed.</p>
+<p>The issue on our systems has been line 3, where the conda python executable is called every time the the user logs in.  Essentially every time the user logs in conda is called to generate the proper environment variables.  This launches python, loads conda and other libraires, and possibly writes many <code>.pyc</code> files depending on where anaconda is installed.</p>
 <p>Using the python trace module, we can see how many files are accessed.</p>
 <div class="highlight"><pre><span></span><code>mkdir<span class="w"> </span>cover<span class="p">;</span><span class="w"> </span><span class="nb">cd</span><span class="w"> </span>cover
 python<span class="w"> </span>-m<span class="w"> </span>trace<span class="w"> </span>-c<span class="w"> </span>-C<span class="w"> </span>/data/apps/anaconda/3.9/bin/conda<span class="w"> </span>shell.bash<span class="w"> </span>hook

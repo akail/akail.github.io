@@ -1,5 +1,335 @@
 <?xml version="1.0" encoding="utf-8"?>
-<feed xmlns="http://www.w3.org/2005/Atom"><title>Andrew Kail's Blog - HPC</title><link href="https://blog.kail.io/" rel="alternate"></link><link href="https://blog.kail.io/feeds/hpc.atom.xml" rel="self"></link><id>https://blog.kail.io/</id><updated>2023-06-27T12:00:00-04:00</updated><subtitle>Somewhat HPC related blog</subtitle><entry><title>The Impact of RHEL Changes on an HPC MSP</title><link href="https://blog.kail.io/the-impact-of-rhel-changes-on-an-hpc-msp.html" rel="alternate"></link><published>2023-06-27T12:00:00-04:00</published><updated>2023-06-27T12:00:00-04:00</updated><author><name>Andrew Kail</name></author><id>tag:blog.kail.io,2023-06-27:/the-impact-of-rhel-changes-on-an-hpc-msp.html</id><summary type="html">&lt;p&gt;Its been nearly a week now and after having stewed on it I think its time to speak my piece on this debacle.&lt;/p&gt;
+<feed xmlns="http://www.w3.org/2005/Atom"><title>Andrew Kail's Blog - HPC</title><link href="https://blog.kail.io/" rel="alternate"></link><link href="https://blog.kail.io/feeds/hpc.atom.xml" rel="self"></link><id>https://blog.kail.io/</id><updated>2023-12-08T00:00:00-05:00</updated><subtitle>Somewhat HPC related blog</subtitle><entry><title>Comparison of Provisioning/Cluster Managers in HPC</title><link href="https://blog.kail.io/comparison-of-provisioningcluster-managers-in-hpc.html" rel="alternate"></link><published>2023-12-08T00:00:00-05:00</published><updated>2023-12-08T00:00:00-05:00</updated><author><name>Andrew Kail</name></author><id>tag:blog.kail.io,2023-12-08:/comparison-of-provisioningcluster-managers-in-hpc.html</id><summary type="html">&lt;p&gt;We are primarily a &lt;del&gt;Bright Cluster Manager&lt;/del&gt; Base Command Manager (BCM) 
+shop and recently some
+uncertainty has arisen around the future of BCM after its purchase by Nvidia last year.
+More specifically how 
+pricing will be handled and whether BCM will only be available with Nvidia
+superpods and DGX systems …&lt;/p&gt;</summary><content type="html">&lt;p&gt;We are primarily a &lt;del&gt;Bright Cluster Manager&lt;/del&gt; Base Command Manager (BCM) 
+shop and recently some
+uncertainty has arisen around the future of BCM after its purchase by Nvidia last year.
+More specifically how 
+pricing will be handled and whether BCM will only be available with Nvidia
+superpods and DGX systems in the long term. &lt;/p&gt;
+&lt;p&gt;As an HPC Managed Services Provider, we seek to leverage solutions that allow
+us to quickly deploy and easily manage compute clusters. For our business operations, BCM 
+has served us well in both the features it provides and the support from Nvidia.  Currently, all but
+one HPC Cluster we manage runs BCM. &lt;/p&gt;
+&lt;p&gt;Our lone outlier is a unique test case were we needed to manage both Linux
+and Windows nodes in the same environment, so we instead went with another
+provisioning software (Cobbler)[https://cobbler.github.io/] which had the ability
+to support a Windows node.  We quickly however
+realized there were many features missing we needed to fill via other means and the
+Windows support proved more difficult that we like.&lt;/p&gt;
+&lt;p&gt;In this article, I'll take a look at what the options are in the HPC space and
+review the features needed in an a standalone deployment.  My goal in writing this is to 
+understand the gaps in the solutions so our team, clients, and you, know
+which ones need to be filled.&lt;/p&gt;
+&lt;h2&gt;Provisioner vs Cluster Manager&lt;/h2&gt;
+&lt;p&gt;First, I want to be clear about what is being compared here.  These tools will fall
+into two categories, with one being a subset of the other.&lt;/p&gt;
+&lt;p&gt;All of the software compared here will provide some form of provisioning. Provisioners
+typically use some form of network booting combined with PXE and a TFTP server to handle installing and configuring an operating system to either baremetal hardware or a VM.  This has become the standard method for provisioning in both HPC and enterprise environments.&lt;/p&gt;
+&lt;p&gt;The subcategory is cluster management software. A cluster managers are more specific to the HPC and parallel computing space. A cluster manager different from generic provisioning software in that it will typically run an agent on each node to manage and configure services for HPC.&lt;/p&gt;
+&lt;h2&gt;The software&lt;/h2&gt;
+&lt;p&gt;I'll be comparing the following software stacks.  This is not an exhaustive list of available software and I have decided to focus on what is either well supported, well known, or niche to this industry.&lt;/p&gt;
+&lt;h3&gt;Provisioning Software&lt;/h3&gt;
+&lt;p&gt;&lt;strong&gt;&lt;a href="https://cobbler.github.io/"&gt;Cobbler&lt;/a&gt;&lt;/strong&gt;&lt;/p&gt;
+&lt;p&gt;Cobbler is a provisioning software stack written in Python primarly geared towards
+Linux network installations.  Its a very light install and leverages template and kickstart scripts for initial system configuration.&lt;/p&gt;
+&lt;p&gt;&lt;strong&gt;&lt;a href="https://theforeman.org/"&gt;The Foreman&lt;/a&gt;&lt;/strong&gt;&lt;/p&gt;
+&lt;p&gt;Foreman is a complete lifecycle management tool for physical and virtual servers.
+More than just a provisioner, it can also handle security update management,
+configuraiton management, and monitoring. Even with its rich feature set I am leaving it
+out of the Cluster Managers list as it is not geared towards HPC Clusters.&lt;/p&gt;
+&lt;h3&gt;Cluster Managers&lt;/h3&gt;
+&lt;p&gt;&lt;strong&gt;&lt;a href="https://www.nvidia.com/en-us/ai-data-science/products/base-command-manager-essentials/"&gt;Base Command Manager&lt;/a&gt;&lt;/strong&gt;&lt;/p&gt;
+&lt;p&gt;Our story's main character.  Base Command Manager is a proprietary turn-key
+application for installaing, configuring and managing and HPC cluster with
+all the batteries included.&lt;/p&gt;
+&lt;p&gt;&lt;strong&gt;&lt;a href="https://warewulf.org/"&gt;Warewulf&lt;/a&gt;&lt;/strong&gt;&lt;/p&gt;
+&lt;p&gt;Warewulf is fast becoming one of the big players in the HPC Cluster management space.  It's the primary manager for the &lt;a href="https://openhpc.community/"&gt;OpenHPC Project&lt;/a&gt;, is open source with the option for enterprise support.&lt;/p&gt;
+&lt;p&gt;&lt;strong&gt;&lt;a href="https://grendel.readthedocs.io"&gt;Grendel&lt;/a&gt;&lt;/strong&gt;&lt;/p&gt;
+&lt;p&gt;Grendel is a cluster manager out of the University at Buffalo Center for Computational Research where it is used to manage their hpc resources.&lt;/p&gt;
+&lt;p&gt;&lt;strong&gt;&lt;a href="https://www.penguinsolutions.com/computing/products/software/scyld-clusterware/"&gt;Scyld Clusterware&lt;/a&gt;&lt;/strong&gt;&lt;/p&gt;
+&lt;p&gt;Scyld is a proprietary cluster management product from Penguin Solutions.  Development is based on the
+beo&lt;/p&gt;
+&lt;p&gt;&lt;strong&gt;&lt;a href="https://xcat-docs.readthedocs.io/en/stable/"&gt;xCAT&lt;/a&gt;&lt;/strong&gt;&lt;/p&gt;
+&lt;p&gt;I well known management stack, xCAT is unfortunately no longer in development by IBM, but there is an attempt by the Open Source
+Community to revive it.  However, I wanted to leave it in this list
+as it is very well known and feature rich, albeit difficult to install and manage.&lt;/p&gt;
+&lt;p&gt;Recently I did discover xCAT development has been continued by Lenovo under the name Confluent, albeit not
+out in the open.  It can be found at &lt;a href="https://hpc.lenovo.com"&gt;hpc.lenovo.com&lt;/a&gt;.  &lt;/p&gt;
+&lt;p&gt;&lt;strong&gt;&lt;a href="https://openhpc.community/"&gt;OpenHPC&lt;/a&gt;&lt;/strong&gt;&lt;/p&gt;
+&lt;p&gt;OpenHPC is a community effort to provide common HPC components which can be mixed and matched to build an cluster.  OpenHPC itself builds on top of Warewulf's
+provisioning and provides other tools and libraries such as Infiniband, Lustre, and other scientific applications.&lt;/p&gt;
+&lt;h2&gt;Features&lt;/h2&gt;
+&lt;ul&gt;
+&lt;li&gt;DHCP&lt;/li&gt;
+&lt;li&gt;TFTP&lt;/li&gt;
+&lt;li&gt;NTP&lt;/li&gt;
+&lt;li&gt;IPMI configuration (During provisioning)&lt;/li&gt;
+&lt;li&gt;Power control&lt;/li&gt;
+&lt;li&gt;DNS&lt;/li&gt;
+&lt;li&gt;Stateless provisioning&lt;/li&gt;
+&lt;li&gt;Statefull provisioning&lt;/li&gt;
+&lt;li&gt;Infiniband Driver&lt;/li&gt;
+&lt;li&gt;Nvidia Drivers&lt;/li&gt;
+&lt;li&gt;License&lt;/li&gt;
+&lt;li&gt;Windows Provisioning&lt;/li&gt;
+&lt;li&gt;User Management&lt;/li&gt;
+&lt;li&gt;Firewall NAT Configuration&lt;/li&gt;
+&lt;li&gt;Service Management (i.e. Systemd services)&lt;/li&gt;
+&lt;li&gt;Image Management&lt;/li&gt;
+&lt;li&gt;NFS Server&lt;/li&gt;
+&lt;li&gt;Kernel Management&lt;/li&gt;
+&lt;li&gt;Support Contract&lt;/li&gt;
+&lt;li&gt;Slurm Management&lt;/li&gt;
+&lt;/ul&gt;
+&lt;p&gt;For many of these features, we are looking at what is provided by the provisioning software itself, not from the OS or
+other related tools like Puppet, Chef, etc.  For example, The Foreman can tightly integrate with Puppet, but requires
+more setup on the admin side to handle some of the features above.&lt;/p&gt;
+&lt;h2&gt;Comparison&lt;/h2&gt;
+&lt;table&gt;
+&lt;thead&gt;
+&lt;tr&gt;
+&lt;th&gt;Feature&lt;/th&gt;
+&lt;th&gt;Cobbler&lt;/th&gt;
+&lt;th&gt;The Foreman&lt;/th&gt;
+&lt;th&gt;BCM&lt;/th&gt;
+&lt;th&gt;Warewulf&lt;/th&gt;
+&lt;th&gt;Grendel&lt;/th&gt;
+&lt;th&gt;Scyld&lt;/th&gt;
+&lt;th&gt;xCAT&lt;/th&gt;
+&lt;th&gt;OpenHPC&lt;/th&gt;
+&lt;/tr&gt;
+&lt;/thead&gt;
+&lt;tbody&gt;
+&lt;tr&gt;
+&lt;td&gt;DHCP&lt;/td&gt;
+&lt;td&gt;Yes&lt;/td&gt;
+&lt;td&gt;Yes&lt;/td&gt;
+&lt;td&gt;Yes&lt;/td&gt;
+&lt;td&gt;Yes&lt;/td&gt;
+&lt;td&gt;Yes&lt;/td&gt;
+&lt;td&gt;Yes&lt;/td&gt;
+&lt;td&gt;Yes&lt;/td&gt;
+&lt;td&gt;Yes&lt;/td&gt;
+&lt;/tr&gt;
+&lt;tr&gt;
+&lt;td&gt;TFTP&lt;/td&gt;
+&lt;td&gt;Yes&lt;/td&gt;
+&lt;td&gt;Yes&lt;/td&gt;
+&lt;td&gt;Yes&lt;/td&gt;
+&lt;td&gt;Yes&lt;/td&gt;
+&lt;td&gt;Yes&lt;/td&gt;
+&lt;td&gt;Yes&lt;/td&gt;
+&lt;td&gt;Yes&lt;/td&gt;
+&lt;td&gt;Yes&lt;/td&gt;
+&lt;/tr&gt;
+&lt;tr&gt;
+&lt;td&gt;NTP&lt;/td&gt;
+&lt;td&gt;No&lt;/td&gt;
+&lt;td&gt;No&lt;/td&gt;
+&lt;td&gt;Yes&lt;/td&gt;
+&lt;td&gt;No&lt;/td&gt;
+&lt;td&gt;Yes&lt;/td&gt;
+&lt;td&gt;Yes&lt;/td&gt;
+&lt;td&gt;Yes&lt;/td&gt;
+&lt;td&gt;No&lt;/td&gt;
+&lt;/tr&gt;
+&lt;tr&gt;
+&lt;td&gt;IMPI Configuration&lt;/td&gt;
+&lt;td&gt;No&lt;/td&gt;
+&lt;td&gt;No&lt;/td&gt;
+&lt;td&gt;Yes&lt;/td&gt;
+&lt;td&gt;No&lt;/td&gt;
+&lt;td&gt;No&lt;/td&gt;
+&lt;td&gt;No&lt;/td&gt;
+&lt;td&gt;No&lt;/td&gt;
+&lt;td&gt;No&lt;/td&gt;
+&lt;/tr&gt;
+&lt;tr&gt;
+&lt;td&gt;Power Management&lt;/td&gt;
+&lt;td&gt;Yes&lt;/td&gt;
+&lt;td&gt;Yes&lt;/td&gt;
+&lt;td&gt;Yes&lt;/td&gt;
+&lt;td&gt;Yes&lt;/td&gt;
+&lt;td&gt;Yes&lt;/td&gt;
+&lt;td&gt;Yes&lt;/td&gt;
+&lt;td&gt;Yes&lt;/td&gt;
+&lt;td&gt;Yes&lt;/td&gt;
+&lt;/tr&gt;
+&lt;tr&gt;
+&lt;td&gt;DNS&lt;/td&gt;
+&lt;td&gt;No&lt;/td&gt;
+&lt;td&gt;Yes&lt;/td&gt;
+&lt;td&gt;Yes&lt;/td&gt;
+&lt;td&gt;Yes&lt;/td&gt;
+&lt;td&gt;Yes&lt;/td&gt;
+&lt;td&gt;Yes&lt;/td&gt;
+&lt;td&gt;Yes&lt;/td&gt;
+&lt;td&gt;Yes&lt;/td&gt;
+&lt;/tr&gt;
+&lt;tr&gt;
+&lt;td&gt;Stateless provisioning&lt;/td&gt;
+&lt;td&gt;No&lt;/td&gt;
+&lt;td&gt;No&lt;/td&gt;
+&lt;td&gt;Yes&lt;/td&gt;
+&lt;td&gt;Yes&lt;/td&gt;
+&lt;td&gt;Yes&lt;/td&gt;
+&lt;td&gt;Yes&lt;/td&gt;
+&lt;td&gt;Yes&lt;/td&gt;
+&lt;td&gt;Yes&lt;/td&gt;
+&lt;/tr&gt;
+&lt;tr&gt;
+&lt;td&gt;Statefull provisioning&lt;/td&gt;
+&lt;td&gt;Yes&lt;/td&gt;
+&lt;td&gt;Yes&lt;/td&gt;
+&lt;td&gt;Yes&lt;/td&gt;
+&lt;td&gt;No&lt;/td&gt;
+&lt;td&gt;Yes&lt;/td&gt;
+&lt;td&gt;Yes&lt;/td&gt;
+&lt;td&gt;Yes&lt;/td&gt;
+&lt;td&gt;Yes&lt;/td&gt;
+&lt;/tr&gt;
+&lt;tr&gt;
+&lt;td&gt;Infiniband Drivers&lt;/td&gt;
+&lt;td&gt;No&lt;/td&gt;
+&lt;td&gt;No&lt;/td&gt;
+&lt;td&gt;Yes&lt;/td&gt;
+&lt;td&gt;No&lt;/td&gt;
+&lt;td&gt;No&lt;/td&gt;
+&lt;td&gt;Yes&lt;/td&gt;
+&lt;td&gt;Yes&lt;/td&gt;
+&lt;td&gt;Yes&lt;/td&gt;
+&lt;/tr&gt;
+&lt;tr&gt;
+&lt;td&gt;Nvidia Drivers&lt;/td&gt;
+&lt;td&gt;No&lt;/td&gt;
+&lt;td&gt;No&lt;/td&gt;
+&lt;td&gt;Yes&lt;/td&gt;
+&lt;td&gt;No&lt;/td&gt;
+&lt;td&gt;No&lt;/td&gt;
+&lt;td&gt;Yes&lt;/td&gt;
+&lt;td&gt;Yes&lt;/td&gt;
+&lt;td&gt;No&lt;/td&gt;
+&lt;/tr&gt;
+&lt;tr&gt;
+&lt;td&gt;License&lt;/td&gt;
+&lt;td&gt;FOSS&lt;/td&gt;
+&lt;td&gt;FOSS&lt;/td&gt;
+&lt;td&gt;Proprietary&lt;/td&gt;
+&lt;td&gt;FOSS&lt;/td&gt;
+&lt;td&gt;FOSS&lt;/td&gt;
+&lt;td&gt;Proprietary&lt;/td&gt;
+&lt;td&gt;FOSS&lt;/td&gt;
+&lt;td&gt;FOSS&lt;/td&gt;
+&lt;/tr&gt;
+&lt;tr&gt;
+&lt;td&gt;Windows Provisioning&lt;/td&gt;
+&lt;td&gt;Maybe&lt;/td&gt;
+&lt;td&gt;Yes&lt;/td&gt;
+&lt;td&gt;No&lt;/td&gt;
+&lt;td&gt;No&lt;/td&gt;
+&lt;td&gt;No&lt;/td&gt;
+&lt;td&gt;No&lt;/td&gt;
+&lt;td&gt;Yes&lt;/td&gt;
+&lt;td&gt;No&lt;/td&gt;
+&lt;/tr&gt;
+&lt;tr&gt;
+&lt;td&gt;User Management&lt;/td&gt;
+&lt;td&gt;No&lt;/td&gt;
+&lt;td&gt;No&lt;/td&gt;
+&lt;td&gt;Yes&lt;/td&gt;
+&lt;td&gt;No&lt;/td&gt;
+&lt;td&gt;No&lt;/td&gt;
+&lt;td&gt;No&lt;/td&gt;
+&lt;td&gt;No&lt;/td&gt;
+&lt;td&gt;No&lt;/td&gt;
+&lt;/tr&gt;
+&lt;tr&gt;
+&lt;td&gt;Firewall NAT Configuration&lt;/td&gt;
+&lt;td&gt;No&lt;/td&gt;
+&lt;td&gt;No&lt;/td&gt;
+&lt;td&gt;Yes&lt;/td&gt;
+&lt;td&gt;No&lt;/td&gt;
+&lt;td&gt;No&lt;/td&gt;
+&lt;td&gt;Yes&lt;/td&gt;
+&lt;td&gt;No&lt;/td&gt;
+&lt;td&gt;No&lt;/td&gt;
+&lt;/tr&gt;
+&lt;tr&gt;
+&lt;td&gt;Service Management&lt;/td&gt;
+&lt;td&gt;No&lt;/td&gt;
+&lt;td&gt;No&lt;/td&gt;
+&lt;td&gt;Yes&lt;/td&gt;
+&lt;td&gt;Yes&lt;/td&gt;
+&lt;td&gt;No&lt;/td&gt;
+&lt;td&gt;No&lt;/td&gt;
+&lt;td&gt;No&lt;/td&gt;
+&lt;td&gt;Yes&lt;/td&gt;
+&lt;/tr&gt;
+&lt;tr&gt;
+&lt;td&gt;Image Management&lt;/td&gt;
+&lt;td&gt;No&lt;/td&gt;
+&lt;td&gt;No&lt;/td&gt;
+&lt;td&gt;Yes&lt;/td&gt;
+&lt;td&gt;Yes&lt;/td&gt;
+&lt;td&gt;No&lt;/td&gt;
+&lt;td&gt;Yes&lt;/td&gt;
+&lt;td&gt;Yes&lt;/td&gt;
+&lt;td&gt;Yes&lt;/td&gt;
+&lt;/tr&gt;
+&lt;tr&gt;
+&lt;td&gt;NFS Server&lt;/td&gt;
+&lt;td&gt;No&lt;/td&gt;
+&lt;td&gt;No&lt;/td&gt;
+&lt;td&gt;Yes&lt;/td&gt;
+&lt;td&gt;Yes&lt;/td&gt;
+&lt;td&gt;No&lt;/td&gt;
+&lt;td&gt;No&lt;/td&gt;
+&lt;td&gt;No&lt;/td&gt;
+&lt;td&gt;Yes&lt;/td&gt;
+&lt;/tr&gt;
+&lt;tr&gt;
+&lt;td&gt;Kernel Management&lt;/td&gt;
+&lt;td&gt;No&lt;/td&gt;
+&lt;td&gt;No&lt;/td&gt;
+&lt;td&gt;Yes&lt;/td&gt;
+&lt;td&gt;Yes&lt;/td&gt;
+&lt;td&gt;No&lt;/td&gt;
+&lt;td&gt;Yes&lt;/td&gt;
+&lt;td&gt;Yes&lt;/td&gt;
+&lt;td&gt;Yes&lt;/td&gt;
+&lt;/tr&gt;
+&lt;tr&gt;
+&lt;td&gt;Support Contract&lt;/td&gt;
+&lt;td&gt;No&lt;/td&gt;
+&lt;td&gt;No&lt;/td&gt;
+&lt;td&gt;Yes&lt;/td&gt;
+&lt;td&gt;Yes&lt;/td&gt;
+&lt;td&gt;No&lt;/td&gt;
+&lt;td&gt;Yes&lt;/td&gt;
+&lt;td&gt;No&lt;/td&gt;
+&lt;td&gt;Yes&lt;/td&gt;
+&lt;/tr&gt;
+&lt;tr&gt;
+&lt;td&gt;Slurm Management&lt;/td&gt;
+&lt;td&gt;No&lt;/td&gt;
+&lt;td&gt;No&lt;/td&gt;
+&lt;td&gt;Yes&lt;/td&gt;
+&lt;td&gt;No&lt;/td&gt;
+&lt;td&gt;No&lt;/td&gt;
+&lt;td&gt;Yes&lt;/td&gt;
+&lt;td&gt;No&lt;/td&gt;
+&lt;td&gt;Yes&lt;/td&gt;
+&lt;/tr&gt;
+&lt;/tbody&gt;
+&lt;/table&gt;
+&lt;h2&gt;Final Thoughts&lt;/h2&gt;
+&lt;p&gt;Its likely I missed some things and I will continue to update the comparison as time goes on or as people possibly yell at me.&lt;/p&gt;
+&lt;p&gt;In the end, we have decided to plan migrations to OpenHPC as it covers the majority of what we need, has a robust community,
+provided timely security updates, and will likely reduce costs for our customers. &lt;/p&gt;</content><category term="HPC"></category><category term="hpc"></category><category term="linux"></category><category term="provisioning"></category></entry><entry><title>The Impact of RHEL Changes on an HPC MSP</title><link href="https://blog.kail.io/the-impact-of-rhel-changes-on-an-hpc-msp.html" rel="alternate"></link><published>2023-06-27T12:00:00-04:00</published><updated>2023-06-27T12:00:00-04:00</updated><author><name>Andrew Kail</name></author><id>tag:blog.kail.io,2023-06-27:/the-impact-of-rhel-changes-on-an-hpc-msp.html</id><summary type="html">&lt;p&gt;Its been nearly a week now and after having stewed on it I think its time to speak my piece on this debacle.&lt;/p&gt;
 &lt;p&gt;The recent changes to how Red Hat Enterprise Linux (RHEL) distributes their
 source code has caused quite a stir in the Linux and HPC community.  &lt;/p&gt;
 &lt;p&gt;While I …&lt;/p&gt;</summary><content type="html">&lt;p&gt;Its been nearly a week now and after having stewed on it I think its time to speak my piece on this debacle.&lt;/p&gt;

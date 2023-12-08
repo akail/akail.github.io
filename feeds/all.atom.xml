@@ -1,5 +1,516 @@
 <?xml version="1.0" encoding="utf-8"?>
-<feed xmlns="http://www.w3.org/2005/Atom"><title>Andrew Kail's Blog</title><link href="https://blog.kail.io/" rel="alternate"></link><link href="https://blog.kail.io/feeds/all.atom.xml" rel="self"></link><id>https://blog.kail.io/</id><updated>2023-08-22T12:00:00-04:00</updated><subtitle>Somewhat HPC related blog</subtitle><entry><title>Integrating Anaconda with Lmod</title><link href="https://blog.kail.io/integrating-anaconda-with-lmod.html" rel="alternate"></link><published>2023-08-22T12:00:00-04:00</published><updated>2023-08-22T12:00:00-04:00</updated><author><name>Andrew Kail</name></author><id>tag:blog.kail.io,2023-08-22:/integrating-anaconda-with-lmod.html</id><summary type="html">&lt;p&gt;In a previous &lt;a href="https://blog.kail.io/performance-impact-of-anaconda-initialization.html"&gt;post&lt;/a&gt; I looked into performance issues with Anaconda initialization.  To
+<feed xmlns="http://www.w3.org/2005/Atom"><title>Andrew Kail's Blog</title><link href="https://blog.kail.io/" rel="alternate"></link><link href="https://blog.kail.io/feeds/all.atom.xml" rel="self"></link><id>https://blog.kail.io/</id><updated>2023-12-08T00:00:00-05:00</updated><subtitle>Somewhat HPC related blog</subtitle><entry><title>Comparison of Provisioning/Cluster Managers in HPC</title><link href="https://blog.kail.io/comparison-of-provisioningcluster-managers-in-hpc.html" rel="alternate"></link><published>2023-12-08T00:00:00-05:00</published><updated>2023-12-08T00:00:00-05:00</updated><author><name>Andrew Kail</name></author><id>tag:blog.kail.io,2023-12-08:/comparison-of-provisioningcluster-managers-in-hpc.html</id><summary type="html">&lt;p&gt;We are primarily a &lt;del&gt;Bright Cluster Manager&lt;/del&gt; Base Command Manager (BCM) 
+shop and recently some
+uncertainty has arisen around the future of BCM after its purchase by Nvidia last year.
+More specifically how 
+pricing will be handled and whether BCM will only be available with Nvidia
+superpods and DGX systems …&lt;/p&gt;</summary><content type="html">&lt;p&gt;We are primarily a &lt;del&gt;Bright Cluster Manager&lt;/del&gt; Base Command Manager (BCM) 
+shop and recently some
+uncertainty has arisen around the future of BCM after its purchase by Nvidia last year.
+More specifically how 
+pricing will be handled and whether BCM will only be available with Nvidia
+superpods and DGX systems in the long term. &lt;/p&gt;
+&lt;p&gt;As an HPC Managed Services Provider, we seek to leverage solutions that allow
+us to quickly deploy and easily manage compute clusters. For our business operations, BCM 
+has served us well in both the features it provides and the support from Nvidia.  Currently, all but
+one HPC Cluster we manage runs BCM. &lt;/p&gt;
+&lt;p&gt;Our lone outlier is a unique test case were we needed to manage both Linux
+and Windows nodes in the same environment, so we instead went with another
+provisioning software (Cobbler)[https://cobbler.github.io/] which had the ability
+to support a Windows node.  We quickly however
+realized there were many features missing we needed to fill via other means and the
+Windows support proved more difficult that we like.&lt;/p&gt;
+&lt;p&gt;In this article, I'll take a look at what the options are in the HPC space and
+review the features needed in an a standalone deployment.  My goal in writing this is to 
+understand the gaps in the solutions so our team, clients, and you, know
+which ones need to be filled.&lt;/p&gt;
+&lt;h2&gt;Provisioner vs Cluster Manager&lt;/h2&gt;
+&lt;p&gt;First, I want to be clear about what is being compared here.  These tools will fall
+into two categories, with one being a subset of the other.&lt;/p&gt;
+&lt;p&gt;All of the software compared here will provide some form of provisioning. Provisioners
+typically use some form of network booting combined with PXE and a TFTP server to handle installing and configuring an operating system to either baremetal hardware or a VM.  This has become the standard method for provisioning in both HPC and enterprise environments.&lt;/p&gt;
+&lt;p&gt;The subcategory is cluster management software. A cluster managers are more specific to the HPC and parallel computing space. A cluster manager different from generic provisioning software in that it will typically run an agent on each node to manage and configure services for HPC.&lt;/p&gt;
+&lt;h2&gt;The software&lt;/h2&gt;
+&lt;p&gt;I'll be comparing the following software stacks.  This is not an exhaustive list of available software and I have decided to focus on what is either well supported, well known, or niche to this industry.&lt;/p&gt;
+&lt;h3&gt;Provisioning Software&lt;/h3&gt;
+&lt;p&gt;&lt;strong&gt;&lt;a href="https://cobbler.github.io/"&gt;Cobbler&lt;/a&gt;&lt;/strong&gt;&lt;/p&gt;
+&lt;p&gt;Cobbler is a provisioning software stack written in Python primarly geared towards
+Linux network installations.  Its a very light install and leverages template and kickstart scripts for initial system configuration.&lt;/p&gt;
+&lt;p&gt;&lt;strong&gt;&lt;a href="https://theforeman.org/"&gt;The Foreman&lt;/a&gt;&lt;/strong&gt;&lt;/p&gt;
+&lt;p&gt;Foreman is a complete lifecycle management tool for physical and virtual servers.
+More than just a provisioner, it can also handle security update management,
+configuraiton management, and monitoring. Even with its rich feature set I am leaving it
+out of the Cluster Managers list as it is not geared towards HPC Clusters.&lt;/p&gt;
+&lt;h3&gt;Cluster Managers&lt;/h3&gt;
+&lt;p&gt;&lt;strong&gt;&lt;a href="https://www.nvidia.com/en-us/ai-data-science/products/base-command-manager-essentials/"&gt;Base Command Manager&lt;/a&gt;&lt;/strong&gt;&lt;/p&gt;
+&lt;p&gt;Our story's main character.  Base Command Manager is a proprietary turn-key
+application for installaing, configuring and managing and HPC cluster with
+all the batteries included.&lt;/p&gt;
+&lt;p&gt;&lt;strong&gt;&lt;a href="https://warewulf.org/"&gt;Warewulf&lt;/a&gt;&lt;/strong&gt;&lt;/p&gt;
+&lt;p&gt;Warewulf is fast becoming one of the big players in the HPC Cluster management space.  It's the primary manager for the &lt;a href="https://openhpc.community/"&gt;OpenHPC Project&lt;/a&gt;, is open source with the option for enterprise support.&lt;/p&gt;
+&lt;p&gt;&lt;strong&gt;&lt;a href="https://grendel.readthedocs.io"&gt;Grendel&lt;/a&gt;&lt;/strong&gt;&lt;/p&gt;
+&lt;p&gt;Grendel is a cluster manager out of the University at Buffalo Center for Computational Research where it is used to manage their hpc resources.&lt;/p&gt;
+&lt;p&gt;&lt;strong&gt;&lt;a href="https://www.penguinsolutions.com/computing/products/software/scyld-clusterware/"&gt;Scyld Clusterware&lt;/a&gt;&lt;/strong&gt;&lt;/p&gt;
+&lt;p&gt;Scyld is a proprietary cluster management product from Penguin Solutions.  Development is based on the
+beo&lt;/p&gt;
+&lt;p&gt;&lt;strong&gt;&lt;a href="https://xcat-docs.readthedocs.io/en/stable/"&gt;xCAT&lt;/a&gt;&lt;/strong&gt;&lt;/p&gt;
+&lt;p&gt;I well known management stack, xCAT is unfortunately no longer in development by IBM, but there is an attempt by the Open Source
+Community to revive it.  However, I wanted to leave it in this list
+as it is very well known and feature rich, albeit difficult to install and manage.&lt;/p&gt;
+&lt;p&gt;Recently I did discover xCAT development has been continued by Lenovo under the name Confluent, albeit not
+out in the open.  It can be found at &lt;a href="https://hpc.lenovo.com"&gt;hpc.lenovo.com&lt;/a&gt;.  &lt;/p&gt;
+&lt;p&gt;&lt;strong&gt;&lt;a href="https://openhpc.community/"&gt;OpenHPC&lt;/a&gt;&lt;/strong&gt;&lt;/p&gt;
+&lt;p&gt;OpenHPC is a community effort to provide common HPC components which can be mixed and matched to build an cluster.  OpenHPC itself builds on top of Warewulf's
+provisioning and provides other tools and libraries such as Infiniband, Lustre, and other scientific applications.&lt;/p&gt;
+&lt;h2&gt;Features&lt;/h2&gt;
+&lt;ul&gt;
+&lt;li&gt;DHCP&lt;/li&gt;
+&lt;li&gt;TFTP&lt;/li&gt;
+&lt;li&gt;NTP&lt;/li&gt;
+&lt;li&gt;IPMI configuration (During provisioning)&lt;/li&gt;
+&lt;li&gt;Power control&lt;/li&gt;
+&lt;li&gt;DNS&lt;/li&gt;
+&lt;li&gt;Stateless provisioning&lt;/li&gt;
+&lt;li&gt;Statefull provisioning&lt;/li&gt;
+&lt;li&gt;Infiniband Driver&lt;/li&gt;
+&lt;li&gt;Nvidia Drivers&lt;/li&gt;
+&lt;li&gt;License&lt;/li&gt;
+&lt;li&gt;Windows Provisioning&lt;/li&gt;
+&lt;li&gt;User Management&lt;/li&gt;
+&lt;li&gt;Firewall NAT Configuration&lt;/li&gt;
+&lt;li&gt;Service Management (i.e. Systemd services)&lt;/li&gt;
+&lt;li&gt;Image Management&lt;/li&gt;
+&lt;li&gt;NFS Server&lt;/li&gt;
+&lt;li&gt;Kernel Management&lt;/li&gt;
+&lt;li&gt;Support Contract&lt;/li&gt;
+&lt;li&gt;Slurm Management&lt;/li&gt;
+&lt;/ul&gt;
+&lt;p&gt;For many of these features, we are looking at what is provided by the provisioning software itself, not from the OS or
+other related tools like Puppet, Chef, etc.  For example, The Foreman can tightly integrate with Puppet, but requires
+more setup on the admin side to handle some of the features above.&lt;/p&gt;
+&lt;h2&gt;Comparison&lt;/h2&gt;
+&lt;table&gt;
+&lt;thead&gt;
+&lt;tr&gt;
+&lt;th&gt;Feature&lt;/th&gt;
+&lt;th&gt;Cobbler&lt;/th&gt;
+&lt;th&gt;The Foreman&lt;/th&gt;
+&lt;th&gt;BCM&lt;/th&gt;
+&lt;th&gt;Warewulf&lt;/th&gt;
+&lt;th&gt;Grendel&lt;/th&gt;
+&lt;th&gt;Scyld&lt;/th&gt;
+&lt;th&gt;xCAT&lt;/th&gt;
+&lt;th&gt;OpenHPC&lt;/th&gt;
+&lt;/tr&gt;
+&lt;/thead&gt;
+&lt;tbody&gt;
+&lt;tr&gt;
+&lt;td&gt;DHCP&lt;/td&gt;
+&lt;td&gt;Yes&lt;/td&gt;
+&lt;td&gt;Yes&lt;/td&gt;
+&lt;td&gt;Yes&lt;/td&gt;
+&lt;td&gt;Yes&lt;/td&gt;
+&lt;td&gt;Yes&lt;/td&gt;
+&lt;td&gt;Yes&lt;/td&gt;
+&lt;td&gt;Yes&lt;/td&gt;
+&lt;td&gt;Yes&lt;/td&gt;
+&lt;/tr&gt;
+&lt;tr&gt;
+&lt;td&gt;TFTP&lt;/td&gt;
+&lt;td&gt;Yes&lt;/td&gt;
+&lt;td&gt;Yes&lt;/td&gt;
+&lt;td&gt;Yes&lt;/td&gt;
+&lt;td&gt;Yes&lt;/td&gt;
+&lt;td&gt;Yes&lt;/td&gt;
+&lt;td&gt;Yes&lt;/td&gt;
+&lt;td&gt;Yes&lt;/td&gt;
+&lt;td&gt;Yes&lt;/td&gt;
+&lt;/tr&gt;
+&lt;tr&gt;
+&lt;td&gt;NTP&lt;/td&gt;
+&lt;td&gt;No&lt;/td&gt;
+&lt;td&gt;No&lt;/td&gt;
+&lt;td&gt;Yes&lt;/td&gt;
+&lt;td&gt;No&lt;/td&gt;
+&lt;td&gt;Yes&lt;/td&gt;
+&lt;td&gt;Yes&lt;/td&gt;
+&lt;td&gt;Yes&lt;/td&gt;
+&lt;td&gt;No&lt;/td&gt;
+&lt;/tr&gt;
+&lt;tr&gt;
+&lt;td&gt;IMPI Configuration&lt;/td&gt;
+&lt;td&gt;No&lt;/td&gt;
+&lt;td&gt;No&lt;/td&gt;
+&lt;td&gt;Yes&lt;/td&gt;
+&lt;td&gt;No&lt;/td&gt;
+&lt;td&gt;No&lt;/td&gt;
+&lt;td&gt;No&lt;/td&gt;
+&lt;td&gt;No&lt;/td&gt;
+&lt;td&gt;No&lt;/td&gt;
+&lt;/tr&gt;
+&lt;tr&gt;
+&lt;td&gt;Power Management&lt;/td&gt;
+&lt;td&gt;Yes&lt;/td&gt;
+&lt;td&gt;Yes&lt;/td&gt;
+&lt;td&gt;Yes&lt;/td&gt;
+&lt;td&gt;Yes&lt;/td&gt;
+&lt;td&gt;Yes&lt;/td&gt;
+&lt;td&gt;Yes&lt;/td&gt;
+&lt;td&gt;Yes&lt;/td&gt;
+&lt;td&gt;Yes&lt;/td&gt;
+&lt;/tr&gt;
+&lt;tr&gt;
+&lt;td&gt;DNS&lt;/td&gt;
+&lt;td&gt;No&lt;/td&gt;
+&lt;td&gt;Yes&lt;/td&gt;
+&lt;td&gt;Yes&lt;/td&gt;
+&lt;td&gt;Yes&lt;/td&gt;
+&lt;td&gt;Yes&lt;/td&gt;
+&lt;td&gt;Yes&lt;/td&gt;
+&lt;td&gt;Yes&lt;/td&gt;
+&lt;td&gt;Yes&lt;/td&gt;
+&lt;/tr&gt;
+&lt;tr&gt;
+&lt;td&gt;Stateless provisioning&lt;/td&gt;
+&lt;td&gt;No&lt;/td&gt;
+&lt;td&gt;No&lt;/td&gt;
+&lt;td&gt;Yes&lt;/td&gt;
+&lt;td&gt;Yes&lt;/td&gt;
+&lt;td&gt;Yes&lt;/td&gt;
+&lt;td&gt;Yes&lt;/td&gt;
+&lt;td&gt;Yes&lt;/td&gt;
+&lt;td&gt;Yes&lt;/td&gt;
+&lt;/tr&gt;
+&lt;tr&gt;
+&lt;td&gt;Statefull provisioning&lt;/td&gt;
+&lt;td&gt;Yes&lt;/td&gt;
+&lt;td&gt;Yes&lt;/td&gt;
+&lt;td&gt;Yes&lt;/td&gt;
+&lt;td&gt;No&lt;/td&gt;
+&lt;td&gt;Yes&lt;/td&gt;
+&lt;td&gt;Yes&lt;/td&gt;
+&lt;td&gt;Yes&lt;/td&gt;
+&lt;td&gt;Yes&lt;/td&gt;
+&lt;/tr&gt;
+&lt;tr&gt;
+&lt;td&gt;Infiniband Drivers&lt;/td&gt;
+&lt;td&gt;No&lt;/td&gt;
+&lt;td&gt;No&lt;/td&gt;
+&lt;td&gt;Yes&lt;/td&gt;
+&lt;td&gt;No&lt;/td&gt;
+&lt;td&gt;No&lt;/td&gt;
+&lt;td&gt;Yes&lt;/td&gt;
+&lt;td&gt;Yes&lt;/td&gt;
+&lt;td&gt;Yes&lt;/td&gt;
+&lt;/tr&gt;
+&lt;tr&gt;
+&lt;td&gt;Nvidia Drivers&lt;/td&gt;
+&lt;td&gt;No&lt;/td&gt;
+&lt;td&gt;No&lt;/td&gt;
+&lt;td&gt;Yes&lt;/td&gt;
+&lt;td&gt;No&lt;/td&gt;
+&lt;td&gt;No&lt;/td&gt;
+&lt;td&gt;Yes&lt;/td&gt;
+&lt;td&gt;Yes&lt;/td&gt;
+&lt;td&gt;No&lt;/td&gt;
+&lt;/tr&gt;
+&lt;tr&gt;
+&lt;td&gt;License&lt;/td&gt;
+&lt;td&gt;FOSS&lt;/td&gt;
+&lt;td&gt;FOSS&lt;/td&gt;
+&lt;td&gt;Proprietary&lt;/td&gt;
+&lt;td&gt;FOSS&lt;/td&gt;
+&lt;td&gt;FOSS&lt;/td&gt;
+&lt;td&gt;Proprietary&lt;/td&gt;
+&lt;td&gt;FOSS&lt;/td&gt;
+&lt;td&gt;FOSS&lt;/td&gt;
+&lt;/tr&gt;
+&lt;tr&gt;
+&lt;td&gt;Windows Provisioning&lt;/td&gt;
+&lt;td&gt;Maybe&lt;/td&gt;
+&lt;td&gt;Yes&lt;/td&gt;
+&lt;td&gt;No&lt;/td&gt;
+&lt;td&gt;No&lt;/td&gt;
+&lt;td&gt;No&lt;/td&gt;
+&lt;td&gt;No&lt;/td&gt;
+&lt;td&gt;Yes&lt;/td&gt;
+&lt;td&gt;No&lt;/td&gt;
+&lt;/tr&gt;
+&lt;tr&gt;
+&lt;td&gt;User Management&lt;/td&gt;
+&lt;td&gt;No&lt;/td&gt;
+&lt;td&gt;No&lt;/td&gt;
+&lt;td&gt;Yes&lt;/td&gt;
+&lt;td&gt;No&lt;/td&gt;
+&lt;td&gt;No&lt;/td&gt;
+&lt;td&gt;No&lt;/td&gt;
+&lt;td&gt;No&lt;/td&gt;
+&lt;td&gt;No&lt;/td&gt;
+&lt;/tr&gt;
+&lt;tr&gt;
+&lt;td&gt;Firewall NAT Configuration&lt;/td&gt;
+&lt;td&gt;No&lt;/td&gt;
+&lt;td&gt;No&lt;/td&gt;
+&lt;td&gt;Yes&lt;/td&gt;
+&lt;td&gt;No&lt;/td&gt;
+&lt;td&gt;No&lt;/td&gt;
+&lt;td&gt;Yes&lt;/td&gt;
+&lt;td&gt;No&lt;/td&gt;
+&lt;td&gt;No&lt;/td&gt;
+&lt;/tr&gt;
+&lt;tr&gt;
+&lt;td&gt;Service Management&lt;/td&gt;
+&lt;td&gt;No&lt;/td&gt;
+&lt;td&gt;No&lt;/td&gt;
+&lt;td&gt;Yes&lt;/td&gt;
+&lt;td&gt;Yes&lt;/td&gt;
+&lt;td&gt;No&lt;/td&gt;
+&lt;td&gt;No&lt;/td&gt;
+&lt;td&gt;No&lt;/td&gt;
+&lt;td&gt;Yes&lt;/td&gt;
+&lt;/tr&gt;
+&lt;tr&gt;
+&lt;td&gt;Image Management&lt;/td&gt;
+&lt;td&gt;No&lt;/td&gt;
+&lt;td&gt;No&lt;/td&gt;
+&lt;td&gt;Yes&lt;/td&gt;
+&lt;td&gt;Yes&lt;/td&gt;
+&lt;td&gt;No&lt;/td&gt;
+&lt;td&gt;Yes&lt;/td&gt;
+&lt;td&gt;Yes&lt;/td&gt;
+&lt;td&gt;Yes&lt;/td&gt;
+&lt;/tr&gt;
+&lt;tr&gt;
+&lt;td&gt;NFS Server&lt;/td&gt;
+&lt;td&gt;No&lt;/td&gt;
+&lt;td&gt;No&lt;/td&gt;
+&lt;td&gt;Yes&lt;/td&gt;
+&lt;td&gt;Yes&lt;/td&gt;
+&lt;td&gt;No&lt;/td&gt;
+&lt;td&gt;No&lt;/td&gt;
+&lt;td&gt;No&lt;/td&gt;
+&lt;td&gt;Yes&lt;/td&gt;
+&lt;/tr&gt;
+&lt;tr&gt;
+&lt;td&gt;Kernel Management&lt;/td&gt;
+&lt;td&gt;No&lt;/td&gt;
+&lt;td&gt;No&lt;/td&gt;
+&lt;td&gt;Yes&lt;/td&gt;
+&lt;td&gt;Yes&lt;/td&gt;
+&lt;td&gt;No&lt;/td&gt;
+&lt;td&gt;Yes&lt;/td&gt;
+&lt;td&gt;Yes&lt;/td&gt;
+&lt;td&gt;Yes&lt;/td&gt;
+&lt;/tr&gt;
+&lt;tr&gt;
+&lt;td&gt;Support Contract&lt;/td&gt;
+&lt;td&gt;No&lt;/td&gt;
+&lt;td&gt;No&lt;/td&gt;
+&lt;td&gt;Yes&lt;/td&gt;
+&lt;td&gt;Yes&lt;/td&gt;
+&lt;td&gt;No&lt;/td&gt;
+&lt;td&gt;Yes&lt;/td&gt;
+&lt;td&gt;No&lt;/td&gt;
+&lt;td&gt;Yes&lt;/td&gt;
+&lt;/tr&gt;
+&lt;tr&gt;
+&lt;td&gt;Slurm Management&lt;/td&gt;
+&lt;td&gt;No&lt;/td&gt;
+&lt;td&gt;No&lt;/td&gt;
+&lt;td&gt;Yes&lt;/td&gt;
+&lt;td&gt;No&lt;/td&gt;
+&lt;td&gt;No&lt;/td&gt;
+&lt;td&gt;Yes&lt;/td&gt;
+&lt;td&gt;No&lt;/td&gt;
+&lt;td&gt;Yes&lt;/td&gt;
+&lt;/tr&gt;
+&lt;/tbody&gt;
+&lt;/table&gt;
+&lt;h2&gt;Final Thoughts&lt;/h2&gt;
+&lt;p&gt;Its likely I missed some things and I will continue to update the comparison as time goes on or as people possibly yell at me.&lt;/p&gt;
+&lt;p&gt;In the end, we have decided to plan migrations to OpenHPC as it covers the majority of what we need, has a robust community,
+provided timely security updates, and will likely reduce costs for our customers. &lt;/p&gt;</content><category term="HPC"></category><category term="hpc"></category><category term="linux"></category><category term="provisioning"></category></entry><entry><title>Some Systemd Root Mount Confusion</title><link href="https://blog.kail.io/some-systemd-root-mount-confusion.html" rel="alternate"></link><published>2023-09-14T00:00:00-04:00</published><updated>2023-09-14T00:00:00-04:00</updated><author><name>Andrew Kail</name></author><id>tag:blog.kail.io,2023-09-14:/some-systemd-root-mount-confusion.html</id><summary type="html">&lt;p&gt;I recently ran into an interesting issue with systemd on a Bright Cluster. &lt;/p&gt;
+&lt;p&gt;Bright Cluster Manager (BCM) has a tendency to restart the Slurm Daemons when
+certain changes are made, such as adding a new partition.  Recently when we did this,
+we found the daemon failed to restart on a …&lt;/p&gt;</summary><content type="html">&lt;p&gt;I recently ran into an interesting issue with systemd on a Bright Cluster. &lt;/p&gt;
+&lt;p&gt;Bright Cluster Manager (BCM) has a tendency to restart the Slurm Daemons when
+certain changes are made, such as adding a new partition.  Recently when we did this,
+we found the daemon failed to restart on a large chunk of the nodes stating:&lt;/p&gt;
+&lt;div class="highlight"&gt;&lt;pre&gt;&lt;span&gt;&lt;/span&gt;&lt;code&gt;&lt;span class="nv"&gt;Aug&lt;/span&gt;&lt;span class="w"&gt; &lt;/span&gt;&lt;span class="mi"&gt;29&lt;/span&gt;&lt;span class="w"&gt; &lt;/span&gt;&lt;span class="mi"&gt;14&lt;/span&gt;:&lt;span class="mi"&gt;11&lt;/span&gt;:&lt;span class="mi"&gt;15&lt;/span&gt;&lt;span class="w"&gt; &lt;/span&gt;&lt;span class="nv"&gt;node129&lt;/span&gt;&lt;span class="w"&gt; &lt;/span&gt;&lt;span class="nv"&gt;systemd&lt;/span&gt;[&lt;span class="mi"&gt;1&lt;/span&gt;]:&lt;span class="w"&gt; &lt;/span&gt;&lt;span class="nv"&gt;Dependency&lt;/span&gt;&lt;span class="w"&gt; &lt;/span&gt;&lt;span class="nv"&gt;failed&lt;/span&gt;&lt;span class="w"&gt; &lt;/span&gt;&lt;span class="k"&gt;for&lt;/span&gt;&lt;span class="w"&gt; &lt;/span&gt;&lt;span class="nv"&gt;Slurm&lt;/span&gt;&lt;span class="w"&gt; &lt;/span&gt;&lt;span class="nv"&gt;node&lt;/span&gt;&lt;span class="w"&gt; &lt;/span&gt;&lt;span class="nv"&gt;daemon&lt;/span&gt;.
+&lt;span class="nv"&gt;Aug&lt;/span&gt;&lt;span class="w"&gt; &lt;/span&gt;&lt;span class="mi"&gt;29&lt;/span&gt;&lt;span class="w"&gt; &lt;/span&gt;&lt;span class="mi"&gt;14&lt;/span&gt;:&lt;span class="mi"&gt;11&lt;/span&gt;:&lt;span class="mi"&gt;15&lt;/span&gt;&lt;span class="w"&gt; &lt;/span&gt;&lt;span class="nv"&gt;node129&lt;/span&gt;&lt;span class="w"&gt; &lt;/span&gt;&lt;span class="nv"&gt;systemd&lt;/span&gt;[&lt;span class="mi"&gt;1&lt;/span&gt;]:&lt;span class="w"&gt; &lt;/span&gt;&lt;span class="nv"&gt;Job&lt;/span&gt;&lt;span class="w"&gt; &lt;/span&gt;&lt;span class="nv"&gt;slurmd&lt;/span&gt;.&lt;span class="nv"&gt;service&lt;/span&gt;&lt;span class="o"&gt;/&lt;/span&gt;&lt;span class="nv"&gt;start&lt;/span&gt;&lt;span class="w"&gt; &lt;/span&gt;&lt;span class="nv"&gt;failed&lt;/span&gt;&lt;span class="w"&gt; &lt;/span&gt;&lt;span class="nv"&gt;with&lt;/span&gt;&lt;span class="w"&gt; &lt;/span&gt;&lt;span class="nb"&gt;result&lt;/span&gt;&lt;span class="w"&gt; &lt;/span&gt;&lt;span class="s1"&gt;&amp;#39;dependency&amp;#39;&lt;/span&gt;.
+&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;
+
+&lt;p&gt;A very confusing message as the system is up and running.  Fine.  Lets see which units have failed.&lt;/p&gt;
+&lt;div class="highlight"&gt;&lt;pre&gt;&lt;span&gt;&lt;/span&gt;&lt;code&gt;&lt;span class="p"&gt;[&lt;/span&gt;&lt;span class="n"&gt;root&lt;/span&gt;&lt;span class="err"&gt;@&lt;/span&gt;&lt;span class="n"&gt;node&lt;/span&gt;&lt;span class="w"&gt; &lt;/span&gt;&lt;span class="o"&gt;~&lt;/span&gt;&lt;span class="p"&gt;]&lt;/span&gt;&lt;span class="c1"&gt;# systemctl list-units --state failed&lt;/span&gt;
+&lt;span class="w"&gt;  &lt;/span&gt;&lt;span class="n"&gt;UNIT&lt;/span&gt;&lt;span class="w"&gt;    &lt;/span&gt;&lt;span class="n"&gt;LOAD&lt;/span&gt;&lt;span class="w"&gt;   &lt;/span&gt;&lt;span class="n"&gt;ACTIVE&lt;/span&gt;&lt;span class="w"&gt; &lt;/span&gt;&lt;span class="n"&gt;SUB&lt;/span&gt;&lt;span class="w"&gt;    &lt;/span&gt;&lt;span class="n"&gt;DESCRIPTION&lt;/span&gt;
+&lt;span class="err"&gt;●&lt;/span&gt;&lt;span class="w"&gt; &lt;/span&gt;&lt;span class="o"&gt;-.&lt;/span&gt;&lt;span class="n"&gt;mount&lt;/span&gt;&lt;span class="w"&gt; &lt;/span&gt;&lt;span class="n"&gt;loaded&lt;/span&gt;&lt;span class="w"&gt; &lt;/span&gt;&lt;span class="n"&gt;failed&lt;/span&gt;&lt;span class="w"&gt; &lt;/span&gt;&lt;span class="n"&gt;failed&lt;/span&gt;&lt;span class="w"&gt; &lt;/span&gt;&lt;span class="o"&gt;/&lt;/span&gt;
+&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;
+
+&lt;p&gt;Root failed to mount?&lt;/p&gt;
+&lt;p&gt;:suprised pikachu:&lt;/p&gt;
+&lt;p&gt;No amount of rebooting an&lt;/p&gt;
+&lt;p&gt;So, since this is a Brigth cluster, a &lt;code&gt;node-installer&lt;/code&gt; is initially booted to and the system process are then turned over to the installed image.  Grossly over simplifying the process but that is the gist of it.  &lt;/p&gt;
+&lt;div class="highlight"&gt;&lt;pre&gt;&lt;span&gt;&lt;/span&gt;&lt;code&gt;systemd-analays dot  | dot -Tsvg &amp;gt; plot.svg
+&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;
+
+&lt;p&gt;While neat, was not helpful as all I could see what maybe &lt;code&gt;-.mount&lt;/code&gt; depended on system.slic.  Which did start up just fine.&lt;/p&gt;
+&lt;p&gt;Interestingly enough, I did accidentally find "-.mount" entered a failed state after the node was up.&lt;/p&gt;
+&lt;div class="highlight"&gt;&lt;pre&gt;&lt;span&gt;&lt;/span&gt;&lt;code&gt;&lt;span class="o"&gt;[&lt;/span&gt;root@node&lt;span class="w"&gt; &lt;/span&gt;~&lt;span class="o"&gt;]&lt;/span&gt;&lt;span class="c1"&gt;# systemctl list-units --state failed&lt;/span&gt;
+&lt;span class="w"&gt;  &lt;/span&gt;UNIT&lt;span class="w"&gt;           &lt;/span&gt;LOAD&lt;span class="w"&gt;   &lt;/span&gt;ACTIVE&lt;span class="w"&gt; &lt;/span&gt;SUB&lt;span class="w"&gt;    &lt;/span&gt;DESCRIPTION
+●&lt;span class="w"&gt; &lt;/span&gt;slurmd.service&lt;span class="w"&gt; &lt;/span&gt;loaded&lt;span class="w"&gt; &lt;/span&gt;failed&lt;span class="w"&gt; &lt;/span&gt;failed&lt;span class="w"&gt; &lt;/span&gt;Slurm&lt;span class="w"&gt; &lt;/span&gt;node&lt;span class="w"&gt; &lt;/span&gt;daemon
+
+&lt;span class="nv"&gt;LOAD&lt;/span&gt;&lt;span class="w"&gt;   &lt;/span&gt;&lt;span class="o"&gt;=&lt;/span&gt;&lt;span class="w"&gt; &lt;/span&gt;Reflects&lt;span class="w"&gt; &lt;/span&gt;whether&lt;span class="w"&gt; &lt;/span&gt;the&lt;span class="w"&gt; &lt;/span&gt;unit&lt;span class="w"&gt; &lt;/span&gt;definition&lt;span class="w"&gt; &lt;/span&gt;was&lt;span class="w"&gt; &lt;/span&gt;properly&lt;span class="w"&gt; &lt;/span&gt;loaded.
+&lt;span class="nv"&gt;ACTIVE&lt;/span&gt;&lt;span class="w"&gt; &lt;/span&gt;&lt;span class="o"&gt;=&lt;/span&gt;&lt;span class="w"&gt; &lt;/span&gt;The&lt;span class="w"&gt; &lt;/span&gt;high-level&lt;span class="w"&gt; &lt;/span&gt;unit&lt;span class="w"&gt; &lt;/span&gt;activation&lt;span class="w"&gt; &lt;/span&gt;state,&lt;span class="w"&gt; &lt;/span&gt;i.e.&lt;span class="w"&gt; &lt;/span&gt;generalization&lt;span class="w"&gt; &lt;/span&gt;of&lt;span class="w"&gt; &lt;/span&gt;SUB.
+&lt;span class="nv"&gt;SUB&lt;/span&gt;&lt;span class="w"&gt;    &lt;/span&gt;&lt;span class="o"&gt;=&lt;/span&gt;&lt;span class="w"&gt; &lt;/span&gt;The&lt;span class="w"&gt; &lt;/span&gt;low-level&lt;span class="w"&gt; &lt;/span&gt;unit&lt;span class="w"&gt; &lt;/span&gt;activation&lt;span class="w"&gt; &lt;/span&gt;state,&lt;span class="w"&gt; &lt;/span&gt;values&lt;span class="w"&gt; &lt;/span&gt;depend&lt;span class="w"&gt; &lt;/span&gt;on&lt;span class="w"&gt; &lt;/span&gt;unit&lt;span class="w"&gt; &lt;/span&gt;type.
+
+&lt;span class="m"&gt;1&lt;/span&gt;&lt;span class="w"&gt; &lt;/span&gt;loaded&lt;span class="w"&gt; &lt;/span&gt;units&lt;span class="w"&gt; &lt;/span&gt;listed.&lt;span class="w"&gt; &lt;/span&gt;Pass&lt;span class="w"&gt; &lt;/span&gt;--all&lt;span class="w"&gt; &lt;/span&gt;to&lt;span class="w"&gt; &lt;/span&gt;see&lt;span class="w"&gt; &lt;/span&gt;loaded&lt;span class="w"&gt; &lt;/span&gt;but&lt;span class="w"&gt; &lt;/span&gt;inactive&lt;span class="w"&gt; &lt;/span&gt;units,&lt;span class="w"&gt; &lt;/span&gt;too.
+To&lt;span class="w"&gt; &lt;/span&gt;show&lt;span class="w"&gt; &lt;/span&gt;all&lt;span class="w"&gt; &lt;/span&gt;installed&lt;span class="w"&gt; &lt;/span&gt;unit&lt;span class="w"&gt; &lt;/span&gt;files&lt;span class="w"&gt; &lt;/span&gt;use&lt;span class="w"&gt; &lt;/span&gt;&lt;span class="s1"&gt;&amp;#39;systemctl list-unit-files&amp;#39;&lt;/span&gt;.
+&lt;span class="o"&gt;[&lt;/span&gt;root@node&lt;span class="w"&gt; &lt;/span&gt;~&lt;span class="o"&gt;]&lt;/span&gt;&lt;span class="c1"&gt;# systemctl list-units --state failed&lt;/span&gt;
+&lt;span class="w"&gt;  &lt;/span&gt;UNIT&lt;span class="w"&gt;           &lt;/span&gt;LOAD&lt;span class="w"&gt;   &lt;/span&gt;ACTIVE&lt;span class="w"&gt; &lt;/span&gt;SUB&lt;span class="w"&gt;    &lt;/span&gt;DESCRIPTION
+●&lt;span class="w"&gt; &lt;/span&gt;-.mount&lt;span class="w"&gt;        &lt;/span&gt;loaded&lt;span class="w"&gt; &lt;/span&gt;failed&lt;span class="w"&gt; &lt;/span&gt;failed&lt;span class="w"&gt; &lt;/span&gt;/
+●&lt;span class="w"&gt; &lt;/span&gt;slurmd.service&lt;span class="w"&gt; &lt;/span&gt;loaded&lt;span class="w"&gt; &lt;/span&gt;failed&lt;span class="w"&gt; &lt;/span&gt;failed&lt;span class="w"&gt; &lt;/span&gt;Slurm&lt;span class="w"&gt; &lt;/span&gt;node&lt;span class="w"&gt; &lt;/span&gt;daemon
+
+&lt;span class="nv"&gt;LOAD&lt;/span&gt;&lt;span class="w"&gt;   &lt;/span&gt;&lt;span class="o"&gt;=&lt;/span&gt;&lt;span class="w"&gt; &lt;/span&gt;Reflects&lt;span class="w"&gt; &lt;/span&gt;whether&lt;span class="w"&gt; &lt;/span&gt;the&lt;span class="w"&gt; &lt;/span&gt;unit&lt;span class="w"&gt; &lt;/span&gt;definition&lt;span class="w"&gt; &lt;/span&gt;was&lt;span class="w"&gt; &lt;/span&gt;properly&lt;span class="w"&gt; &lt;/span&gt;loaded.
+&lt;span class="nv"&gt;ACTIVE&lt;/span&gt;&lt;span class="w"&gt; &lt;/span&gt;&lt;span class="o"&gt;=&lt;/span&gt;&lt;span class="w"&gt; &lt;/span&gt;The&lt;span class="w"&gt; &lt;/span&gt;high-level&lt;span class="w"&gt; &lt;/span&gt;unit&lt;span class="w"&gt; &lt;/span&gt;activation&lt;span class="w"&gt; &lt;/span&gt;state,&lt;span class="w"&gt; &lt;/span&gt;i.e.&lt;span class="w"&gt; &lt;/span&gt;generalization&lt;span class="w"&gt; &lt;/span&gt;of&lt;span class="w"&gt; &lt;/span&gt;SUB.
+&lt;span class="nv"&gt;SUB&lt;/span&gt;&lt;span class="w"&gt;    &lt;/span&gt;&lt;span class="o"&gt;=&lt;/span&gt;&lt;span class="w"&gt; &lt;/span&gt;The&lt;span class="w"&gt; &lt;/span&gt;low-level&lt;span class="w"&gt; &lt;/span&gt;unit&lt;span class="w"&gt; &lt;/span&gt;activation&lt;span class="w"&gt; &lt;/span&gt;state,&lt;span class="w"&gt; &lt;/span&gt;values&lt;span class="w"&gt; &lt;/span&gt;depend&lt;span class="w"&gt; &lt;/span&gt;on&lt;span class="w"&gt; &lt;/span&gt;unit&lt;span class="w"&gt; &lt;/span&gt;type.
+
+&lt;span class="m"&gt;2&lt;/span&gt;&lt;span class="w"&gt; &lt;/span&gt;loaded&lt;span class="w"&gt; &lt;/span&gt;units&lt;span class="w"&gt; &lt;/span&gt;listed.&lt;span class="w"&gt; &lt;/span&gt;Pass&lt;span class="w"&gt; &lt;/span&gt;--all&lt;span class="w"&gt; &lt;/span&gt;to&lt;span class="w"&gt; &lt;/span&gt;see&lt;span class="w"&gt; &lt;/span&gt;loaded&lt;span class="w"&gt; &lt;/span&gt;but&lt;span class="w"&gt; &lt;/span&gt;inactive&lt;span class="w"&gt; &lt;/span&gt;units,&lt;span class="w"&gt; &lt;/span&gt;too.
+To&lt;span class="w"&gt; &lt;/span&gt;show&lt;span class="w"&gt; &lt;/span&gt;all&lt;span class="w"&gt; &lt;/span&gt;installed&lt;span class="w"&gt; &lt;/span&gt;unit&lt;span class="w"&gt; &lt;/span&gt;files&lt;span class="w"&gt; &lt;/span&gt;use&lt;span class="w"&gt; &lt;/span&gt;&lt;span class="s1"&gt;&amp;#39;systemctl list-unit-files&amp;#39;&lt;/span&gt;.
+&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;
+
+&lt;p&gt;Not sure if this meant anything, but its here.&lt;/p&gt;
+&lt;div class="highlight"&gt;&lt;pre&gt;&lt;span&gt;&lt;/span&gt;&lt;code&gt;&lt;span class="gp"&gt;[root@node129 ~]# &lt;/span&gt;systemctl&lt;span class="w"&gt; &lt;/span&gt;&lt;span class="p"&gt;|&lt;/span&gt;&lt;span class="w"&gt; &lt;/span&gt;grep&lt;span class="w"&gt; &lt;/span&gt;mount
+&lt;span class="go"&gt;  proc-sys-fs-binfmt_misc.automount       loaded active     waiting      Arbitrary Executable File Formats File System Automount Point&lt;/span&gt;
+&lt;span class="go"&gt;● -.mount                                 loaded failed     failed       /&lt;/span&gt;
+&lt;span class="go"&gt;  data.mount                              loaded active     mounted      /data&lt;/span&gt;
+&lt;span class="go"&gt;  data_lake.mount                         loaded active     mounted      /data_lake&lt;/span&gt;
+&lt;span class="go"&gt;  local.mount                             loaded active     mounted      /local&lt;/span&gt;
+&lt;span class="go"&gt;  tmp.mount                               loaded active     mounted      /tmp&lt;/span&gt;
+&lt;span class="go"&gt;  var-lib-nfs-rpc_pipefs.mount            loaded active     mounted      RPC Pipe File System&lt;/span&gt;
+&lt;span class="go"&gt;  var.mount                               loaded active     mounted      /var&lt;/span&gt;
+&lt;span class="go"&gt;  systemd-remount-fs.service              loaded active     exited       Remount Root and Kernel File Systems&lt;/span&gt;
+&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;
+
+&lt;p&gt;The most frustrating thing is I can't get any information on this mount.  Any other mount service I can query, but I only get invalid option errors.&lt;/p&gt;
+&lt;div class="highlight"&gt;&lt;pre&gt;&lt;span&gt;&lt;/span&gt;&lt;code&gt;&lt;span class="o"&gt;[&lt;/span&gt;root@node129&lt;span class="w"&gt; &lt;/span&gt;~&lt;span class="o"&gt;]&lt;/span&gt;&lt;span class="c1"&gt;# systemctl status -.mount&lt;/span&gt;
+systemctl:&lt;span class="w"&gt; &lt;/span&gt;invalid&lt;span class="w"&gt; &lt;/span&gt;option&lt;span class="w"&gt; &lt;/span&gt;--&lt;span class="w"&gt; &lt;/span&gt;&lt;span class="s1"&gt;&amp;#39;.&amp;#39;&lt;/span&gt;
+&lt;span class="o"&gt;[&lt;/span&gt;root@node129&lt;span class="w"&gt; &lt;/span&gt;~&lt;span class="o"&gt;]&lt;/span&gt;&lt;span class="c1"&gt;# systemctl status &amp;quot;-.mount&amp;quot;&lt;/span&gt;
+systemctl:&lt;span class="w"&gt; &lt;/span&gt;invalid&lt;span class="w"&gt; &lt;/span&gt;option&lt;span class="w"&gt; &lt;/span&gt;--&lt;span class="w"&gt; &lt;/span&gt;&lt;span class="s1"&gt;&amp;#39;.&amp;#39;&lt;/span&gt;
+&lt;span class="o"&gt;[&lt;/span&gt;root@node129&lt;span class="w"&gt; &lt;/span&gt;~&lt;span class="o"&gt;]&lt;/span&gt;&lt;span class="c1"&gt;# systemctl status &amp;#39;-.mount&amp;#39;&lt;/span&gt;
+systemctl:&lt;span class="w"&gt; &lt;/span&gt;invalid&lt;span class="w"&gt; &lt;/span&gt;option&lt;span class="w"&gt; &lt;/span&gt;--&lt;span class="w"&gt; &lt;/span&gt;&lt;span class="s1"&gt;&amp;#39;.&amp;#39;&lt;/span&gt;
+&lt;span class="o"&gt;[&lt;/span&gt;root@node129&lt;span class="w"&gt; &lt;/span&gt;~&lt;span class="o"&gt;]&lt;/span&gt;&lt;span class="c1"&gt;# systemctl status &amp;#39;-\.mount&amp;#39;&lt;/span&gt;
+systemctl:&lt;span class="w"&gt; &lt;/span&gt;invalid&lt;span class="w"&gt; &lt;/span&gt;option&lt;span class="w"&gt; &lt;/span&gt;--&lt;span class="w"&gt; &lt;/span&gt;&lt;span class="s1"&gt;&amp;#39;\&amp;#39;&lt;/span&gt;
+&lt;span class="o"&gt;[&lt;/span&gt;root@node129&lt;span class="w"&gt; &lt;/span&gt;~&lt;span class="o"&gt;]&lt;/span&gt;&lt;span class="c1"&gt;# systemctl status &amp;quot;-\.mount&amp;quot;&lt;/span&gt;
+systemctl:&lt;span class="w"&gt; &lt;/span&gt;invalid&lt;span class="w"&gt; &lt;/span&gt;option&lt;span class="w"&gt; &lt;/span&gt;--&lt;span class="w"&gt; &lt;/span&gt;&lt;span class="s1"&gt;&amp;#39;\&amp;#39;&lt;/span&gt;
+&lt;span class="o"&gt;[&lt;/span&gt;root@node129&lt;span class="w"&gt; &lt;/span&gt;~&lt;span class="o"&gt;]&lt;/span&gt;&lt;span class="c1"&gt;# systemctl status &amp;quot;-\\.mount&amp;quot;&lt;/span&gt;
+systemctl:&lt;span class="w"&gt; &lt;/span&gt;invalid&lt;span class="w"&gt; &lt;/span&gt;option&lt;span class="w"&gt; &lt;/span&gt;--&lt;span class="w"&gt; &lt;/span&gt;&lt;span class="s1"&gt;&amp;#39;\&amp;#39;&lt;/span&gt;
+&lt;span class="o"&gt;[&lt;/span&gt;root@node129&lt;span class="w"&gt; &lt;/span&gt;~&lt;span class="o"&gt;]&lt;/span&gt;&lt;span class="c1"&gt;# systemctl status &amp;quot;-/\.mount&amp;quot;&lt;/span&gt;
+systemctl:&lt;span class="w"&gt; &lt;/span&gt;invalid&lt;span class="w"&gt; &lt;/span&gt;option&lt;span class="w"&gt; &lt;/span&gt;--&lt;span class="w"&gt; &lt;/span&gt;&lt;span class="s1"&gt;&amp;#39;/&amp;#39;&lt;/span&gt;
+&lt;span class="o"&gt;[&lt;/span&gt;root@node129&lt;span class="w"&gt; &lt;/span&gt;~&lt;span class="o"&gt;]&lt;/span&gt;&lt;span class="c1"&gt;# systemctl status &amp;quot;\-.mount&amp;quot;&lt;/span&gt;
+Unit&lt;span class="w"&gt; &lt;/span&gt;&lt;span class="se"&gt;\-&lt;/span&gt;.mount&lt;span class="w"&gt; &lt;/span&gt;could&lt;span class="w"&gt; &lt;/span&gt;not&lt;span class="w"&gt; &lt;/span&gt;be&lt;span class="w"&gt; &lt;/span&gt;found.
+&lt;span class="o"&gt;[&lt;/span&gt;root@node129&lt;span class="w"&gt; &lt;/span&gt;~&lt;span class="o"&gt;]&lt;/span&gt;&lt;span class="c1"&gt;# systemctl status &amp;quot;-.mount&amp;quot;&lt;/span&gt;
+systemctl:&lt;span class="w"&gt; &lt;/span&gt;invalid&lt;span class="w"&gt; &lt;/span&gt;option&lt;span class="w"&gt; &lt;/span&gt;--&lt;span class="w"&gt; &lt;/span&gt;&lt;span class="s1"&gt;&amp;#39;.&amp;#39;&lt;/span&gt;
+&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;
+
+&lt;p&gt;While I can see the full dependency tree, it tells me nothing that is blocking "-.mount"&lt;/p&gt;
+&lt;div class="highlight"&gt;&lt;pre&gt;&lt;span&gt;&lt;/span&gt;&lt;code&gt;● │ │ ├─local-fs.target
+● │ │ │ ├─-.mount
+● │ │ │ ├─local.mount
+&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;
+
+&lt;p&gt;Just looking at its parent, I only see one dependency&lt;/p&gt;
+&lt;div class="highlight"&gt;&lt;pre&gt;&lt;span&gt;&lt;/span&gt;&lt;code&gt;&lt;span class="p"&gt;[&lt;/span&gt;&lt;span class="n"&gt;root&lt;/span&gt;&lt;span class="err"&gt;@&lt;/span&gt;&lt;span class="n"&gt;node129&lt;/span&gt;&lt;span class="w"&gt; &lt;/span&gt;&lt;span class="o"&gt;~&lt;/span&gt;&lt;span class="p"&gt;]&lt;/span&gt;&lt;span class="c1"&gt;# systemctl list-dependencies local-fs.target&lt;/span&gt;
+&lt;span class="n"&gt;local&lt;/span&gt;&lt;span class="o"&gt;-&lt;/span&gt;&lt;span class="n"&gt;fs&lt;/span&gt;&lt;span class="o"&gt;.&lt;/span&gt;&lt;span class="n"&gt;target&lt;/span&gt;
+&lt;span class="err"&gt;●&lt;/span&gt;&lt;span class="w"&gt; &lt;/span&gt;&lt;span class="err"&gt;├─&lt;/span&gt;&lt;span class="o"&gt;-.&lt;/span&gt;&lt;span class="n"&gt;mount&lt;/span&gt;
+&lt;span class="err"&gt;●&lt;/span&gt;&lt;span class="w"&gt; &lt;/span&gt;&lt;span class="err"&gt;├─&lt;/span&gt;&lt;span class="n"&gt;local&lt;/span&gt;&lt;span class="o"&gt;.&lt;/span&gt;&lt;span class="n"&gt;mount&lt;/span&gt;
+&lt;span class="err"&gt;●&lt;/span&gt;&lt;span class="w"&gt; &lt;/span&gt;&lt;span class="err"&gt;├─&lt;/span&gt;&lt;span class="n"&gt;rhel&lt;/span&gt;&lt;span class="o"&gt;-&lt;/span&gt;&lt;span class="n"&gt;readonly&lt;/span&gt;&lt;span class="o"&gt;.&lt;/span&gt;&lt;span class="n"&gt;service&lt;/span&gt;
+&lt;span class="err"&gt;●&lt;/span&gt;&lt;span class="w"&gt; &lt;/span&gt;&lt;span class="err"&gt;├─&lt;/span&gt;&lt;span class="n"&gt;systemd&lt;/span&gt;&lt;span class="o"&gt;-&lt;/span&gt;&lt;span class="n"&gt;fsck&lt;/span&gt;&lt;span class="o"&gt;-&lt;/span&gt;&lt;span class="n"&gt;root&lt;/span&gt;&lt;span class="o"&gt;.&lt;/span&gt;&lt;span class="n"&gt;service&lt;/span&gt;
+&lt;span class="err"&gt;●&lt;/span&gt;&lt;span class="w"&gt; &lt;/span&gt;&lt;span class="err"&gt;├─&lt;/span&gt;&lt;span class="n"&gt;systemd&lt;/span&gt;&lt;span class="o"&gt;-&lt;/span&gt;&lt;span class="n"&gt;remount&lt;/span&gt;&lt;span class="o"&gt;-&lt;/span&gt;&lt;span class="n"&gt;fs&lt;/span&gt;&lt;span class="o"&gt;.&lt;/span&gt;&lt;span class="n"&gt;service&lt;/span&gt;
+&lt;span class="err"&gt;●&lt;/span&gt;&lt;span class="w"&gt; &lt;/span&gt;&lt;span class="err"&gt;├─&lt;/span&gt;&lt;span class="n"&gt;tmp&lt;/span&gt;&lt;span class="o"&gt;.&lt;/span&gt;&lt;span class="n"&gt;mount&lt;/span&gt;
+&lt;span class="err"&gt;●&lt;/span&gt;&lt;span class="w"&gt; &lt;/span&gt;&lt;span class="err"&gt;└─&lt;/span&gt;&lt;span class="k"&gt;var&lt;/span&gt;&lt;span class="o"&gt;.&lt;/span&gt;&lt;span class="n"&gt;mount&lt;/span&gt;
+&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;
+
+&lt;p&gt;So time to look elsewhere...&lt;/p&gt;
+&lt;p&gt;One of the more confusing items is mount and lsblk disagreeing.  The mount command shows &lt;code&gt;/&lt;/code&gt; mounted, but lsblk does not.&lt;/p&gt;
+&lt;div class="highlight"&gt;&lt;pre&gt;&lt;span&gt;&lt;/span&gt;&lt;code&gt;&lt;span class="o"&gt;[&lt;/span&gt;&lt;span class="n"&gt;root@node129 ~&lt;/span&gt;&lt;span class="o"&gt;]&lt;/span&gt;&lt;span class="err"&gt;#&lt;/span&gt;&lt;span class="w"&gt; &lt;/span&gt;&lt;span class="n"&gt;lsblk&lt;/span&gt;
+&lt;span class="n"&gt;NAME&lt;/span&gt;&lt;span class="w"&gt;        &lt;/span&gt;&lt;span class="nl"&gt;MAJ&lt;/span&gt;&lt;span class="p"&gt;:&lt;/span&gt;&lt;span class="nf"&gt;MIN&lt;/span&gt;&lt;span class="w"&gt; &lt;/span&gt;&lt;span class="n"&gt;RM&lt;/span&gt;&lt;span class="w"&gt;  &lt;/span&gt;&lt;span class="k"&gt;SIZE&lt;/span&gt;&lt;span class="w"&gt; &lt;/span&gt;&lt;span class="n"&gt;RO&lt;/span&gt;&lt;span class="w"&gt; &lt;/span&gt;&lt;span class="n"&gt;TYPE&lt;/span&gt;&lt;span class="w"&gt; &lt;/span&gt;&lt;span class="n"&gt;MOUNTPOINT&lt;/span&gt;
+&lt;span class="n"&gt;nvme0n1&lt;/span&gt;&lt;span class="w"&gt;     &lt;/span&gt;&lt;span class="mi"&gt;259&lt;/span&gt;&lt;span class="err"&gt;:&lt;/span&gt;&lt;span class="mi"&gt;1&lt;/span&gt;&lt;span class="w"&gt;    &lt;/span&gt;&lt;span class="mi"&gt;0&lt;/span&gt;&lt;span class="w"&gt;  &lt;/span&gt;&lt;span class="mf"&gt;1.8&lt;/span&gt;&lt;span class="n"&gt;T&lt;/span&gt;&lt;span class="w"&gt;  &lt;/span&gt;&lt;span class="mi"&gt;0&lt;/span&gt;&lt;span class="w"&gt; &lt;/span&gt;&lt;span class="k"&gt;disk&lt;/span&gt;
+&lt;span class="err"&gt;├─&lt;/span&gt;&lt;span class="n"&gt;nvme0n1p1&lt;/span&gt;&lt;span class="w"&gt; &lt;/span&gt;&lt;span class="mi"&gt;259&lt;/span&gt;&lt;span class="err"&gt;:&lt;/span&gt;&lt;span class="mi"&gt;4&lt;/span&gt;&lt;span class="w"&gt;    &lt;/span&gt;&lt;span class="mi"&gt;0&lt;/span&gt;&lt;span class="w"&gt;   &lt;/span&gt;&lt;span class="mi"&gt;40&lt;/span&gt;&lt;span class="n"&gt;G&lt;/span&gt;&lt;span class="w"&gt;  &lt;/span&gt;&lt;span class="mi"&gt;0&lt;/span&gt;&lt;span class="w"&gt; &lt;/span&gt;&lt;span class="n"&gt;part&lt;/span&gt;
+&lt;span class="err"&gt;├─&lt;/span&gt;&lt;span class="n"&gt;nvme0n1p2&lt;/span&gt;&lt;span class="w"&gt; &lt;/span&gt;&lt;span class="mi"&gt;259&lt;/span&gt;&lt;span class="err"&gt;:&lt;/span&gt;&lt;span class="mi"&gt;5&lt;/span&gt;&lt;span class="w"&gt;    &lt;/span&gt;&lt;span class="mi"&gt;0&lt;/span&gt;&lt;span class="w"&gt;   &lt;/span&gt;&lt;span class="mi"&gt;20&lt;/span&gt;&lt;span class="n"&gt;G&lt;/span&gt;&lt;span class="w"&gt;  &lt;/span&gt;&lt;span class="mi"&gt;0&lt;/span&gt;&lt;span class="w"&gt; &lt;/span&gt;&lt;span class="n"&gt;part&lt;/span&gt;&lt;span class="w"&gt; &lt;/span&gt;&lt;span class="o"&gt;/&lt;/span&gt;&lt;span class="nf"&gt;var&lt;/span&gt;
+&lt;span class="err"&gt;├─&lt;/span&gt;&lt;span class="n"&gt;nvme0n1p3&lt;/span&gt;&lt;span class="w"&gt; &lt;/span&gt;&lt;span class="mi"&gt;259&lt;/span&gt;&lt;span class="err"&gt;:&lt;/span&gt;&lt;span class="mi"&gt;6&lt;/span&gt;&lt;span class="w"&gt;    &lt;/span&gt;&lt;span class="mi"&gt;0&lt;/span&gt;&lt;span class="w"&gt;   &lt;/span&gt;&lt;span class="mi"&gt;20&lt;/span&gt;&lt;span class="n"&gt;G&lt;/span&gt;&lt;span class="w"&gt;  &lt;/span&gt;&lt;span class="mi"&gt;0&lt;/span&gt;&lt;span class="w"&gt; &lt;/span&gt;&lt;span class="n"&gt;part&lt;/span&gt;&lt;span class="w"&gt; &lt;/span&gt;&lt;span class="o"&gt;/&lt;/span&gt;&lt;span class="n"&gt;tmp&lt;/span&gt;
+&lt;span class="err"&gt;├─&lt;/span&gt;&lt;span class="n"&gt;nvme0n1p4&lt;/span&gt;&lt;span class="w"&gt; &lt;/span&gt;&lt;span class="mi"&gt;259&lt;/span&gt;&lt;span class="err"&gt;:&lt;/span&gt;&lt;span class="mi"&gt;7&lt;/span&gt;&lt;span class="w"&gt;    &lt;/span&gt;&lt;span class="mi"&gt;0&lt;/span&gt;&lt;span class="w"&gt;   &lt;/span&gt;&lt;span class="mi"&gt;12&lt;/span&gt;&lt;span class="n"&gt;G&lt;/span&gt;&lt;span class="w"&gt;  &lt;/span&gt;&lt;span class="mi"&gt;0&lt;/span&gt;&lt;span class="w"&gt; &lt;/span&gt;&lt;span class="n"&gt;part&lt;/span&gt;&lt;span class="w"&gt; &lt;/span&gt;&lt;span class="o"&gt;[&lt;/span&gt;&lt;span class="n"&gt;SWAP&lt;/span&gt;&lt;span class="o"&gt;]&lt;/span&gt;
+&lt;span class="err"&gt;└─&lt;/span&gt;&lt;span class="n"&gt;nvme0n1p5&lt;/span&gt;&lt;span class="w"&gt; &lt;/span&gt;&lt;span class="mi"&gt;259&lt;/span&gt;&lt;span class="err"&gt;:&lt;/span&gt;&lt;span class="mi"&gt;8&lt;/span&gt;&lt;span class="w"&gt;    &lt;/span&gt;&lt;span class="mi"&gt;0&lt;/span&gt;&lt;span class="w"&gt;  &lt;/span&gt;&lt;span class="mf"&gt;1.7&lt;/span&gt;&lt;span class="n"&gt;T&lt;/span&gt;&lt;span class="w"&gt;  &lt;/span&gt;&lt;span class="mi"&gt;0&lt;/span&gt;&lt;span class="w"&gt; &lt;/span&gt;&lt;span class="n"&gt;part&lt;/span&gt;&lt;span class="w"&gt; &lt;/span&gt;&lt;span class="o"&gt;/&lt;/span&gt;&lt;span class="k"&gt;local&lt;/span&gt;
+&lt;span class="o"&gt;[&lt;/span&gt;&lt;span class="n"&gt;root@node129 ~&lt;/span&gt;&lt;span class="o"&gt;]&lt;/span&gt;&lt;span class="err"&gt;#&lt;/span&gt;&lt;span class="w"&gt; &lt;/span&gt;&lt;span class="n"&gt;df&lt;/span&gt;&lt;span class="w"&gt; &lt;/span&gt;&lt;span class="o"&gt;-&lt;/span&gt;&lt;span class="n"&gt;h&lt;/span&gt;
+&lt;span class="n"&gt;Filesystem&lt;/span&gt;&lt;span class="w"&gt;                                                      &lt;/span&gt;&lt;span class="k"&gt;Size&lt;/span&gt;&lt;span class="w"&gt;  &lt;/span&gt;&lt;span class="n"&gt;Used&lt;/span&gt;&lt;span class="w"&gt; &lt;/span&gt;&lt;span class="n"&gt;Avail&lt;/span&gt;&lt;span class="w"&gt; &lt;/span&gt;&lt;span class="k"&gt;Use&lt;/span&gt;&lt;span class="o"&gt;%&lt;/span&gt;&lt;span class="w"&gt; &lt;/span&gt;&lt;span class="n"&gt;Mounted&lt;/span&gt;&lt;span class="w"&gt; &lt;/span&gt;&lt;span class="k"&gt;on&lt;/span&gt;
+&lt;span class="n"&gt;devtmpfs&lt;/span&gt;&lt;span class="w"&gt;                                                        &lt;/span&gt;&lt;span class="mi"&gt;504&lt;/span&gt;&lt;span class="n"&gt;G&lt;/span&gt;&lt;span class="w"&gt;     &lt;/span&gt;&lt;span class="mi"&gt;0&lt;/span&gt;&lt;span class="w"&gt;  &lt;/span&gt;&lt;span class="mi"&gt;504&lt;/span&gt;&lt;span class="n"&gt;G&lt;/span&gt;&lt;span class="w"&gt;   &lt;/span&gt;&lt;span class="mi"&gt;0&lt;/span&gt;&lt;span class="o"&gt;%&lt;/span&gt;&lt;span class="w"&gt; &lt;/span&gt;&lt;span class="o"&gt;/&lt;/span&gt;&lt;span class="n"&gt;dev&lt;/span&gt;
+&lt;span class="n"&gt;tmpfs&lt;/span&gt;&lt;span class="w"&gt;                                                           &lt;/span&gt;&lt;span class="mi"&gt;504&lt;/span&gt;&lt;span class="n"&gt;G&lt;/span&gt;&lt;span class="w"&gt;  &lt;/span&gt;&lt;span class="mf"&gt;3.2&lt;/span&gt;&lt;span class="n"&gt;M&lt;/span&gt;&lt;span class="w"&gt;  &lt;/span&gt;&lt;span class="mi"&gt;504&lt;/span&gt;&lt;span class="n"&gt;G&lt;/span&gt;&lt;span class="w"&gt;   &lt;/span&gt;&lt;span class="mi"&gt;1&lt;/span&gt;&lt;span class="o"&gt;%&lt;/span&gt;&lt;span class="w"&gt; &lt;/span&gt;&lt;span class="o"&gt;/&lt;/span&gt;&lt;span class="n"&gt;run&lt;/span&gt;
+&lt;span class="o"&gt;/&lt;/span&gt;&lt;span class="n"&gt;dev&lt;/span&gt;&lt;span class="o"&gt;/&lt;/span&gt;&lt;span class="n"&gt;nvme0n1p1&lt;/span&gt;&lt;span class="w"&gt;                                                   &lt;/span&gt;&lt;span class="mi"&gt;40&lt;/span&gt;&lt;span class="n"&gt;G&lt;/span&gt;&lt;span class="w"&gt;   &lt;/span&gt;&lt;span class="mi"&gt;19&lt;/span&gt;&lt;span class="n"&gt;G&lt;/span&gt;&lt;span class="w"&gt;   &lt;/span&gt;&lt;span class="mi"&gt;22&lt;/span&gt;&lt;span class="n"&gt;G&lt;/span&gt;&lt;span class="w"&gt;  &lt;/span&gt;&lt;span class="mi"&gt;46&lt;/span&gt;&lt;span class="o"&gt;%&lt;/span&gt;&lt;span class="w"&gt; &lt;/span&gt;&lt;span class="o"&gt;/&lt;/span&gt;
+&lt;span class="n"&gt;tmpfs&lt;/span&gt;&lt;span class="w"&gt;                                                           &lt;/span&gt;&lt;span class="mi"&gt;504&lt;/span&gt;&lt;span class="n"&gt;G&lt;/span&gt;&lt;span class="w"&gt;     &lt;/span&gt;&lt;span class="mi"&gt;0&lt;/span&gt;&lt;span class="w"&gt;  &lt;/span&gt;&lt;span class="mi"&gt;504&lt;/span&gt;&lt;span class="n"&gt;G&lt;/span&gt;&lt;span class="w"&gt;   &lt;/span&gt;&lt;span class="mi"&gt;0&lt;/span&gt;&lt;span class="o"&gt;%&lt;/span&gt;&lt;span class="w"&gt; &lt;/span&gt;&lt;span class="o"&gt;/&lt;/span&gt;&lt;span class="n"&gt;dev&lt;/span&gt;&lt;span class="o"&gt;/&lt;/span&gt;&lt;span class="n"&gt;shm&lt;/span&gt;
+&lt;span class="n"&gt;tmpfs&lt;/span&gt;&lt;span class="w"&gt;                                                           &lt;/span&gt;&lt;span class="mi"&gt;504&lt;/span&gt;&lt;span class="n"&gt;G&lt;/span&gt;&lt;span class="w"&gt;     &lt;/span&gt;&lt;span class="mi"&gt;0&lt;/span&gt;&lt;span class="w"&gt;  &lt;/span&gt;&lt;span class="mi"&gt;504&lt;/span&gt;&lt;span class="n"&gt;G&lt;/span&gt;&lt;span class="w"&gt;   &lt;/span&gt;&lt;span class="mi"&gt;0&lt;/span&gt;&lt;span class="o"&gt;%&lt;/span&gt;&lt;span class="w"&gt; &lt;/span&gt;&lt;span class="o"&gt;/&lt;/span&gt;&lt;span class="n"&gt;sys&lt;/span&gt;&lt;span class="o"&gt;/&lt;/span&gt;&lt;span class="n"&gt;fs&lt;/span&gt;&lt;span class="o"&gt;/&lt;/span&gt;&lt;span class="n"&gt;cgroup&lt;/span&gt;
+&lt;span class="o"&gt;/&lt;/span&gt;&lt;span class="n"&gt;dev&lt;/span&gt;&lt;span class="o"&gt;/&lt;/span&gt;&lt;span class="n"&gt;nvme0n1p3&lt;/span&gt;&lt;span class="w"&gt;                                                   &lt;/span&gt;&lt;span class="mi"&gt;20&lt;/span&gt;&lt;span class="n"&gt;G&lt;/span&gt;&lt;span class="w"&gt;   &lt;/span&gt;&lt;span class="mi"&gt;33&lt;/span&gt;&lt;span class="n"&gt;M&lt;/span&gt;&lt;span class="w"&gt;   &lt;/span&gt;&lt;span class="mi"&gt;20&lt;/span&gt;&lt;span class="n"&gt;G&lt;/span&gt;&lt;span class="w"&gt;   &lt;/span&gt;&lt;span class="mi"&gt;1&lt;/span&gt;&lt;span class="o"&gt;%&lt;/span&gt;&lt;span class="w"&gt; &lt;/span&gt;&lt;span class="o"&gt;/&lt;/span&gt;&lt;span class="n"&gt;tmp&lt;/span&gt;
+&lt;span class="o"&gt;/&lt;/span&gt;&lt;span class="n"&gt;dev&lt;/span&gt;&lt;span class="o"&gt;/&lt;/span&gt;&lt;span class="n"&gt;nvme0n1p2&lt;/span&gt;&lt;span class="w"&gt;                                                   &lt;/span&gt;&lt;span class="mi"&gt;20&lt;/span&gt;&lt;span class="n"&gt;G&lt;/span&gt;&lt;span class="w"&gt;  &lt;/span&gt;&lt;span class="mf"&gt;4.6&lt;/span&gt;&lt;span class="n"&gt;G&lt;/span&gt;&lt;span class="w"&gt;   &lt;/span&gt;&lt;span class="mi"&gt;16&lt;/span&gt;&lt;span class="n"&gt;G&lt;/span&gt;&lt;span class="w"&gt;  &lt;/span&gt;&lt;span class="mi"&gt;23&lt;/span&gt;&lt;span class="o"&gt;%&lt;/span&gt;&lt;span class="w"&gt; &lt;/span&gt;&lt;span class="o"&gt;/&lt;/span&gt;&lt;span class="nf"&gt;var&lt;/span&gt;
+&lt;span class="o"&gt;/&lt;/span&gt;&lt;span class="n"&gt;dev&lt;/span&gt;&lt;span class="o"&gt;/&lt;/span&gt;&lt;span class="n"&gt;nvme0n1p5&lt;/span&gt;&lt;span class="w"&gt;                                                  &lt;/span&gt;&lt;span class="mf"&gt;1.7&lt;/span&gt;&lt;span class="n"&gt;T&lt;/span&gt;&lt;span class="w"&gt;   &lt;/span&gt;&lt;span class="mi"&gt;33&lt;/span&gt;&lt;span class="n"&gt;M&lt;/span&gt;&lt;span class="w"&gt;  &lt;/span&gt;&lt;span class="mf"&gt;1.7&lt;/span&gt;&lt;span class="n"&gt;T&lt;/span&gt;&lt;span class="w"&gt;   &lt;/span&gt;&lt;span class="mi"&gt;1&lt;/span&gt;&lt;span class="o"&gt;%&lt;/span&gt;&lt;span class="w"&gt; &lt;/span&gt;&lt;span class="o"&gt;/&lt;/span&gt;&lt;span class="k"&gt;local&lt;/span&gt;
+&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;
+
+&lt;p&gt;Next I tried doing an update, which did include some updates to the kernel and systemd but alas the issue persisted.&lt;/p&gt;
+&lt;p&gt;After pulling my hair out for a few days my only option was to take a known good image from another node class
+and rebuild our image.  In the end, this worked but has still left puzzled as to what actually happened here.&lt;/p&gt;
+&lt;p&gt;If anyone has experienced this before on BCM or other cluster management software please reach out and let me
+know what you found or possibly did to resolve it.&lt;/p&gt;</content><category term="Linux"></category><category term="linux"></category><category term="systemd"></category><category term="bright"></category></entry><entry><title>Running A Jupyter Kernel In Apptainer</title><link href="https://blog.kail.io/running-a-jupyter-kernel-in-apptainer.html" rel="alternate"></link><published>2023-08-30T00:00:00-04:00</published><updated>2023-08-30T00:00:00-04:00</updated><author><name>Andrew Kail</name></author><id>tag:blog.kail.io,2023-08-30:/running-a-jupyter-kernel-in-apptainer.html</id><summary type="html">&lt;p&gt;Just a quick example of running a Jupyter kernel inside an &lt;del&gt;Singularity&lt;/del&gt; 
+Apptainer container.&lt;/p&gt;
+&lt;p&gt;First define a container with all the required applications, in particular &lt;code&gt;ipykernel&lt;/code&gt;.&lt;/p&gt;
+&lt;div class="highlight"&gt;&lt;pre&gt;&lt;span&gt;&lt;/span&gt;&lt;code&gt;&lt;span class="k"&gt;bootstrap&lt;/span&gt;:&lt;span class="w"&gt; &lt;/span&gt;docker
+&lt;span class="k"&gt;From&lt;/span&gt;:&lt;span class="w"&gt; &lt;/span&gt;python:&lt;span class="m"&gt;3.11&lt;/span&gt;-slim-buster
+
+&lt;span class="gh"&gt;%runscript&lt;/span&gt;
+&lt;span class="w"&gt;    &lt;/span&gt;&lt;span class="nb"&gt;echo&lt;/span&gt;&lt;span class="w"&gt; &lt;/span&gt;&lt;span class="s2"&gt;&amp;quot;Hello... I am a new Singularity container&amp;quot;&lt;/span&gt;
+
+&lt;span class="gh"&gt;%labels&lt;/span&gt;
+&lt;span class="w"&gt;    &lt;/span&gt;AUTHOR&lt;span class="w"&gt; &lt;/span&gt;andrew@kail.io
+
+&lt;span class="gh"&gt;%post&lt;/span&gt;
+&lt;span class="w"&gt;    &lt;/span&gt;apt-get&lt;span class="w"&gt; &lt;/span&gt;update …&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;</summary><content type="html">&lt;p&gt;Just a quick example of running a Jupyter kernel inside an &lt;del&gt;Singularity&lt;/del&gt; 
+Apptainer container.&lt;/p&gt;
+&lt;p&gt;First define a container with all the required applications, in particular &lt;code&gt;ipykernel&lt;/code&gt;.&lt;/p&gt;
+&lt;div class="highlight"&gt;&lt;pre&gt;&lt;span&gt;&lt;/span&gt;&lt;code&gt;&lt;span class="k"&gt;bootstrap&lt;/span&gt;:&lt;span class="w"&gt; &lt;/span&gt;docker
+&lt;span class="k"&gt;From&lt;/span&gt;:&lt;span class="w"&gt; &lt;/span&gt;python:&lt;span class="m"&gt;3.11&lt;/span&gt;-slim-buster
+
+&lt;span class="gh"&gt;%runscript&lt;/span&gt;
+&lt;span class="w"&gt;    &lt;/span&gt;&lt;span class="nb"&gt;echo&lt;/span&gt;&lt;span class="w"&gt; &lt;/span&gt;&lt;span class="s2"&gt;&amp;quot;Hello... I am a new Singularity container&amp;quot;&lt;/span&gt;
+
+&lt;span class="gh"&gt;%labels&lt;/span&gt;
+&lt;span class="w"&gt;    &lt;/span&gt;AUTHOR&lt;span class="w"&gt; &lt;/span&gt;andrew@kail.io
+
+&lt;span class="gh"&gt;%post&lt;/span&gt;
+&lt;span class="w"&gt;    &lt;/span&gt;apt-get&lt;span class="w"&gt; &lt;/span&gt;update&lt;span class="w"&gt; &lt;/span&gt;&lt;span class="o"&gt;&amp;amp;&amp;amp;&lt;/span&gt;&lt;span class="w"&gt; &lt;/span&gt;apt-get&lt;span class="w"&gt; &lt;/span&gt;install&lt;span class="w"&gt; &lt;/span&gt;-y&lt;span class="w"&gt; &lt;/span&gt;python-pip&lt;span class="w"&gt; &lt;/span&gt;python-dev&lt;span class="w"&gt; &lt;/span&gt;build-essential
+&lt;span class="w"&gt;    &lt;/span&gt;pip&lt;span class="w"&gt; &lt;/span&gt;install&lt;span class="w"&gt; &lt;/span&gt;--upgrade&lt;span class="w"&gt; &lt;/span&gt;pip
+&lt;span class="w"&gt;    &lt;/span&gt;pip&lt;span class="w"&gt; &lt;/span&gt;install&lt;span class="w"&gt; &lt;/span&gt;numpy
+&lt;span class="w"&gt;    &lt;/span&gt;pip&lt;span class="w"&gt; &lt;/span&gt;install&lt;span class="w"&gt; &lt;/span&gt;ipykernel
+&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;
+
+&lt;p&gt;Build the container image.&lt;/p&gt;
+&lt;div class="highlight"&gt;&lt;pre&gt;&lt;span&gt;&lt;/span&gt;&lt;code&gt;apptainer&lt;span class="w"&gt; &lt;/span&gt;build&lt;span class="w"&gt; &lt;/span&gt;ipykernel.sif&lt;span class="w"&gt; &lt;/span&gt;ipykernel.def
+&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;
+
+&lt;p&gt;Finally, add the following to kernel specification under &lt;code&gt;/home/&amp;lt;user&amp;gt;/.local/share/jupyter/kernels/&amp;lt;kernelname&amp;gt;/kernel.json&lt;/code&gt;&lt;/p&gt;
+&lt;div class="highlight"&gt;&lt;pre&gt;&lt;span&gt;&lt;/span&gt;&lt;code&gt;&lt;span class="p"&gt;{&lt;/span&gt;
+&lt;span class="w"&gt; &lt;/span&gt;&lt;span class="nt"&gt;&amp;quot;argv&amp;quot;&lt;/span&gt;&lt;span class="p"&gt;:&lt;/span&gt;&lt;span class="w"&gt; &lt;/span&gt;&lt;span class="p"&gt;[&lt;/span&gt;
+&lt;span class="w"&gt;   &lt;/span&gt;&lt;span class="s2"&gt;&amp;quot;singularity&amp;quot;&lt;/span&gt;&lt;span class="p"&gt;,&lt;/span&gt;
+&lt;span class="w"&gt;   &lt;/span&gt;&lt;span class="s2"&gt;&amp;quot;exec&amp;quot;&lt;/span&gt;&lt;span class="p"&gt;,&lt;/span&gt;
+&lt;span class="w"&gt;   &lt;/span&gt;&lt;span class="s2"&gt;&amp;quot;--cleanenv&amp;quot;&lt;/span&gt;&lt;span class="p"&gt;,&lt;/span&gt;
+&lt;span class="w"&gt;   &lt;/span&gt;&lt;span class="s2"&gt;&amp;quot;/home/akail/Projects/singularity/kernel/ipykernel.sif&amp;quot;&lt;/span&gt;&lt;span class="p"&gt;,&lt;/span&gt;
+&lt;span class="w"&gt;   &lt;/span&gt;&lt;span class="s2"&gt;&amp;quot;python&amp;quot;&lt;/span&gt;&lt;span class="p"&gt;,&lt;/span&gt;
+&lt;span class="w"&gt;   &lt;/span&gt;&lt;span class="s2"&gt;&amp;quot;-m&amp;quot;&lt;/span&gt;&lt;span class="p"&gt;,&lt;/span&gt;
+&lt;span class="w"&gt;   &lt;/span&gt;&lt;span class="s2"&gt;&amp;quot;ipykernel&amp;quot;&lt;/span&gt;&lt;span class="p"&gt;,&lt;/span&gt;
+&lt;span class="w"&gt;   &lt;/span&gt;&lt;span class="s2"&gt;&amp;quot;-f&amp;quot;&lt;/span&gt;&lt;span class="p"&gt;,&lt;/span&gt;
+&lt;span class="w"&gt;   &lt;/span&gt;&lt;span class="s2"&gt;&amp;quot;{connection_file}&amp;quot;&lt;/span&gt;
+&lt;span class="w"&gt; &lt;/span&gt;&lt;span class="p"&gt;],&lt;/span&gt;
+&lt;span class="w"&gt; &lt;/span&gt;&lt;span class="nt"&gt;&amp;quot;language&amp;quot;&lt;/span&gt;&lt;span class="p"&gt;:&lt;/span&gt;&lt;span class="w"&gt; &lt;/span&gt;&lt;span class="s2"&gt;&amp;quot;python&amp;quot;&lt;/span&gt;&lt;span class="p"&gt;,&lt;/span&gt;
+&lt;span class="w"&gt; &lt;/span&gt;&lt;span class="nt"&gt;&amp;quot;display_name&amp;quot;&lt;/span&gt;&lt;span class="p"&gt;:&lt;/span&gt;&lt;span class="w"&gt; &lt;/span&gt;&lt;span class="s2"&gt;&amp;quot;singularity-kernel&amp;quot;&lt;/span&gt;
+&lt;span class="p"&gt;}&lt;/span&gt;
+&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;
+
+&lt;p&gt;Restart Jupyter or Jupyter lab and you're all set.&lt;/p&gt;</content><category term="Python"></category><category term="apptainer"></category><category term="jupyter"></category></entry><entry><title>Integrating Anaconda with Lmod</title><link href="https://blog.kail.io/integrating-anaconda-with-lmod.html" rel="alternate"></link><published>2023-08-22T12:00:00-04:00</published><updated>2023-08-22T12:00:00-04:00</updated><author><name>Andrew Kail</name></author><id>tag:blog.kail.io,2023-08-22:/integrating-anaconda-with-lmod.html</id><summary type="html">&lt;p&gt;In a previous &lt;a href="https://blog.kail.io/performance-impact-of-anaconda-initialization.html"&gt;post&lt;/a&gt; I looked into performance issues with Anaconda initialization.  To
 get around users modifying their &lt;code&gt;.bashrc&lt;/code&gt; and breaking their environment, 
 I have instead written an Lmod modulefile that handles setting and unsetting the variables and
 fuctions it needs.  This works for both bash and csh.&lt;/p&gt;
@@ -82,7 +593,9 @@ fuctions it needs.  This works for both bash and csh.&lt;/p&gt;
 &lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;/td&gt;&lt;/tr&gt;&lt;/table&gt;&lt;/div&gt;
 
 &lt;p&gt;Users can even add the &lt;code&gt;module load anaconda&lt;/code&gt; to their bashrc safely as this will initialize
-anaconda without the penalty of running the &lt;code&gt;__conda_setup&lt;/code&gt; function from the last article.&lt;/p&gt;</content><category term="HPC,Python"></category><category term="hpc"></category><category term="anaconda"></category></entry><entry><title>Performance Impact of Anaconda Initialization</title><link href="https://blog.kail.io/performance-impact-of-anaconda-initialization.html" rel="alternate"></link><published>2023-08-15T12:00:00-04:00</published><updated>2023-08-15T12:00:00-04:00</updated><author><name>Andrew Kail</name></author><id>tag:blog.kail.io,2023-08-15:/performance-impact-of-anaconda-initialization.html</id><summary type="html">&lt;p&gt;One of the biggest complaints we get from many users is a delayed login when they initially
+anaconda without the penalty of running the &lt;code&gt;__conda_setup&lt;/code&gt; function from the last article.&lt;/p&gt;
+&lt;p&gt;This also has the added benefit of allowing for multiple Anaconda installations in single environment
+as a users &lt;code&gt;.bashrc&lt;/code&gt; will not point to a hard-coded location.&lt;/p&gt;</content><category term="HPC,Python"></category><category term="hpc"></category><category term="anaconda"></category></entry><entry><title>Performance Impact of Anaconda Initialization</title><link href="https://blog.kail.io/performance-impact-of-anaconda-initialization.html" rel="alternate"></link><published>2023-08-15T12:00:00-04:00</published><updated>2023-08-15T12:00:00-04:00</updated><author><name>Andrew Kail</name></author><id>tag:blog.kail.io,2023-08-15:/performance-impact-of-anaconda-initialization.html</id><summary type="html">&lt;p&gt;One of the biggest complaints we get from many users is a delayed login when they initially
 get into the cluster.  In most cases, we have narrowed it down to users either installing
 their own version of &lt;a href="https://anaconda.org"&gt;Anaconda&lt;/a&gt; or they're using an existing install
 without without a customized modulefile.&lt;/p&gt;
@@ -121,7 +634,7 @@ for it to function.  Usually a user will be asked to run &lt;code&gt;conda init&
 &lt;span class="c1"&gt;# &amp;lt;&amp;lt;&amp;lt; conda initialize &amp;lt;&amp;lt;&amp;lt;&lt;/span&gt;
 &lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;/td&gt;&lt;/tr&gt;&lt;/table&gt;&lt;/div&gt;
 
-&lt;p&gt;The issue on our systems has been line 5, where the conda python executable is called every time the the user logs in.  Essentially every time the user logs in conda is called to generate the proper environment variables.  This launches python, loads conda and other libraires, and possibly writes many &lt;code&gt;.pyc&lt;/code&gt; files depending on where anaconda is installed.&lt;/p&gt;
+&lt;p&gt;The issue on our systems has been line 3, where the conda python executable is called every time the the user logs in.  Essentially every time the user logs in conda is called to generate the proper environment variables.  This launches python, loads conda and other libraires, and possibly writes many &lt;code&gt;.pyc&lt;/code&gt; files depending on where anaconda is installed.&lt;/p&gt;
 &lt;p&gt;Using the python trace module, we can see how many files are accessed.&lt;/p&gt;
 &lt;div class="highlight"&gt;&lt;pre&gt;&lt;span&gt;&lt;/span&gt;&lt;code&gt;mkdir&lt;span class="w"&gt; &lt;/span&gt;cover&lt;span class="p"&gt;;&lt;/span&gt;&lt;span class="w"&gt; &lt;/span&gt;&lt;span class="nb"&gt;cd&lt;/span&gt;&lt;span class="w"&gt; &lt;/span&gt;cover
 python&lt;span class="w"&gt; &lt;/span&gt;-m&lt;span class="w"&gt; &lt;/span&gt;trace&lt;span class="w"&gt; &lt;/span&gt;-c&lt;span class="w"&gt; &lt;/span&gt;-C&lt;span class="w"&gt; &lt;/span&gt;/data/apps/anaconda/3.9/bin/conda&lt;span class="w"&gt; &lt;/span&gt;shell.bash&lt;span class="w"&gt; &lt;/span&gt;hook

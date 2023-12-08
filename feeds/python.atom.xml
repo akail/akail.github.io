@@ -1,5 +1,59 @@
 <?xml version="1.0" encoding="utf-8"?>
-<feed xmlns="http://www.w3.org/2005/Atom"><title>Andrew Kail's Blog - Python</title><link href="https://blog.kail.io/" rel="alternate"></link><link href="https://blog.kail.io/feeds/python.atom.xml" rel="self"></link><id>https://blog.kail.io/</id><updated>2023-01-02T00:00:00-05:00</updated><subtitle>Somewhat HPC related blog</subtitle><entry><title>Hide Pelican Articles on Output</title><link href="https://blog.kail.io/hide-pelican-articles-on-output.html" rel="alternate"></link><published>2023-01-02T00:00:00-05:00</published><updated>2023-01-02T00:00:00-05:00</updated><author><name>Andrew Kail</name></author><id>tag:blog.kail.io,2023-01-02:/hide-pelican-articles-on-output.html</id><summary type="html">&lt;p&gt;Authors: Andrew Kail&lt;/p&gt;
+<feed xmlns="http://www.w3.org/2005/Atom"><title>Andrew Kail's Blog - Python</title><link href="https://blog.kail.io/" rel="alternate"></link><link href="https://blog.kail.io/feeds/python.atom.xml" rel="self"></link><id>https://blog.kail.io/</id><updated>2023-08-30T00:00:00-04:00</updated><subtitle>Somewhat HPC related blog</subtitle><entry><title>Running A Jupyter Kernel In Apptainer</title><link href="https://blog.kail.io/running-a-jupyter-kernel-in-apptainer.html" rel="alternate"></link><published>2023-08-30T00:00:00-04:00</published><updated>2023-08-30T00:00:00-04:00</updated><author><name>Andrew Kail</name></author><id>tag:blog.kail.io,2023-08-30:/running-a-jupyter-kernel-in-apptainer.html</id><summary type="html">&lt;p&gt;Just a quick example of running a Jupyter kernel inside an &lt;del&gt;Singularity&lt;/del&gt; 
+Apptainer container.&lt;/p&gt;
+&lt;p&gt;First define a container with all the required applications, in particular &lt;code&gt;ipykernel&lt;/code&gt;.&lt;/p&gt;
+&lt;div class="highlight"&gt;&lt;pre&gt;&lt;span&gt;&lt;/span&gt;&lt;code&gt;&lt;span class="k"&gt;bootstrap&lt;/span&gt;:&lt;span class="w"&gt; &lt;/span&gt;docker
+&lt;span class="k"&gt;From&lt;/span&gt;:&lt;span class="w"&gt; &lt;/span&gt;python:&lt;span class="m"&gt;3.11&lt;/span&gt;-slim-buster
+
+&lt;span class="gh"&gt;%runscript&lt;/span&gt;
+&lt;span class="w"&gt;    &lt;/span&gt;&lt;span class="nb"&gt;echo&lt;/span&gt;&lt;span class="w"&gt; &lt;/span&gt;&lt;span class="s2"&gt;&amp;quot;Hello... I am a new Singularity container&amp;quot;&lt;/span&gt;
+
+&lt;span class="gh"&gt;%labels&lt;/span&gt;
+&lt;span class="w"&gt;    &lt;/span&gt;AUTHOR&lt;span class="w"&gt; &lt;/span&gt;andrew@kail.io
+
+&lt;span class="gh"&gt;%post&lt;/span&gt;
+&lt;span class="w"&gt;    &lt;/span&gt;apt-get&lt;span class="w"&gt; &lt;/span&gt;update …&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;</summary><content type="html">&lt;p&gt;Just a quick example of running a Jupyter kernel inside an &lt;del&gt;Singularity&lt;/del&gt; 
+Apptainer container.&lt;/p&gt;
+&lt;p&gt;First define a container with all the required applications, in particular &lt;code&gt;ipykernel&lt;/code&gt;.&lt;/p&gt;
+&lt;div class="highlight"&gt;&lt;pre&gt;&lt;span&gt;&lt;/span&gt;&lt;code&gt;&lt;span class="k"&gt;bootstrap&lt;/span&gt;:&lt;span class="w"&gt; &lt;/span&gt;docker
+&lt;span class="k"&gt;From&lt;/span&gt;:&lt;span class="w"&gt; &lt;/span&gt;python:&lt;span class="m"&gt;3.11&lt;/span&gt;-slim-buster
+
+&lt;span class="gh"&gt;%runscript&lt;/span&gt;
+&lt;span class="w"&gt;    &lt;/span&gt;&lt;span class="nb"&gt;echo&lt;/span&gt;&lt;span class="w"&gt; &lt;/span&gt;&lt;span class="s2"&gt;&amp;quot;Hello... I am a new Singularity container&amp;quot;&lt;/span&gt;
+
+&lt;span class="gh"&gt;%labels&lt;/span&gt;
+&lt;span class="w"&gt;    &lt;/span&gt;AUTHOR&lt;span class="w"&gt; &lt;/span&gt;andrew@kail.io
+
+&lt;span class="gh"&gt;%post&lt;/span&gt;
+&lt;span class="w"&gt;    &lt;/span&gt;apt-get&lt;span class="w"&gt; &lt;/span&gt;update&lt;span class="w"&gt; &lt;/span&gt;&lt;span class="o"&gt;&amp;amp;&amp;amp;&lt;/span&gt;&lt;span class="w"&gt; &lt;/span&gt;apt-get&lt;span class="w"&gt; &lt;/span&gt;install&lt;span class="w"&gt; &lt;/span&gt;-y&lt;span class="w"&gt; &lt;/span&gt;python-pip&lt;span class="w"&gt; &lt;/span&gt;python-dev&lt;span class="w"&gt; &lt;/span&gt;build-essential
+&lt;span class="w"&gt;    &lt;/span&gt;pip&lt;span class="w"&gt; &lt;/span&gt;install&lt;span class="w"&gt; &lt;/span&gt;--upgrade&lt;span class="w"&gt; &lt;/span&gt;pip
+&lt;span class="w"&gt;    &lt;/span&gt;pip&lt;span class="w"&gt; &lt;/span&gt;install&lt;span class="w"&gt; &lt;/span&gt;numpy
+&lt;span class="w"&gt;    &lt;/span&gt;pip&lt;span class="w"&gt; &lt;/span&gt;install&lt;span class="w"&gt; &lt;/span&gt;ipykernel
+&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;
+
+&lt;p&gt;Build the container image.&lt;/p&gt;
+&lt;div class="highlight"&gt;&lt;pre&gt;&lt;span&gt;&lt;/span&gt;&lt;code&gt;apptainer&lt;span class="w"&gt; &lt;/span&gt;build&lt;span class="w"&gt; &lt;/span&gt;ipykernel.sif&lt;span class="w"&gt; &lt;/span&gt;ipykernel.def
+&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;
+
+&lt;p&gt;Finally, add the following to kernel specification under &lt;code&gt;/home/&amp;lt;user&amp;gt;/.local/share/jupyter/kernels/&amp;lt;kernelname&amp;gt;/kernel.json&lt;/code&gt;&lt;/p&gt;
+&lt;div class="highlight"&gt;&lt;pre&gt;&lt;span&gt;&lt;/span&gt;&lt;code&gt;&lt;span class="p"&gt;{&lt;/span&gt;
+&lt;span class="w"&gt; &lt;/span&gt;&lt;span class="nt"&gt;&amp;quot;argv&amp;quot;&lt;/span&gt;&lt;span class="p"&gt;:&lt;/span&gt;&lt;span class="w"&gt; &lt;/span&gt;&lt;span class="p"&gt;[&lt;/span&gt;
+&lt;span class="w"&gt;   &lt;/span&gt;&lt;span class="s2"&gt;&amp;quot;singularity&amp;quot;&lt;/span&gt;&lt;span class="p"&gt;,&lt;/span&gt;
+&lt;span class="w"&gt;   &lt;/span&gt;&lt;span class="s2"&gt;&amp;quot;exec&amp;quot;&lt;/span&gt;&lt;span class="p"&gt;,&lt;/span&gt;
+&lt;span class="w"&gt;   &lt;/span&gt;&lt;span class="s2"&gt;&amp;quot;--cleanenv&amp;quot;&lt;/span&gt;&lt;span class="p"&gt;,&lt;/span&gt;
+&lt;span class="w"&gt;   &lt;/span&gt;&lt;span class="s2"&gt;&amp;quot;/home/akail/Projects/singularity/kernel/ipykernel.sif&amp;quot;&lt;/span&gt;&lt;span class="p"&gt;,&lt;/span&gt;
+&lt;span class="w"&gt;   &lt;/span&gt;&lt;span class="s2"&gt;&amp;quot;python&amp;quot;&lt;/span&gt;&lt;span class="p"&gt;,&lt;/span&gt;
+&lt;span class="w"&gt;   &lt;/span&gt;&lt;span class="s2"&gt;&amp;quot;-m&amp;quot;&lt;/span&gt;&lt;span class="p"&gt;,&lt;/span&gt;
+&lt;span class="w"&gt;   &lt;/span&gt;&lt;span class="s2"&gt;&amp;quot;ipykernel&amp;quot;&lt;/span&gt;&lt;span class="p"&gt;,&lt;/span&gt;
+&lt;span class="w"&gt;   &lt;/span&gt;&lt;span class="s2"&gt;&amp;quot;-f&amp;quot;&lt;/span&gt;&lt;span class="p"&gt;,&lt;/span&gt;
+&lt;span class="w"&gt;   &lt;/span&gt;&lt;span class="s2"&gt;&amp;quot;{connection_file}&amp;quot;&lt;/span&gt;
+&lt;span class="w"&gt; &lt;/span&gt;&lt;span class="p"&gt;],&lt;/span&gt;
+&lt;span class="w"&gt; &lt;/span&gt;&lt;span class="nt"&gt;&amp;quot;language&amp;quot;&lt;/span&gt;&lt;span class="p"&gt;:&lt;/span&gt;&lt;span class="w"&gt; &lt;/span&gt;&lt;span class="s2"&gt;&amp;quot;python&amp;quot;&lt;/span&gt;&lt;span class="p"&gt;,&lt;/span&gt;
+&lt;span class="w"&gt; &lt;/span&gt;&lt;span class="nt"&gt;&amp;quot;display_name&amp;quot;&lt;/span&gt;&lt;span class="p"&gt;:&lt;/span&gt;&lt;span class="w"&gt; &lt;/span&gt;&lt;span class="s2"&gt;&amp;quot;singularity-kernel&amp;quot;&lt;/span&gt;
+&lt;span class="p"&gt;}&lt;/span&gt;
+&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;
+
+&lt;p&gt;Restart Jupyter or Jupyter lab and you're all set.&lt;/p&gt;</content><category term="Python"></category><category term="apptainer"></category><category term="jupyter"></category></entry><entry><title>Hide Pelican Articles on Output</title><link href="https://blog.kail.io/hide-pelican-articles-on-output.html" rel="alternate"></link><published>2023-01-02T00:00:00-05:00</published><updated>2023-01-02T00:00:00-05:00</updated><author><name>Andrew Kail</name></author><id>tag:blog.kail.io,2023-01-02:/hide-pelican-articles-on-output.html</id><summary type="html">&lt;p&gt;Authors: Andrew Kail&lt;/p&gt;
 &lt;p&gt;While working on this website I had started to draft a lot of articles in preparation
 to develop some consistency and start to flesh out a book on &lt;a href="https://hpc.kail.io"&gt;HPC&lt;/a&gt;.&lt;/p&gt;
 &lt;p&gt;In doing so, I found that there was no way to prevent these articles from being generated and …&lt;/p&gt;</summary><content type="html">&lt;p&gt;Authors: Andrew Kail&lt;/p&gt;

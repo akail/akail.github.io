@@ -150,6 +150,87 @@ rel="me"           href="https://fosstodon.org/@akail"
 
 <article>
   <header>
+    <h2><a href="https://blog.kail.io/comparison-of-provisioningcluster-managers-in-hpc.html#comparison-of-provisioningcluster-managers-in-hpc">Comparison of Provisioning/Cluster Managers in HPC</a></h2>
+    <p>
+      Posted on Fri 08 December 2023 in <a href="https://blog.kail.io/category/hpc.html">HPC</a>
+
+          &#8226; Tagged with
+              <a href="https://blog.kail.io/tag/hpc.html">hpc</a>,              <a href="https://blog.kail.io/tag/linux.html">linux</a>,              <a href="https://blog.kail.io/tag/provisioning.html">provisioning</a>
+    </p>
+  </header>
+  <div>
+      <div><p>We are primarily a <del>Bright Cluster Manager</del> Base Command Manager (BCM) 
+shop and recently some
+uncertainty has arisen around the future of BCM after its purchase by Nvidia last year.
+More specifically how 
+pricing will be handled and whether BCM will only be available with Nvidia
+superpods and DGX systems …</p></div>
+        <br>
+        <a class="btn"
+           href="https://blog.kail.io/comparison-of-provisioningcluster-managers-in-hpc.html#comparison-of-provisioningcluster-managers-in-hpc">
+          Continue reading
+        </a>
+  </div>
+  <hr />
+</article>
+<article>
+  <header>
+    <h2><a href="https://blog.kail.io/some-systemd-root-mount-confusion.html#some-systemd-root-mount-confusion">Some Systemd Root Mount Confusion</a></h2>
+    <p>
+      Posted on Thu 14 September 2023 in <a href="https://blog.kail.io/category/linux.html">Linux</a>
+
+          &#8226; Tagged with
+              <a href="https://blog.kail.io/tag/linux.html">linux</a>,              <a href="https://blog.kail.io/tag/systemd.html">systemd</a>,              <a href="https://blog.kail.io/tag/bright.html">bright</a>
+    </p>
+  </header>
+  <div>
+      <div><p>I recently ran into an interesting issue with systemd on a Bright Cluster. </p>
+<p>Bright Cluster Manager (BCM) has a tendency to restart the Slurm Daemons when
+certain changes are made, such as adding a new partition.  Recently when we did this,
+we found the daemon failed to restart on a …</p></div>
+        <br>
+        <a class="btn"
+           href="https://blog.kail.io/some-systemd-root-mount-confusion.html#some-systemd-root-mount-confusion">
+          Continue reading
+        </a>
+  </div>
+  <hr />
+</article>
+<article>
+  <header>
+    <h2><a href="https://blog.kail.io/running-a-jupyter-kernel-in-apptainer.html#running-a-jupyter-kernel-in-apptainer">Running A Jupyter Kernel In Apptainer</a></h2>
+    <p>
+      Posted on Wed 30 August 2023 in <a href="https://blog.kail.io/category/python.html">Python</a>
+
+          &#8226; Tagged with
+              <a href="https://blog.kail.io/tag/apptainer.html">apptainer</a>,              <a href="https://blog.kail.io/tag/jupyter.html">jupyter</a>
+    </p>
+  </header>
+  <div>
+      <div><p>Just a quick example of running a Jupyter kernel inside an <del>Singularity</del> 
+Apptainer container.</p>
+<p>First define a container with all the required applications, in particular <code>ipykernel</code>.</p>
+<div class="highlight"><pre><span></span><code><span class="k">bootstrap</span>:<span class="w"> </span>docker
+<span class="k">From</span>:<span class="w"> </span>python:<span class="m">3.11</span>-slim-buster
+
+<span class="gh">%runscript</span>
+<span class="w">    </span><span class="nb">echo</span><span class="w"> </span><span class="s2">&quot;Hello... I am a new Singularity container&quot;</span>
+
+<span class="gh">%labels</span>
+<span class="w">    </span>AUTHOR<span class="w"> </span>andrew@kail.io
+
+<span class="gh">%post</span>
+<span class="w">    </span>apt-get<span class="w"> </span>update …</code></pre></div></div>
+        <br>
+        <a class="btn"
+           href="https://blog.kail.io/running-a-jupyter-kernel-in-apptainer.html#running-a-jupyter-kernel-in-apptainer">
+          Continue reading
+        </a>
+  </div>
+  <hr />
+</article>
+<article>
+  <header>
     <h2><a href="https://blog.kail.io/integrating-anaconda-with-lmod.html#integrating-anaconda-with-lmod">Integrating Anaconda with Lmod</a></h2>
     <p>
       Posted on Tue 22 August 2023 in <a href="https://blog.kail.io/category/hpcpython.html">HPC,Python</a>
@@ -311,53 +392,12 @@ environments.</p>
           Continue reading
         </a>
   </div>
-  <hr />
-</article>
-<article>
-  <header>
-    <h2><a href="https://blog.kail.io/cleaning-scratch-sub-directories.html#cleaning-scratch-sub-directories">Cleaning Scratch Sub-directories</a></h2>
-    <p>
-      Posted on Mon 09 January 2023 in <a href="https://blog.kail.io/category/snippet.html">Snippet</a>
-
-          &#8226; Tagged with
-              <a href="https://blog.kail.io/tag/storage.html">storage</a>,              <a href="https://blog.kail.io/tag/snippets.html">snippets</a>
-    </p>
-  </header>
-  <div>
-      <div><p>We recently ran into an issue with a high speed scratch file system after some drive failures.  While the metadata was intact we could not guarantee
-that any of the user data was any good.  Since the metadata was good, we could keep the top level user scratch directories intact …</p></div>
-        <br>
-        <a class="btn"
-           href="https://blog.kail.io/cleaning-scratch-sub-directories.html#cleaning-scratch-sub-directories">
-          Continue reading
-        </a>
-  </div>
-  <hr />
-</article>
-<article>
-  <header>
-    <h2><a href="https://blog.kail.io/hide-pelican-articles-on-output.html#hide-pelican-articles-on-output">Hide Pelican Articles on Output</a></h2>
-    <p>
-      Posted on Mon 02 January 2023 in <a href="https://blog.kail.io/category/python.html">Python</a>
-
-          &#8226; Tagged with
-              <a href="https://blog.kail.io/tag/pelican.html">pelican</a>
-    </p>
-  </header>
-  <div>
-      <div><p>Authors: Andrew Kail</p>
-<p>While working on this website I had started to draft a lot of articles in preparation
-to develop some consistency and start to flesh out a book on <a href="https://hpc.kail.io">HPC</a>.</p>
-<p>In doing so, I found that there was no way to prevent these articles from being generated and …</p></div>
-        <br>
-        <a class="btn"
-           href="https://blog.kail.io/hide-pelican-articles-on-output.html#hide-pelican-articles-on-output">
-          Continue reading
-        </a>
-  </div>
 </article>
 
   <div class="pagination">
+    <a class="btn float-left" href="https://blog.kail.io/index2.html">
+      <i class="fa fa-angle-left"></i> Older Posts
+    </a>
   </div>
 
 
