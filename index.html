@@ -198,6 +198,40 @@ we found the daemon failed to restart on a …</p></div>
 </article>
 <article>
   <header>
+    <h2><a href="https://blog.kail.io/simple-nvidia-pytorch-container.html#simple-nvidia-pytorch-container">Simple Nvidia PyTorch Container</a></h2>
+    <p>
+      Posted on Wed 06 September 2023 in <a href="https://blog.kail.io/category/python.html">Python</a>
+
+          &#8226; Tagged with
+              <a href="https://blog.kail.io/tag/apptainer.html">apptainer</a>,              <a href="https://blog.kail.io/tag/jupyter.html">jupyter</a>,              <a href="https://blog.kail.io/tag/nvidia.html">nvidia</a>,              <a href="https://blog.kail.io/tag/pytorch.html">pytorch</a>
+    </p>
+  </header>
+  <div>
+      <div><p>Another quick Apptainer example for getting pytorch quickly up and
+running.</p>
+<p><strong>The Definition File</strong></p>
+<div class="highlight"><pre><span></span><code><span class="k">Bootstrap</span>:<span class="w"> </span>docker
+<span class="k">From</span>:<span class="w"> </span>nvidia/cuda:<span class="m">11.7.1</span>-runtime-ubuntu22<span class="m">.04</span>
+
+<span class="gh">%post</span>
+<span class="w">    </span>apt-get<span class="w"> </span>-y<span class="w"> </span>update
+<span class="w">    </span>apt<span class="w"> </span>install<span class="w"> </span>-y<span class="w"> </span>python3<span class="w"> </span>python3-pip
+<span class="w">    </span>pip3<span class="w"> </span>install<span class="w"> </span>torch<span class="w"> </span>torchvision<span class="w"> </span>torchaudio
+<span class="w">    </span>pip3<span class="w"> </span>install<span class="w"> </span>ipykernel
+</code></pre></div>
+
+<p><strong>Build the Contaienr</strong></p>
+<div class="highlight"><pre><span></span><code>apptainer build pytorch.sif pytorch.def …</code></pre></div></div>
+        <br>
+        <a class="btn"
+           href="https://blog.kail.io/simple-nvidia-pytorch-container.html#simple-nvidia-pytorch-container">
+          Continue reading
+        </a>
+  </div>
+  <hr />
+</article>
+<article>
+  <header>
     <h2><a href="https://blog.kail.io/running-a-jupyter-kernel-in-apptainer.html#running-a-jupyter-kernel-in-apptainer">Running A Jupyter Kernel In Apptainer</a></h2>
     <p>
       Posted on Wed 30 August 2023 in <a href="https://blog.kail.io/category/python.html">Python</a>
@@ -364,31 +398,6 @@ VM as it is the …</p></div>
         <br>
         <a class="btn"
            href="https://blog.kail.io/running-netbootxyz-from-opnsense.html#running-netbootxyz-from-opnsense">
-          Continue reading
-        </a>
-  </div>
-  <hr />
-</article>
-<article>
-  <header>
-    <h2><a href="https://blog.kail.io/adding-anaconda-environment-to-jupyter.html#adding-anaconda-environment-to-jupyter">Adding Anaconda Environment to Jupyter</a></h2>
-    <p>
-      Posted on Mon 13 February 2023 in <a href="https://blog.kail.io/category/jupyter.html">Jupyter</a>
-
-          &#8226; Tagged with
-              <a href="https://blog.kail.io/tag/jupyter.html">jupyter</a>,              <a href="https://blog.kail.io/tag/python.html">python</a>
-    </p>
-  </header>
-  <div>
-      <div><p>When using Jupyter, or Jupyterlab, you'll often times want to use different anaconda
-environments for different projects.  Especially when you are working on a
-personal workstation.  Unfortunately, even when installed with anaconda at the
-root level, jupyter doesn't automatically detect installed anaconda
-environments.</p>
-<p>For example, in a default jupyterhub install …</p></div>
-        <br>
-        <a class="btn"
-           href="https://blog.kail.io/adding-anaconda-environment-to-jupyter.html#adding-anaconda-environment-to-jupyter">
           Continue reading
         </a>
   </div>

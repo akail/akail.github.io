@@ -1,5 +1,40 @@
 <?xml version="1.0" encoding="utf-8"?>
-<feed xmlns="http://www.w3.org/2005/Atom"><title>Andrew Kail's Blog - Python</title><link href="https://blog.kail.io/" rel="alternate"></link><link href="https://blog.kail.io/feeds/python.atom.xml" rel="self"></link><id>https://blog.kail.io/</id><updated>2023-08-30T00:00:00-04:00</updated><subtitle>Somewhat HPC related blog</subtitle><entry><title>Running A Jupyter Kernel In Apptainer</title><link href="https://blog.kail.io/running-a-jupyter-kernel-in-apptainer.html" rel="alternate"></link><published>2023-08-30T00:00:00-04:00</published><updated>2023-08-30T00:00:00-04:00</updated><author><name>Andrew Kail</name></author><id>tag:blog.kail.io,2023-08-30:/running-a-jupyter-kernel-in-apptainer.html</id><summary type="html">&lt;p&gt;Just a quick example of running a Jupyter kernel inside an &lt;del&gt;Singularity&lt;/del&gt; 
+<feed xmlns="http://www.w3.org/2005/Atom"><title>Andrew Kail's Blog - Python</title><link href="https://blog.kail.io/" rel="alternate"></link><link href="https://blog.kail.io/feeds/python.atom.xml" rel="self"></link><id>https://blog.kail.io/</id><updated>2023-09-06T00:00:00-04:00</updated><subtitle>Somewhat HPC related blog</subtitle><entry><title>Simple Nvidia PyTorch Container</title><link href="https://blog.kail.io/simple-nvidia-pytorch-container.html" rel="alternate"></link><published>2023-09-06T00:00:00-04:00</published><updated>2023-09-06T00:00:00-04:00</updated><author><name>Andrew Kail</name></author><id>tag:blog.kail.io,2023-09-06:/simple-nvidia-pytorch-container.html</id><summary type="html">&lt;p&gt;Another quick Apptainer example for getting pytorch quickly up and
+running.&lt;/p&gt;
+&lt;p&gt;&lt;strong&gt;The Definition File&lt;/strong&gt;&lt;/p&gt;
+&lt;div class="highlight"&gt;&lt;pre&gt;&lt;span&gt;&lt;/span&gt;&lt;code&gt;&lt;span class="k"&gt;Bootstrap&lt;/span&gt;:&lt;span class="w"&gt; &lt;/span&gt;docker
+&lt;span class="k"&gt;From&lt;/span&gt;:&lt;span class="w"&gt; &lt;/span&gt;nvidia/cuda:&lt;span class="m"&gt;11.7.1&lt;/span&gt;-runtime-ubuntu22&lt;span class="m"&gt;.04&lt;/span&gt;
+
+&lt;span class="gh"&gt;%post&lt;/span&gt;
+&lt;span class="w"&gt;    &lt;/span&gt;apt-get&lt;span class="w"&gt; &lt;/span&gt;-y&lt;span class="w"&gt; &lt;/span&gt;update
+&lt;span class="w"&gt;    &lt;/span&gt;apt&lt;span class="w"&gt; &lt;/span&gt;install&lt;span class="w"&gt; &lt;/span&gt;-y&lt;span class="w"&gt; &lt;/span&gt;python3&lt;span class="w"&gt; &lt;/span&gt;python3-pip
+&lt;span class="w"&gt;    &lt;/span&gt;pip3&lt;span class="w"&gt; &lt;/span&gt;install&lt;span class="w"&gt; &lt;/span&gt;torch&lt;span class="w"&gt; &lt;/span&gt;torchvision&lt;span class="w"&gt; &lt;/span&gt;torchaudio
+&lt;span class="w"&gt;    &lt;/span&gt;pip3&lt;span class="w"&gt; &lt;/span&gt;install&lt;span class="w"&gt; &lt;/span&gt;ipykernel
+&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;
+
+&lt;p&gt;&lt;strong&gt;Build the Contaienr&lt;/strong&gt;&lt;/p&gt;
+&lt;div class="highlight"&gt;&lt;pre&gt;&lt;span&gt;&lt;/span&gt;&lt;code&gt;apptainer build pytorch.sif pytorch.def …&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;</summary><content type="html">&lt;p&gt;Another quick Apptainer example for getting pytorch quickly up and
+running.&lt;/p&gt;
+&lt;p&gt;&lt;strong&gt;The Definition File&lt;/strong&gt;&lt;/p&gt;
+&lt;div class="highlight"&gt;&lt;pre&gt;&lt;span&gt;&lt;/span&gt;&lt;code&gt;&lt;span class="k"&gt;Bootstrap&lt;/span&gt;:&lt;span class="w"&gt; &lt;/span&gt;docker
+&lt;span class="k"&gt;From&lt;/span&gt;:&lt;span class="w"&gt; &lt;/span&gt;nvidia/cuda:&lt;span class="m"&gt;11.7.1&lt;/span&gt;-runtime-ubuntu22&lt;span class="m"&gt;.04&lt;/span&gt;
+
+&lt;span class="gh"&gt;%post&lt;/span&gt;
+&lt;span class="w"&gt;    &lt;/span&gt;apt-get&lt;span class="w"&gt; &lt;/span&gt;-y&lt;span class="w"&gt; &lt;/span&gt;update
+&lt;span class="w"&gt;    &lt;/span&gt;apt&lt;span class="w"&gt; &lt;/span&gt;install&lt;span class="w"&gt; &lt;/span&gt;-y&lt;span class="w"&gt; &lt;/span&gt;python3&lt;span class="w"&gt; &lt;/span&gt;python3-pip
+&lt;span class="w"&gt;    &lt;/span&gt;pip3&lt;span class="w"&gt; &lt;/span&gt;install&lt;span class="w"&gt; &lt;/span&gt;torch&lt;span class="w"&gt; &lt;/span&gt;torchvision&lt;span class="w"&gt; &lt;/span&gt;torchaudio
+&lt;span class="w"&gt;    &lt;/span&gt;pip3&lt;span class="w"&gt; &lt;/span&gt;install&lt;span class="w"&gt; &lt;/span&gt;ipykernel
+&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;
+
+&lt;p&gt;&lt;strong&gt;Build the Contaienr&lt;/strong&gt;&lt;/p&gt;
+&lt;div class="highlight"&gt;&lt;pre&gt;&lt;span&gt;&lt;/span&gt;&lt;code&gt;apptainer build pytorch.sif pytorch.def
+&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;
+
+&lt;p&gt;&lt;strong&gt;Test&lt;/strong&gt;&lt;/p&gt;
+&lt;p&gt;Passing &lt;code&gt;--nv&lt;/code&gt; tells apptainer to setup apptainer for running with the Nvidia GPU.&lt;/p&gt;
+&lt;div class="highlight"&gt;&lt;pre&gt;&lt;span&gt;&lt;/span&gt;&lt;code&gt;&lt;span class="n"&gt;apptainer&lt;/span&gt; &lt;span class="n"&gt;exec&lt;/span&gt; &lt;span class="o"&gt;--&lt;/span&gt;&lt;span class="n"&gt;nv&lt;/span&gt; &lt;span class="n"&gt;pytorch&lt;/span&gt;&lt;span class="o"&gt;.&lt;/span&gt;&lt;span class="n"&gt;sif&lt;/span&gt; &lt;span class="n"&gt;python3&lt;/span&gt; &lt;span class="o"&gt;-&lt;/span&gt;&lt;span class="n"&gt;c&lt;/span&gt; &lt;span class="s2"&gt;&amp;quot;import torch; print(torch.cuda.is_available())&amp;quot;&lt;/span&gt;
+&lt;span class="kc"&gt;True&lt;/span&gt;
+&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;</content><category term="Python"></category><category term="apptainer"></category><category term="jupyter"></category><category term="nvidia"></category><category term="pytorch"></category></entry><entry><title>Running A Jupyter Kernel In Apptainer</title><link href="https://blog.kail.io/running-a-jupyter-kernel-in-apptainer.html" rel="alternate"></link><published>2023-08-30T00:00:00-04:00</published><updated>2023-08-30T00:00:00-04:00</updated><author><name>Andrew Kail</name></author><id>tag:blog.kail.io,2023-08-30:/running-a-jupyter-kernel-in-apptainer.html</id><summary type="html">&lt;p&gt;Just a quick example of running a Jupyter kernel inside an &lt;del&gt;Singularity&lt;/del&gt; 
 Apptainer container.&lt;/p&gt;
 &lt;p&gt;First define a container with all the required applications, in particular &lt;code&gt;ipykernel&lt;/code&gt;.&lt;/p&gt;
 &lt;div class="highlight"&gt;&lt;pre&gt;&lt;span&gt;&lt;/span&gt;&lt;code&gt;&lt;span class="k"&gt;bootstrap&lt;/span&gt;:&lt;span class="w"&gt; &lt;/span&gt;docker
