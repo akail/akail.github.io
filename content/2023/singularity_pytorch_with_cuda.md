@@ -20,7 +20,7 @@ running.
         pip3 install ipykernel
 
 
-**Build the Contaienr**
+**Build the Container**
 
     apptainer build pytorch.sif pytorch.def
 
