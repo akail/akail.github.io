@@ -14,6 +14,7 @@ livereload = "^2.6.3"
 pelican-series = "^2.1.0"
 pelican-simple-footnotes = "^1.0.2"
 mastodon-py = "^1.8.0"
+pymdown-extensions = "^10.2"
 
 
 [tool.poetry.group.dev.dependencies]

@@ -34,7 +34,7 @@ DEFAULT_PAGINATION = 10
 
 # Theme settings
 THEME = 'Flex'
-# THEME = 'mytheme'
+# THEME = 'mysimple'
 THEME_COLOR = "light"
 PYGMENTS_STYLE = "gruvbox-dark"
 STATIC_PATHS = ["extra/custom.css", "images"]
@@ -77,3 +77,16 @@ PLUGINS = ['pelican.plugins.series',
 ## Pelican seo
 SEO_REPORT = True
 FAVICON = "/images/favicon.ico"
+
+MARKDOWN = {
+        'extension_configs': {
+            "pymdownx.tilde": {},
+            # "pymdownx.emoji": {
+            #     'emoji_index': "pymdownx.emoji.gemoji",
+            #     },
+            'markdown.extensions.codehilite': {'css_class': 'highlight'},
+            'markdown.extensions.extra': {},
+            'markdown.extensions.meta': {},
+            },
+        'output_format': 'html5',
+    }
