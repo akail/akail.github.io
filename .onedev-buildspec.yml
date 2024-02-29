@@ -1,0 +1,15 @@
+version: 29
+jobs:
+- name: Push to github
+  jobExecutor: Default
+  steps:
+  - !PushRepository
+    name: Push to Github
+    remoteUrl: https://github.com/akail/akail.github.io.git
+    passwordSecret: github
+    force: false
+    condition: ALL_PREVIOUS_STEPS_WERE_SUCCESSFUL
+  retryCondition: never
+  maxRetries: 3
+  retryDelay: 30
+  timeout: 3600
