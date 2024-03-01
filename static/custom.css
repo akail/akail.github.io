@@ -1,0 +1,23 @@
+aside nav ul li {
+  text-transform: capitalize !important;
+}
+
+table { 
+  margin-left: auto;
+  margin-right: auto;
+}
+
+.center-img { 
+  margin-left: auto;
+  margin-right: auto;
+  display: block;
+}
+
+article img {
+  padding-top: 2em;
+  padding-bottom: 2em;
+  margin-left: auto;
+  margin-right: auto;
+  display: block;
+  max-width: 80%;
+}

@@ -1,0 +1,544 @@
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="utf-8" />
+  <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+  <meta name="HandheldFriendly" content="True" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <meta name="robots" content="" />
+  <meta name="google-site-verification" content="ZlfC6LPbIl8QMogAf9hWUt9xNqocwt4niXcpc56reIs" />
+
+  <link href="https://fonts.googleapis.com/css2?family=Source+Code+Pro:ital,wght@0,400;0,700;1,400&family=Source+Sans+Pro:ital,wght@0,300;0,400;0,700;1,400&display=swap" rel="stylesheet">
+
+    <link rel="stylesheet" type="text/css" href="https://blog.kail.io/theme/stylesheet/style.min.css">
+
+
+    <link id="pygments-light-theme" rel="stylesheet" type="text/css"
+          href="https://blog.kail.io/theme/pygments/gruvbox-dark.min.css">
+
+
+
+  <link rel="stylesheet" type="text/css" href="https://blog.kail.io/theme/font-awesome/css/fontawesome.css">
+  <link rel="stylesheet" type="text/css" href="https://blog.kail.io/theme/font-awesome/css/brands.css">
+  <link rel="stylesheet" type="text/css" href="https://blog.kail.io/theme/font-awesome/css/solid.css">
+
+  <link rel="stylesheet" type="text/css" href="https://blog.kail.io/static/custom.css">
+  <link rel="stylesheet" type="text/css" href="https://blog.kail.io/theme//copy/copy.css">
+
+  <link rel="shortcut icon" href="/images/favicon.ico" type="image/x-icon">
+  <link rel="icon" href="/images/favicon.ico" type="image/x-icon">
+
+
+  <link href="https://blog.kail.io/feeds/all.atom.xml" type="application/atom+xml" rel="alternate" title="Andrew Kail's Blog Atom">
+
+
+
+
+<script defer data-domain="blog.kail.io" src="https://plausible.kail.io/js/script.js"></script>
+
+
+
+
+ 
+
+<meta name="author" content="Andrew Kail" />
+<meta name="description" content="We are primarily a Bright Cluster Manager Base Command Manager (BCM) shop and recently some uncertainty has arisen around the future of BCM after its purchase by Nvidia last year. More specifically how pricing will be handled and whether BCM will only be available with Nvidia superpods and DGX systems …" />
+<meta name="keywords" content="hpc, linux, provisioning">
+
+
+  <meta property="og:site_name" content="Andrew Kail's Blog"/>
+  <meta property="og:title" content="Comparison of Provisioning/Cluster Managers in HPC"/>
+  <meta property="og:description" content="We are primarily a Bright Cluster Manager Base Command Manager (BCM) shop and recently some uncertainty has arisen around the future of BCM after its purchase by Nvidia last year. More specifically how pricing will be handled and whether BCM will only be available with Nvidia superpods and DGX systems …"/>
+  <meta property="og:locale" content="en_US"/>
+  <meta property="og:url" content="https://blog.kail.io/comparison-of-provisioningcluster-managers-in-hpc.html"/>
+  <meta property="og:type" content="article"/>
+  <meta property="article:published_time" content="2023-12-08 00:00:00-05:00"/>
+  <meta property="article:modified_time" content=""/>
+  <meta property="article:author" content="https://blog.kail.io/author/andrew-kail.html">
+  <meta property="article:section" content="HPC"/>
+  <meta property="article:tag" content="hpc"/>
+  <meta property="article:tag" content="linux"/>
+  <meta property="article:tag" content="provisioning"/>
+  <meta property="og:image" content="https://blog.kail.io/images/profile.png">
+
+  <title>Andrew Kail's Blog &ndash; Comparison of Provisioning/Cluster Managers in HPC</title>
+
+
+</head>
+<body class="light-theme">
+
+<aside>
+  <div>
+    <a href="https://blog.kail.io/">
+      <img src="https://blog.kail.io/images/profile.png" alt="Andrew Kail's Blog" title="Andrew Kail's Blog">
+    </a>
+
+    <h1>
+      <a href="https://blog.kail.io/">Andrew Kail's Blog</a>
+    </h1>
+
+    <p>Somewhat HPC related blog</p>
+
+
+    <nav>
+      <ul class="list">
+
+
+            <li>
+              <a target="_self"
+                 href="https://blog.kail.io/pages/about.html#about">
+                About
+              </a>
+            </li>
+            <li>
+              <a target="_self"
+                 href="https://blog.kail.io/pages/get-in-touch.html#get-in-touch">
+                Get in Touch
+              </a>
+            </li>
+            <li>
+              <a target="_self"
+                 href="https://blog.kail.io/pages/projects.html#projects">
+                Projects
+              </a>
+            </li>
+
+          <li>
+            <a target="_self" href="https://github.com/akail/Configs" >My Configs</a>
+          </li>
+      </ul>
+    </nav>
+
+    <ul class="social">
+      <li>
+        <a class="sc-github"
+           href="https://github.com/akail"
+           target="_blank">
+          <i class="fa-brands fa-github"></i>
+        </a>
+      </li>
+      <li>
+        <a class="sc-rss"
+           href="/feeds/all.atom.xml"
+           target="_blank">
+          <i class="fa-solid fa-rss"></i>
+        </a>
+      </li>
+      <li>
+        <a class="sc-linkedin"
+           href="https://www.linkedin.com/in/andrewkail/"
+           target="_blank">
+          <i class="fa-brands fa-linkedin"></i>
+        </a>
+      </li>
+      <li>
+        <a class="sc-mastodon"
+rel="me"           href="https://fosstodon.org/@akail"
+           target="_blank">
+          <i class="fa-brands fa-mastodon"></i>
+        </a>
+      </li>
+    </ul>
+  </div>
+
+</aside>
+  <main>
+
+<nav>
+  <a href="https://blog.kail.io/">Home</a>
+
+  <a href="/archives.html">Archives</a>
+  <a href="/categories.html">Categories</a>
+  <a href="/tags.html">Tags</a>
+
+  <a href="https://blog.kail.io/feeds/all.atom.xml">Atom</a>
+
+</nav>
+
+<article class="single">
+  <header>
+      
+    <h1 id="comparison-of-provisioningcluster-managers-in-hpc">Comparison of Provisioning/Cluster Managers in HPC</h1>
+    <p>
+      Posted on Fri 08 December 2023 in <a href="https://blog.kail.io/category/hpc.html">HPC</a>
+
+    </p>
+  </header>
+
+
+  <div>
+    <p>We are primarily a <del>Bright Cluster Manager</del> Base Command Manager (BCM) 
+shop and recently some
+uncertainty has arisen around the future of BCM after its purchase by Nvidia last year.
+More specifically how 
+pricing will be handled and whether BCM will only be available with Nvidia
+superpods and DGX systems in the long term. </p>
+<p>As an HPC Managed Services Provider, we seek to leverage solutions that allow
+us to quickly deploy and easily manage compute clusters. For our business operations, BCM 
+has served us well in both the features it provides and the support from Nvidia.  Currently, all but
+one HPC Cluster we manage runs BCM. </p>
+<p>Our lone outlier is a unique test case were we needed to manage both Linux
+and Windows nodes in the same environment, so we instead went with another
+provisioning software (Cobbler)[https://cobbler.github.io/] which had the ability
+to support a Windows node.  We quickly however
+realized there were many features missing we needed to fill via other means and the
+Windows support proved more difficult that we like.</p>
+<p>In this article, I'll take a look at what the options are in the HPC space and
+review the features needed in an a standalone deployment.  My goal in writing this is to 
+understand the gaps in the solutions so our team, clients, and you, know
+which ones need to be filled.</p>
+<h2>Provisioner vs Cluster Manager</h2>
+<p>First, I want to be clear about what is being compared here.  These tools will fall
+into two categories, with one being a subset of the other.</p>
+<p>All of the software compared here will provide some form of provisioning. Provisioners
+typically use some form of network booting combined with PXE and a TFTP server to handle installing and configuring an operating system to either baremetal hardware or a VM.  This has become the standard method for provisioning in both HPC and enterprise environments.</p>
+<p>The subcategory is cluster management software. A cluster managers are more specific to the HPC and parallel computing space. A cluster manager different from generic provisioning software in that it will typically run an agent on each node to manage and configure services for HPC.</p>
+<h2>The software</h2>
+<p>I'll be comparing the following software stacks.  This is not an exhaustive list of available software and I have decided to focus on what is either well supported, well known, or niche to this industry.</p>
+<h3>Provisioning Software</h3>
+<p><strong><a href="https://cobbler.github.io/">Cobbler</a></strong></p>
+<p>Cobbler is a provisioning software stack written in Python primarly geared towards
+Linux network installations.  Its a very light install and leverages template and kickstart scripts for initial system configuration.</p>
+<p><strong><a href="https://theforeman.org/">The Foreman</a></strong></p>
+<p>Foreman is a complete lifecycle management tool for physical and virtual servers.
+More than just a provisioner, it can also handle security update management,
+configuraiton management, and monitoring. Even with its rich feature set I am leaving it
+out of the Cluster Managers list as it is not geared towards HPC Clusters.</p>
+<h3>Cluster Managers</h3>
+<p><strong><a href="https://www.nvidia.com/en-us/ai-data-science/products/base-command-manager-essentials/">Base Command Manager</a></strong></p>
+<p>Our story's main character.  Base Command Manager is a proprietary turn-key
+application for installaing, configuring and managing and HPC cluster with
+all the batteries included.</p>
+<p><strong><a href="https://warewulf.org/">Warewulf</a></strong></p>
+<p>Warewulf is fast becoming one of the big players in the HPC Cluster management space.  It's the primary manager for the <a href="https://openhpc.community/">OpenHPC Project</a>, is open source with the option for enterprise support.</p>
+<p><strong><a href="https://grendel.readthedocs.io">Grendel</a></strong></p>
+<p>Grendel is a cluster manager out of the University at Buffalo Center for Computational Research where it is used to manage their hpc resources.</p>
+<p><strong><a href="https://www.penguinsolutions.com/computing/products/software/scyld-clusterware/">Scyld Clusterware</a></strong></p>
+<p>Scyld is a proprietary cluster management product from Penguin Solutions.  Development is based on the
+beo</p>
+<p><strong><a href="https://xcat-docs.readthedocs.io/en/stable/">xCAT</a></strong></p>
+<p>I well known management stack, xCAT is unfortunately no longer in development by IBM, but there is an attempt by the Open Source
+Community to revive it.  However, I wanted to leave it in this list
+as it is very well known and feature rich, albeit difficult to install and manage.</p>
+<p>Recently I did discover xCAT development has been continued by Lenovo under the name Confluent, albeit not
+out in the open.  It can be found at <a href="https://hpc.lenovo.com">hpc.lenovo.com</a>.  </p>
+<p><strong><a href="https://openhpc.community/">OpenHPC</a></strong></p>
+<p>OpenHPC is a community effort to provide common HPC components which can be mixed and matched to build an cluster.  OpenHPC itself builds on top of Warewulf's
+provisioning and provides other tools and libraries such as Infiniband, Lustre, and other scientific applications.</p>
+<h2>Features</h2>
+<ul>
+<li>DHCP</li>
+<li>TFTP</li>
+<li>NTP</li>
+<li>IPMI configuration (During provisioning)</li>
+<li>Power control</li>
+<li>DNS</li>
+<li>Stateless provisioning</li>
+<li>Statefull provisioning</li>
+<li>Infiniband Driver</li>
+<li>Nvidia Drivers</li>
+<li>License</li>
+<li>Windows Provisioning</li>
+<li>User Management</li>
+<li>Firewall NAT Configuration</li>
+<li>Service Management (i.e. Systemd services)</li>
+<li>Image Management</li>
+<li>NFS Server</li>
+<li>Kernel Management</li>
+<li>Support Contract</li>
+<li>Slurm Management</li>
+</ul>
+<p>For many of these features, we are looking at what is provided by the provisioning software itself, not from the OS or
+other related tools like Puppet, Chef, etc.  For example, The Foreman can tightly integrate with Puppet, but requires
+more setup on the admin side to handle some of the features above.</p>
+<h2>Comparison</h2>
+<table>
+<thead>
+<tr>
+<th>Feature</th>
+<th>Cobbler</th>
+<th>The Foreman</th>
+<th>BCM</th>
+<th>Warewulf</th>
+<th>Grendel</th>
+<th>Scyld</th>
+<th>xCAT</th>
+<th>OpenHPC</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>DHCP</td>
+<td>Yes</td>
+<td>Yes</td>
+<td>Yes</td>
+<td>Yes</td>
+<td>Yes</td>
+<td>Yes</td>
+<td>Yes</td>
+<td>Yes</td>
+</tr>
+<tr>
+<td>TFTP</td>
+<td>Yes</td>
+<td>Yes</td>
+<td>Yes</td>
+<td>Yes</td>
+<td>Yes</td>
+<td>Yes</td>
+<td>Yes</td>
+<td>Yes</td>
+</tr>
+<tr>
+<td>NTP</td>
+<td>No</td>
+<td>No</td>
+<td>Yes</td>
+<td>No</td>
+<td>Yes</td>
+<td>Yes</td>
+<td>Yes</td>
+<td>No</td>
+</tr>
+<tr>
+<td>IMPI Configuration</td>
+<td>No</td>
+<td>No</td>
+<td>Yes</td>
+<td>No</td>
+<td>No</td>
+<td>No</td>
+<td>No</td>
+<td>No</td>
+</tr>
+<tr>
+<td>Power Management</td>
+<td>Yes</td>
+<td>Yes</td>
+<td>Yes</td>
+<td>Yes</td>
+<td>Yes</td>
+<td>Yes</td>
+<td>Yes</td>
+<td>Yes</td>
+</tr>
+<tr>
+<td>DNS</td>
+<td>No</td>
+<td>Yes</td>
+<td>Yes</td>
+<td>Yes</td>
+<td>Yes</td>
+<td>Yes</td>
+<td>Yes</td>
+<td>Yes</td>
+</tr>
+<tr>
+<td>Stateless provisioning</td>
+<td>No</td>
+<td>No</td>
+<td>Yes</td>
+<td>Yes</td>
+<td>Yes</td>
+<td>Yes</td>
+<td>Yes</td>
+<td>Yes</td>
+</tr>
+<tr>
+<td>Statefull provisioning</td>
+<td>Yes</td>
+<td>Yes</td>
+<td>Yes</td>
+<td>No</td>
+<td>Yes</td>
+<td>Yes</td>
+<td>Yes</td>
+<td>Yes</td>
+</tr>
+<tr>
+<td>Infiniband Drivers</td>
+<td>No</td>
+<td>No</td>
+<td>Yes</td>
+<td>No</td>
+<td>No</td>
+<td>Yes</td>
+<td>Yes</td>
+<td>Yes</td>
+</tr>
+<tr>
+<td>Nvidia Drivers</td>
+<td>No</td>
+<td>No</td>
+<td>Yes</td>
+<td>No</td>
+<td>No</td>
+<td>Yes</td>
+<td>Yes</td>
+<td>No</td>
+</tr>
+<tr>
+<td>License</td>
+<td>FOSS</td>
+<td>FOSS</td>
+<td>Proprietary</td>
+<td>FOSS</td>
+<td>FOSS</td>
+<td>Proprietary</td>
+<td>FOSS</td>
+<td>FOSS</td>
+</tr>
+<tr>
+<td>Windows Provisioning</td>
+<td>Maybe</td>
+<td>Yes</td>
+<td>No</td>
+<td>No</td>
+<td>No</td>
+<td>No</td>
+<td>Yes</td>
+<td>No</td>
+</tr>
+<tr>
+<td>User Management</td>
+<td>No</td>
+<td>No</td>
+<td>Yes</td>
+<td>No</td>
+<td>No</td>
+<td>No</td>
+<td>No</td>
+<td>No</td>
+</tr>
+<tr>
+<td>Firewall NAT Configuration</td>
+<td>No</td>
+<td>No</td>
+<td>Yes</td>
+<td>No</td>
+<td>No</td>
+<td>Yes</td>
+<td>No</td>
+<td>No</td>
+</tr>
+<tr>
+<td>Service Management</td>
+<td>No</td>
+<td>No</td>
+<td>Yes</td>
+<td>Yes</td>
+<td>No</td>
+<td>No</td>
+<td>No</td>
+<td>Yes</td>
+</tr>
+<tr>
+<td>Image Management</td>
+<td>No</td>
+<td>No</td>
+<td>Yes</td>
+<td>Yes</td>
+<td>No</td>
+<td>Yes</td>
+<td>Yes</td>
+<td>Yes</td>
+</tr>
+<tr>
+<td>NFS Server</td>
+<td>No</td>
+<td>No</td>
+<td>Yes</td>
+<td>Yes</td>
+<td>No</td>
+<td>No</td>
+<td>No</td>
+<td>Yes</td>
+</tr>
+<tr>
+<td>Kernel Management</td>
+<td>No</td>
+<td>No</td>
+<td>Yes</td>
+<td>Yes</td>
+<td>No</td>
+<td>Yes</td>
+<td>Yes</td>
+<td>Yes</td>
+</tr>
+<tr>
+<td>Support Contract</td>
+<td>No</td>
+<td>No</td>
+<td>Yes</td>
+<td>Yes</td>
+<td>No</td>
+<td>Yes</td>
+<td>No</td>
+<td>Yes</td>
+</tr>
+<tr>
+<td>Slurm Management</td>
+<td>No</td>
+<td>No</td>
+<td>Yes</td>
+<td>No</td>
+<td>No</td>
+<td>Yes</td>
+<td>No</td>
+<td>Yes</td>
+</tr>
+</tbody>
+</table>
+<h2>Final Thoughts</h2>
+<p>Its likely I missed some things and I will continue to update the comparison as time goes on or as people possibly yell at me.</p>
+<p>In the end, we have decided to plan migrations to OpenHPC as it covers the majority of what we need, has a robust community,
+provided timely security updates, and will likely reduce costs for our customers. </p>
+  </div>
+  <div class="tag-cloud">
+    <p>
+      <a href="https://blog.kail.io/tag/hpc.html">hpc</a>
+      <a href="https://blog.kail.io/tag/linux.html">linux</a>
+      <a href="https://blog.kail.io/tag/provisioning.html">provisioning</a>
+    </p>
+  </div>
+
+
+
+
+
+
+</article>
+
+<footer>
+<p>
+  &copy;   - This work is licensed under a <a rel="license" href="http://creativecommons.org/licenses/by-sa/4.0/deed.en_US" target="_blank">Creative Commons Attribution-ShareAlike</a>
+</p>
+<p>
+Built with <a href="http://getpelican.com" target="_blank">Pelican</a> using <a href="http://bit.ly/flex-pelican" target="_blank">Flex</a> theme
+</p><p>
+  <a rel="license"
+     href="http://creativecommons.org/licenses/by-sa/4.0/"
+     target="_blank">
+    <img alt="Creative Commons License"
+         title="Creative Commons License"
+         style="border-width:0"
+           src="https://i.creativecommons.org/l/by-sa/4.0/80x15.png"
+         width="80"
+         height="15"/>
+  </a>
+</p></footer>  </main>
+
+<script type="application/ld+json">
+{
+  "@context" : "http://schema.org",
+  "@type" : "Blog",
+  "name": " Andrew Kail's Blog ",
+  "url" : "https://blog.kail.io",
+  "image": "https://blog.kail.io/images/profile.png",
+  "description": "The personal blog of Andrew Kail, an HPC enthusiast, PhD Student, and homelaber."
+}
+</script>
+  <script src="https://blog.kail.io/theme/copy/copy.js"></script>
+</body>
+</html>

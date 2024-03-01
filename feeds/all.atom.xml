@@ -1,0 +1,1119 @@
+<?xml version="1.0" encoding="utf-8"?>
+<feed xmlns="http://www.w3.org/2005/Atom"><title>Andrew Kail's Blog</title><link href="https://blog.kail.io/" rel="alternate"></link><link href="https://blog.kail.io/feeds/all.atom.xml" rel="self"></link><id>https://blog.kail.io/</id><updated>2023-12-08T00:00:00-05:00</updated><subtitle>Somewhat HPC related blog</subtitle><entry><title>Comparison of Provisioning/Cluster Managers in HPC</title><link href="https://blog.kail.io/comparison-of-provisioningcluster-managers-in-hpc.html" rel="alternate"></link><published>2023-12-08T00:00:00-05:00</published><updated>2023-12-08T00:00:00-05:00</updated><author><name>Andrew Kail</name></author><id>tag:blog.kail.io,2023-12-08:/comparison-of-provisioningcluster-managers-in-hpc.html</id><summary type="html">&lt;p&gt;We are primarily a &lt;del&gt;Bright Cluster Manager&lt;/del&gt; Base Command Manager (BCM) 
+shop and recently some
+uncertainty has arisen around the future of BCM after its purchase by Nvidia last year.
+More specifically how 
+pricing will be handled and whether BCM will only be available with Nvidia
+superpods and DGX systems …&lt;/p&gt;</summary><content type="html">&lt;p&gt;We are primarily a &lt;del&gt;Bright Cluster Manager&lt;/del&gt; Base Command Manager (BCM) 
+shop and recently some
+uncertainty has arisen around the future of BCM after its purchase by Nvidia last year.
+More specifically how 
+pricing will be handled and whether BCM will only be available with Nvidia
+superpods and DGX systems in the long term. &lt;/p&gt;
+&lt;p&gt;As an HPC Managed Services Provider, we seek to leverage solutions that allow
+us to quickly deploy and easily manage compute clusters. For our business operations, BCM 
+has served us well in both the features it provides and the support from Nvidia.  Currently, all but
+one HPC Cluster we manage runs BCM. &lt;/p&gt;
+&lt;p&gt;Our lone outlier is a unique test case were we needed to manage both Linux
+and Windows nodes in the same environment, so we instead went with another
+provisioning software (Cobbler)[https://cobbler.github.io/] which had the ability
+to support a Windows node.  We quickly however
+realized there were many features missing we needed to fill via other means and the
+Windows support proved more difficult that we like.&lt;/p&gt;
+&lt;p&gt;In this article, I'll take a look at what the options are in the HPC space and
+review the features needed in an a standalone deployment.  My goal in writing this is to 
+understand the gaps in the solutions so our team, clients, and you, know
+which ones need to be filled.&lt;/p&gt;
+&lt;h2&gt;Provisioner vs Cluster Manager&lt;/h2&gt;
+&lt;p&gt;First, I want to be clear about what is being compared here.  These tools will fall
+into two categories, with one being a subset of the other.&lt;/p&gt;
+&lt;p&gt;All of the software compared here will provide some form of provisioning. Provisioners
+typically use some form of network booting combined with PXE and a TFTP server to handle installing and configuring an operating system to either baremetal hardware or a VM.  This has become the standard method for provisioning in both HPC and enterprise environments.&lt;/p&gt;
+&lt;p&gt;The subcategory is cluster management software. A cluster managers are more specific to the HPC and parallel computing space. A cluster manager different from generic provisioning software in that it will typically run an agent on each node to manage and configure services for HPC.&lt;/p&gt;
+&lt;h2&gt;The software&lt;/h2&gt;
+&lt;p&gt;I'll be comparing the following software stacks.  This is not an exhaustive list of available software and I have decided to focus on what is either well supported, well known, or niche to this industry.&lt;/p&gt;
+&lt;h3&gt;Provisioning Software&lt;/h3&gt;
+&lt;p&gt;&lt;strong&gt;&lt;a href="https://cobbler.github.io/"&gt;Cobbler&lt;/a&gt;&lt;/strong&gt;&lt;/p&gt;
+&lt;p&gt;Cobbler is a provisioning software stack written in Python primarly geared towards
+Linux network installations.  Its a very light install and leverages template and kickstart scripts for initial system configuration.&lt;/p&gt;
+&lt;p&gt;&lt;strong&gt;&lt;a href="https://theforeman.org/"&gt;The Foreman&lt;/a&gt;&lt;/strong&gt;&lt;/p&gt;
+&lt;p&gt;Foreman is a complete lifecycle management tool for physical and virtual servers.
+More than just a provisioner, it can also handle security update management,
+configuraiton management, and monitoring. Even with its rich feature set I am leaving it
+out of the Cluster Managers list as it is not geared towards HPC Clusters.&lt;/p&gt;
+&lt;h3&gt;Cluster Managers&lt;/h3&gt;
+&lt;p&gt;&lt;strong&gt;&lt;a href="https://www.nvidia.com/en-us/ai-data-science/products/base-command-manager-essentials/"&gt;Base Command Manager&lt;/a&gt;&lt;/strong&gt;&lt;/p&gt;
+&lt;p&gt;Our story's main character.  Base Command Manager is a proprietary turn-key
+application for installaing, configuring and managing and HPC cluster with
+all the batteries included.&lt;/p&gt;
+&lt;p&gt;&lt;strong&gt;&lt;a href="https://warewulf.org/"&gt;Warewulf&lt;/a&gt;&lt;/strong&gt;&lt;/p&gt;
+&lt;p&gt;Warewulf is fast becoming one of the big players in the HPC Cluster management space.  It's the primary manager for the &lt;a href="https://openhpc.community/"&gt;OpenHPC Project&lt;/a&gt;, is open source with the option for enterprise support.&lt;/p&gt;
+&lt;p&gt;&lt;strong&gt;&lt;a href="https://grendel.readthedocs.io"&gt;Grendel&lt;/a&gt;&lt;/strong&gt;&lt;/p&gt;
+&lt;p&gt;Grendel is a cluster manager out of the University at Buffalo Center for Computational Research where it is used to manage their hpc resources.&lt;/p&gt;
+&lt;p&gt;&lt;strong&gt;&lt;a href="https://www.penguinsolutions.com/computing/products/software/scyld-clusterware/"&gt;Scyld Clusterware&lt;/a&gt;&lt;/strong&gt;&lt;/p&gt;
+&lt;p&gt;Scyld is a proprietary cluster management product from Penguin Solutions.  Development is based on the
+beo&lt;/p&gt;
+&lt;p&gt;&lt;strong&gt;&lt;a href="https://xcat-docs.readthedocs.io/en/stable/"&gt;xCAT&lt;/a&gt;&lt;/strong&gt;&lt;/p&gt;
+&lt;p&gt;I well known management stack, xCAT is unfortunately no longer in development by IBM, but there is an attempt by the Open Source
+Community to revive it.  However, I wanted to leave it in this list
+as it is very well known and feature rich, albeit difficult to install and manage.&lt;/p&gt;
+&lt;p&gt;Recently I did discover xCAT development has been continued by Lenovo under the name Confluent, albeit not
+out in the open.  It can be found at &lt;a href="https://hpc.lenovo.com"&gt;hpc.lenovo.com&lt;/a&gt;.  &lt;/p&gt;
+&lt;p&gt;&lt;strong&gt;&lt;a href="https://openhpc.community/"&gt;OpenHPC&lt;/a&gt;&lt;/strong&gt;&lt;/p&gt;
+&lt;p&gt;OpenHPC is a community effort to provide common HPC components which can be mixed and matched to build an cluster.  OpenHPC itself builds on top of Warewulf's
+provisioning and provides other tools and libraries such as Infiniband, Lustre, and other scientific applications.&lt;/p&gt;
+&lt;h2&gt;Features&lt;/h2&gt;
+&lt;ul&gt;
+&lt;li&gt;DHCP&lt;/li&gt;
+&lt;li&gt;TFTP&lt;/li&gt;
+&lt;li&gt;NTP&lt;/li&gt;
+&lt;li&gt;IPMI configuration (During provisioning)&lt;/li&gt;
+&lt;li&gt;Power control&lt;/li&gt;
+&lt;li&gt;DNS&lt;/li&gt;
+&lt;li&gt;Stateless provisioning&lt;/li&gt;
+&lt;li&gt;Statefull provisioning&lt;/li&gt;
+&lt;li&gt;Infiniband Driver&lt;/li&gt;
+&lt;li&gt;Nvidia Drivers&lt;/li&gt;
+&lt;li&gt;License&lt;/li&gt;
+&lt;li&gt;Windows Provisioning&lt;/li&gt;
+&lt;li&gt;User Management&lt;/li&gt;
+&lt;li&gt;Firewall NAT Configuration&lt;/li&gt;
+&lt;li&gt;Service Management (i.e. Systemd services)&lt;/li&gt;
+&lt;li&gt;Image Management&lt;/li&gt;
+&lt;li&gt;NFS Server&lt;/li&gt;
+&lt;li&gt;Kernel Management&lt;/li&gt;
+&lt;li&gt;Support Contract&lt;/li&gt;
+&lt;li&gt;Slurm Management&lt;/li&gt;
+&lt;/ul&gt;
+&lt;p&gt;For many of these features, we are looking at what is provided by the provisioning software itself, not from the OS or
+other related tools like Puppet, Chef, etc.  For example, The Foreman can tightly integrate with Puppet, but requires
+more setup on the admin side to handle some of the features above.&lt;/p&gt;
+&lt;h2&gt;Comparison&lt;/h2&gt;
+&lt;table&gt;
+&lt;thead&gt;
+&lt;tr&gt;
+&lt;th&gt;Feature&lt;/th&gt;
+&lt;th&gt;Cobbler&lt;/th&gt;
+&lt;th&gt;The Foreman&lt;/th&gt;
+&lt;th&gt;BCM&lt;/th&gt;
+&lt;th&gt;Warewulf&lt;/th&gt;
+&lt;th&gt;Grendel&lt;/th&gt;
+&lt;th&gt;Scyld&lt;/th&gt;
+&lt;th&gt;xCAT&lt;/th&gt;
+&lt;th&gt;OpenHPC&lt;/th&gt;
+&lt;/tr&gt;
+&lt;/thead&gt;
+&lt;tbody&gt;
+&lt;tr&gt;
+&lt;td&gt;DHCP&lt;/td&gt;
+&lt;td&gt;Yes&lt;/td&gt;
+&lt;td&gt;Yes&lt;/td&gt;
+&lt;td&gt;Yes&lt;/td&gt;
+&lt;td&gt;Yes&lt;/td&gt;
+&lt;td&gt;Yes&lt;/td&gt;
+&lt;td&gt;Yes&lt;/td&gt;
+&lt;td&gt;Yes&lt;/td&gt;
+&lt;td&gt;Yes&lt;/td&gt;
+&lt;/tr&gt;
+&lt;tr&gt;
+&lt;td&gt;TFTP&lt;/td&gt;
+&lt;td&gt;Yes&lt;/td&gt;
+&lt;td&gt;Yes&lt;/td&gt;
+&lt;td&gt;Yes&lt;/td&gt;
+&lt;td&gt;Yes&lt;/td&gt;
+&lt;td&gt;Yes&lt;/td&gt;
+&lt;td&gt;Yes&lt;/td&gt;
+&lt;td&gt;Yes&lt;/td&gt;
+&lt;td&gt;Yes&lt;/td&gt;
+&lt;/tr&gt;
+&lt;tr&gt;
+&lt;td&gt;NTP&lt;/td&gt;
+&lt;td&gt;No&lt;/td&gt;
+&lt;td&gt;No&lt;/td&gt;
+&lt;td&gt;Yes&lt;/td&gt;
+&lt;td&gt;No&lt;/td&gt;
+&lt;td&gt;Yes&lt;/td&gt;
+&lt;td&gt;Yes&lt;/td&gt;
+&lt;td&gt;Yes&lt;/td&gt;
+&lt;td&gt;No&lt;/td&gt;
+&lt;/tr&gt;
+&lt;tr&gt;
+&lt;td&gt;IMPI Configuration&lt;/td&gt;
+&lt;td&gt;No&lt;/td&gt;
+&lt;td&gt;No&lt;/td&gt;
+&lt;td&gt;Yes&lt;/td&gt;
+&lt;td&gt;No&lt;/td&gt;
+&lt;td&gt;No&lt;/td&gt;
+&lt;td&gt;No&lt;/td&gt;
+&lt;td&gt;No&lt;/td&gt;
+&lt;td&gt;No&lt;/td&gt;
+&lt;/tr&gt;
+&lt;tr&gt;
+&lt;td&gt;Power Management&lt;/td&gt;
+&lt;td&gt;Yes&lt;/td&gt;
+&lt;td&gt;Yes&lt;/td&gt;
+&lt;td&gt;Yes&lt;/td&gt;
+&lt;td&gt;Yes&lt;/td&gt;
+&lt;td&gt;Yes&lt;/td&gt;
+&lt;td&gt;Yes&lt;/td&gt;
+&lt;td&gt;Yes&lt;/td&gt;
+&lt;td&gt;Yes&lt;/td&gt;
+&lt;/tr&gt;
+&lt;tr&gt;
+&lt;td&gt;DNS&lt;/td&gt;
+&lt;td&gt;No&lt;/td&gt;
+&lt;td&gt;Yes&lt;/td&gt;
+&lt;td&gt;Yes&lt;/td&gt;
+&lt;td&gt;Yes&lt;/td&gt;
+&lt;td&gt;Yes&lt;/td&gt;
+&lt;td&gt;Yes&lt;/td&gt;
+&lt;td&gt;Yes&lt;/td&gt;
+&lt;td&gt;Yes&lt;/td&gt;
+&lt;/tr&gt;
+&lt;tr&gt;
+&lt;td&gt;Stateless provisioning&lt;/td&gt;
+&lt;td&gt;No&lt;/td&gt;
+&lt;td&gt;No&lt;/td&gt;
+&lt;td&gt;Yes&lt;/td&gt;
+&lt;td&gt;Yes&lt;/td&gt;
+&lt;td&gt;Yes&lt;/td&gt;
+&lt;td&gt;Yes&lt;/td&gt;
+&lt;td&gt;Yes&lt;/td&gt;
+&lt;td&gt;Yes&lt;/td&gt;
+&lt;/tr&gt;
+&lt;tr&gt;
+&lt;td&gt;Statefull provisioning&lt;/td&gt;
+&lt;td&gt;Yes&lt;/td&gt;
+&lt;td&gt;Yes&lt;/td&gt;
+&lt;td&gt;Yes&lt;/td&gt;
+&lt;td&gt;No&lt;/td&gt;
+&lt;td&gt;Yes&lt;/td&gt;
+&lt;td&gt;Yes&lt;/td&gt;
+&lt;td&gt;Yes&lt;/td&gt;
+&lt;td&gt;Yes&lt;/td&gt;
+&lt;/tr&gt;
+&lt;tr&gt;
+&lt;td&gt;Infiniband Drivers&lt;/td&gt;
+&lt;td&gt;No&lt;/td&gt;
+&lt;td&gt;No&lt;/td&gt;
+&lt;td&gt;Yes&lt;/td&gt;
+&lt;td&gt;No&lt;/td&gt;
+&lt;td&gt;No&lt;/td&gt;
+&lt;td&gt;Yes&lt;/td&gt;
+&lt;td&gt;Yes&lt;/td&gt;
+&lt;td&gt;Yes&lt;/td&gt;
+&lt;/tr&gt;
+&lt;tr&gt;
+&lt;td&gt;Nvidia Drivers&lt;/td&gt;
+&lt;td&gt;No&lt;/td&gt;
+&lt;td&gt;No&lt;/td&gt;
+&lt;td&gt;Yes&lt;/td&gt;
+&lt;td&gt;No&lt;/td&gt;
+&lt;td&gt;No&lt;/td&gt;
+&lt;td&gt;Yes&lt;/td&gt;
+&lt;td&gt;Yes&lt;/td&gt;
+&lt;td&gt;No&lt;/td&gt;
+&lt;/tr&gt;
+&lt;tr&gt;
+&lt;td&gt;License&lt;/td&gt;
+&lt;td&gt;FOSS&lt;/td&gt;
+&lt;td&gt;FOSS&lt;/td&gt;
+&lt;td&gt;Proprietary&lt;/td&gt;
+&lt;td&gt;FOSS&lt;/td&gt;
+&lt;td&gt;FOSS&lt;/td&gt;
+&lt;td&gt;Proprietary&lt;/td&gt;
+&lt;td&gt;FOSS&lt;/td&gt;
+&lt;td&gt;FOSS&lt;/td&gt;
+&lt;/tr&gt;
+&lt;tr&gt;
+&lt;td&gt;Windows Provisioning&lt;/td&gt;
+&lt;td&gt;Maybe&lt;/td&gt;
+&lt;td&gt;Yes&lt;/td&gt;
+&lt;td&gt;No&lt;/td&gt;
+&lt;td&gt;No&lt;/td&gt;
+&lt;td&gt;No&lt;/td&gt;
+&lt;td&gt;No&lt;/td&gt;
+&lt;td&gt;Yes&lt;/td&gt;
+&lt;td&gt;No&lt;/td&gt;
+&lt;/tr&gt;
+&lt;tr&gt;
+&lt;td&gt;User Management&lt;/td&gt;
+&lt;td&gt;No&lt;/td&gt;
+&lt;td&gt;No&lt;/td&gt;
+&lt;td&gt;Yes&lt;/td&gt;
+&lt;td&gt;No&lt;/td&gt;
+&lt;td&gt;No&lt;/td&gt;
+&lt;td&gt;No&lt;/td&gt;
+&lt;td&gt;No&lt;/td&gt;
+&lt;td&gt;No&lt;/td&gt;
+&lt;/tr&gt;
+&lt;tr&gt;
+&lt;td&gt;Firewall NAT Configuration&lt;/td&gt;
+&lt;td&gt;No&lt;/td&gt;
+&lt;td&gt;No&lt;/td&gt;
+&lt;td&gt;Yes&lt;/td&gt;
+&lt;td&gt;No&lt;/td&gt;
+&lt;td&gt;No&lt;/td&gt;
+&lt;td&gt;Yes&lt;/td&gt;
+&lt;td&gt;No&lt;/td&gt;
+&lt;td&gt;No&lt;/td&gt;
+&lt;/tr&gt;
+&lt;tr&gt;
+&lt;td&gt;Service Management&lt;/td&gt;
+&lt;td&gt;No&lt;/td&gt;
+&lt;td&gt;No&lt;/td&gt;
+&lt;td&gt;Yes&lt;/td&gt;
+&lt;td&gt;Yes&lt;/td&gt;
+&lt;td&gt;No&lt;/td&gt;
+&lt;td&gt;No&lt;/td&gt;
+&lt;td&gt;No&lt;/td&gt;
+&lt;td&gt;Yes&lt;/td&gt;
+&lt;/tr&gt;
+&lt;tr&gt;
+&lt;td&gt;Image Management&lt;/td&gt;
+&lt;td&gt;No&lt;/td&gt;
+&lt;td&gt;No&lt;/td&gt;
+&lt;td&gt;Yes&lt;/td&gt;
+&lt;td&gt;Yes&lt;/td&gt;
+&lt;td&gt;No&lt;/td&gt;
+&lt;td&gt;Yes&lt;/td&gt;
+&lt;td&gt;Yes&lt;/td&gt;
+&lt;td&gt;Yes&lt;/td&gt;
+&lt;/tr&gt;
+&lt;tr&gt;
+&lt;td&gt;NFS Server&lt;/td&gt;
+&lt;td&gt;No&lt;/td&gt;
+&lt;td&gt;No&lt;/td&gt;
+&lt;td&gt;Yes&lt;/td&gt;
+&lt;td&gt;Yes&lt;/td&gt;
+&lt;td&gt;No&lt;/td&gt;
+&lt;td&gt;No&lt;/td&gt;
+&lt;td&gt;No&lt;/td&gt;
+&lt;td&gt;Yes&lt;/td&gt;
+&lt;/tr&gt;
+&lt;tr&gt;
+&lt;td&gt;Kernel Management&lt;/td&gt;
+&lt;td&gt;No&lt;/td&gt;
+&lt;td&gt;No&lt;/td&gt;
+&lt;td&gt;Yes&lt;/td&gt;
+&lt;td&gt;Yes&lt;/td&gt;
+&lt;td&gt;No&lt;/td&gt;
+&lt;td&gt;Yes&lt;/td&gt;
+&lt;td&gt;Yes&lt;/td&gt;
+&lt;td&gt;Yes&lt;/td&gt;
+&lt;/tr&gt;
+&lt;tr&gt;
+&lt;td&gt;Support Contract&lt;/td&gt;
+&lt;td&gt;No&lt;/td&gt;
+&lt;td&gt;No&lt;/td&gt;
+&lt;td&gt;Yes&lt;/td&gt;
+&lt;td&gt;Yes&lt;/td&gt;
+&lt;td&gt;No&lt;/td&gt;
+&lt;td&gt;Yes&lt;/td&gt;
+&lt;td&gt;No&lt;/td&gt;
+&lt;td&gt;Yes&lt;/td&gt;
+&lt;/tr&gt;
+&lt;tr&gt;
+&lt;td&gt;Slurm Management&lt;/td&gt;
+&lt;td&gt;No&lt;/td&gt;
+&lt;td&gt;No&lt;/td&gt;
+&lt;td&gt;Yes&lt;/td&gt;
+&lt;td&gt;No&lt;/td&gt;
+&lt;td&gt;No&lt;/td&gt;
+&lt;td&gt;Yes&lt;/td&gt;
+&lt;td&gt;No&lt;/td&gt;
+&lt;td&gt;Yes&lt;/td&gt;
+&lt;/tr&gt;
+&lt;/tbody&gt;
+&lt;/table&gt;
+&lt;h2&gt;Final Thoughts&lt;/h2&gt;
+&lt;p&gt;Its likely I missed some things and I will continue to update the comparison as time goes on or as people possibly yell at me.&lt;/p&gt;
+&lt;p&gt;In the end, we have decided to plan migrations to OpenHPC as it covers the majority of what we need, has a robust community,
+provided timely security updates, and will likely reduce costs for our customers. &lt;/p&gt;</content><category term="HPC"></category><category term="hpc"></category><category term="linux"></category><category term="provisioning"></category></entry><entry><title>Some Systemd Root Mount Confusion</title><link href="https://blog.kail.io/some-systemd-root-mount-confusion.html" rel="alternate"></link><published>2023-09-14T00:00:00-04:00</published><updated>2023-09-14T00:00:00-04:00</updated><author><name>Andrew Kail</name></author><id>tag:blog.kail.io,2023-09-14:/some-systemd-root-mount-confusion.html</id><summary type="html">&lt;p&gt;I recently ran into an interesting issue with systemd on a Bright Cluster. &lt;/p&gt;
+&lt;p&gt;Bright Cluster Manager (BCM) has a tendency to restart the Slurm Daemons when
+certain changes are made, such as adding a new partition.  Recently when we did this,
+we found the daemon failed to restart on a …&lt;/p&gt;</summary><content type="html">&lt;p&gt;I recently ran into an interesting issue with systemd on a Bright Cluster. &lt;/p&gt;
+&lt;p&gt;Bright Cluster Manager (BCM) has a tendency to restart the Slurm Daemons when
+certain changes are made, such as adding a new partition.  Recently when we did this,
+we found the daemon failed to restart on a large chunk of the nodes stating:&lt;/p&gt;
+&lt;div class="highlight"&gt;&lt;pre&gt;&lt;span&gt;&lt;/span&gt;&lt;code&gt;&lt;span class="nv"&gt;Aug&lt;/span&gt;&lt;span class="w"&gt; &lt;/span&gt;&lt;span class="mi"&gt;29&lt;/span&gt;&lt;span class="w"&gt; &lt;/span&gt;&lt;span class="mi"&gt;14&lt;/span&gt;:&lt;span class="mi"&gt;11&lt;/span&gt;:&lt;span class="mi"&gt;15&lt;/span&gt;&lt;span class="w"&gt; &lt;/span&gt;&lt;span class="nv"&gt;node129&lt;/span&gt;&lt;span class="w"&gt; &lt;/span&gt;&lt;span class="nv"&gt;systemd&lt;/span&gt;[&lt;span class="mi"&gt;1&lt;/span&gt;]:&lt;span class="w"&gt; &lt;/span&gt;&lt;span class="nv"&gt;Dependency&lt;/span&gt;&lt;span class="w"&gt; &lt;/span&gt;&lt;span class="nv"&gt;failed&lt;/span&gt;&lt;span class="w"&gt; &lt;/span&gt;&lt;span class="k"&gt;for&lt;/span&gt;&lt;span class="w"&gt; &lt;/span&gt;&lt;span class="nv"&gt;Slurm&lt;/span&gt;&lt;span class="w"&gt; &lt;/span&gt;&lt;span class="nv"&gt;node&lt;/span&gt;&lt;span class="w"&gt; &lt;/span&gt;&lt;span class="nv"&gt;daemon&lt;/span&gt;.
+&lt;span class="nv"&gt;Aug&lt;/span&gt;&lt;span class="w"&gt; &lt;/span&gt;&lt;span class="mi"&gt;29&lt;/span&gt;&lt;span class="w"&gt; &lt;/span&gt;&lt;span class="mi"&gt;14&lt;/span&gt;:&lt;span class="mi"&gt;11&lt;/span&gt;:&lt;span class="mi"&gt;15&lt;/span&gt;&lt;span class="w"&gt; &lt;/span&gt;&lt;span class="nv"&gt;node129&lt;/span&gt;&lt;span class="w"&gt; &lt;/span&gt;&lt;span class="nv"&gt;systemd&lt;/span&gt;[&lt;span class="mi"&gt;1&lt;/span&gt;]:&lt;span class="w"&gt; &lt;/span&gt;&lt;span class="nv"&gt;Job&lt;/span&gt;&lt;span class="w"&gt; &lt;/span&gt;&lt;span class="nv"&gt;slurmd&lt;/span&gt;.&lt;span class="nv"&gt;service&lt;/span&gt;&lt;span class="o"&gt;/&lt;/span&gt;&lt;span class="nv"&gt;start&lt;/span&gt;&lt;span class="w"&gt; &lt;/span&gt;&lt;span class="nv"&gt;failed&lt;/span&gt;&lt;span class="w"&gt; &lt;/span&gt;&lt;span class="nv"&gt;with&lt;/span&gt;&lt;span class="w"&gt; &lt;/span&gt;&lt;span class="nb"&gt;result&lt;/span&gt;&lt;span class="w"&gt; &lt;/span&gt;&lt;span class="s1"&gt;&amp;#39;dependency&amp;#39;&lt;/span&gt;.
+&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;
+
+&lt;p&gt;A very confusing message as the system is up and running.  Fine.  Lets see which units have failed.&lt;/p&gt;
+&lt;div class="highlight"&gt;&lt;pre&gt;&lt;span&gt;&lt;/span&gt;&lt;code&gt;&lt;span class="p"&gt;[&lt;/span&gt;&lt;span class="n"&gt;root&lt;/span&gt;&lt;span class="err"&gt;@&lt;/span&gt;&lt;span class="n"&gt;node&lt;/span&gt;&lt;span class="w"&gt; &lt;/span&gt;&lt;span class="o"&gt;~&lt;/span&gt;&lt;span class="p"&gt;]&lt;/span&gt;&lt;span class="c1"&gt;# systemctl list-units --state failed&lt;/span&gt;
+&lt;span class="w"&gt;  &lt;/span&gt;&lt;span class="n"&gt;UNIT&lt;/span&gt;&lt;span class="w"&gt;    &lt;/span&gt;&lt;span class="n"&gt;LOAD&lt;/span&gt;&lt;span class="w"&gt;   &lt;/span&gt;&lt;span class="n"&gt;ACTIVE&lt;/span&gt;&lt;span class="w"&gt; &lt;/span&gt;&lt;span class="n"&gt;SUB&lt;/span&gt;&lt;span class="w"&gt;    &lt;/span&gt;&lt;span class="n"&gt;DESCRIPTION&lt;/span&gt;
+&lt;span class="err"&gt;●&lt;/span&gt;&lt;span class="w"&gt; &lt;/span&gt;&lt;span class="o"&gt;-.&lt;/span&gt;&lt;span class="n"&gt;mount&lt;/span&gt;&lt;span class="w"&gt; &lt;/span&gt;&lt;span class="n"&gt;loaded&lt;/span&gt;&lt;span class="w"&gt; &lt;/span&gt;&lt;span class="n"&gt;failed&lt;/span&gt;&lt;span class="w"&gt; &lt;/span&gt;&lt;span class="n"&gt;failed&lt;/span&gt;&lt;span class="w"&gt; &lt;/span&gt;&lt;span class="o"&gt;/&lt;/span&gt;
+&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;
+
+&lt;p&gt;Root failed to mount?&lt;/p&gt;
+&lt;p&gt;:suprised pikachu:&lt;/p&gt;
+&lt;p&gt;No amount of rebooting an&lt;/p&gt;
+&lt;p&gt;So, since this is a Brigth cluster, a &lt;code&gt;node-installer&lt;/code&gt; is initially booted to and the system process are then turned over to the installed image.  Grossly over simplifying the process but that is the gist of it.  &lt;/p&gt;
+&lt;div class="highlight"&gt;&lt;pre&gt;&lt;span&gt;&lt;/span&gt;&lt;code&gt;systemd-analays dot  | dot -Tsvg &amp;gt; plot.svg
+&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;
+
+&lt;p&gt;While neat, was not helpful as all I could see what maybe &lt;code&gt;-.mount&lt;/code&gt; depended on system.slic.  Which did start up just fine.&lt;/p&gt;
+&lt;p&gt;Interestingly enough, I did accidentally find "-.mount" entered a failed state after the node was up.&lt;/p&gt;
+&lt;div class="highlight"&gt;&lt;pre&gt;&lt;span&gt;&lt;/span&gt;&lt;code&gt;&lt;span class="o"&gt;[&lt;/span&gt;root@node&lt;span class="w"&gt; &lt;/span&gt;~&lt;span class="o"&gt;]&lt;/span&gt;&lt;span class="c1"&gt;# systemctl list-units --state failed&lt;/span&gt;
+&lt;span class="w"&gt;  &lt;/span&gt;UNIT&lt;span class="w"&gt;           &lt;/span&gt;LOAD&lt;span class="w"&gt;   &lt;/span&gt;ACTIVE&lt;span class="w"&gt; &lt;/span&gt;SUB&lt;span class="w"&gt;    &lt;/span&gt;DESCRIPTION
+●&lt;span class="w"&gt; &lt;/span&gt;slurmd.service&lt;span class="w"&gt; &lt;/span&gt;loaded&lt;span class="w"&gt; &lt;/span&gt;failed&lt;span class="w"&gt; &lt;/span&gt;failed&lt;span class="w"&gt; &lt;/span&gt;Slurm&lt;span class="w"&gt; &lt;/span&gt;node&lt;span class="w"&gt; &lt;/span&gt;daemon
+
+&lt;span class="nv"&gt;LOAD&lt;/span&gt;&lt;span class="w"&gt;   &lt;/span&gt;&lt;span class="o"&gt;=&lt;/span&gt;&lt;span class="w"&gt; &lt;/span&gt;Reflects&lt;span class="w"&gt; &lt;/span&gt;whether&lt;span class="w"&gt; &lt;/span&gt;the&lt;span class="w"&gt; &lt;/span&gt;unit&lt;span class="w"&gt; &lt;/span&gt;definition&lt;span class="w"&gt; &lt;/span&gt;was&lt;span class="w"&gt; &lt;/span&gt;properly&lt;span class="w"&gt; &lt;/span&gt;loaded.
+&lt;span class="nv"&gt;ACTIVE&lt;/span&gt;&lt;span class="w"&gt; &lt;/span&gt;&lt;span class="o"&gt;=&lt;/span&gt;&lt;span class="w"&gt; &lt;/span&gt;The&lt;span class="w"&gt; &lt;/span&gt;high-level&lt;span class="w"&gt; &lt;/span&gt;unit&lt;span class="w"&gt; &lt;/span&gt;activation&lt;span class="w"&gt; &lt;/span&gt;state,&lt;span class="w"&gt; &lt;/span&gt;i.e.&lt;span class="w"&gt; &lt;/span&gt;generalization&lt;span class="w"&gt; &lt;/span&gt;of&lt;span class="w"&gt; &lt;/span&gt;SUB.
+&lt;span class="nv"&gt;SUB&lt;/span&gt;&lt;span class="w"&gt;    &lt;/span&gt;&lt;span class="o"&gt;=&lt;/span&gt;&lt;span class="w"&gt; &lt;/span&gt;The&lt;span class="w"&gt; &lt;/span&gt;low-level&lt;span class="w"&gt; &lt;/span&gt;unit&lt;span class="w"&gt; &lt;/span&gt;activation&lt;span class="w"&gt; &lt;/span&gt;state,&lt;span class="w"&gt; &lt;/span&gt;values&lt;span class="w"&gt; &lt;/span&gt;depend&lt;span class="w"&gt; &lt;/span&gt;on&lt;span class="w"&gt; &lt;/span&gt;unit&lt;span class="w"&gt; &lt;/span&gt;type.
+
+&lt;span class="m"&gt;1&lt;/span&gt;&lt;span class="w"&gt; &lt;/span&gt;loaded&lt;span class="w"&gt; &lt;/span&gt;units&lt;span class="w"&gt; &lt;/span&gt;listed.&lt;span class="w"&gt; &lt;/span&gt;Pass&lt;span class="w"&gt; &lt;/span&gt;--all&lt;span class="w"&gt; &lt;/span&gt;to&lt;span class="w"&gt; &lt;/span&gt;see&lt;span class="w"&gt; &lt;/span&gt;loaded&lt;span class="w"&gt; &lt;/span&gt;but&lt;span class="w"&gt; &lt;/span&gt;inactive&lt;span class="w"&gt; &lt;/span&gt;units,&lt;span class="w"&gt; &lt;/span&gt;too.
+To&lt;span class="w"&gt; &lt;/span&gt;show&lt;span class="w"&gt; &lt;/span&gt;all&lt;span class="w"&gt; &lt;/span&gt;installed&lt;span class="w"&gt; &lt;/span&gt;unit&lt;span class="w"&gt; &lt;/span&gt;files&lt;span class="w"&gt; &lt;/span&gt;use&lt;span class="w"&gt; &lt;/span&gt;&lt;span class="s1"&gt;&amp;#39;systemctl list-unit-files&amp;#39;&lt;/span&gt;.
+&lt;span class="o"&gt;[&lt;/span&gt;root@node&lt;span class="w"&gt; &lt;/span&gt;~&lt;span class="o"&gt;]&lt;/span&gt;&lt;span class="c1"&gt;# systemctl list-units --state failed&lt;/span&gt;
+&lt;span class="w"&gt;  &lt;/span&gt;UNIT&lt;span class="w"&gt;           &lt;/span&gt;LOAD&lt;span class="w"&gt;   &lt;/span&gt;ACTIVE&lt;span class="w"&gt; &lt;/span&gt;SUB&lt;span class="w"&gt;    &lt;/span&gt;DESCRIPTION
+●&lt;span class="w"&gt; &lt;/span&gt;-.mount&lt;span class="w"&gt;        &lt;/span&gt;loaded&lt;span class="w"&gt; &lt;/span&gt;failed&lt;span class="w"&gt; &lt;/span&gt;failed&lt;span class="w"&gt; &lt;/span&gt;/
+●&lt;span class="w"&gt; &lt;/span&gt;slurmd.service&lt;span class="w"&gt; &lt;/span&gt;loaded&lt;span class="w"&gt; &lt;/span&gt;failed&lt;span class="w"&gt; &lt;/span&gt;failed&lt;span class="w"&gt; &lt;/span&gt;Slurm&lt;span class="w"&gt; &lt;/span&gt;node&lt;span class="w"&gt; &lt;/span&gt;daemon
+
+&lt;span class="nv"&gt;LOAD&lt;/span&gt;&lt;span class="w"&gt;   &lt;/span&gt;&lt;span class="o"&gt;=&lt;/span&gt;&lt;span class="w"&gt; &lt;/span&gt;Reflects&lt;span class="w"&gt; &lt;/span&gt;whether&lt;span class="w"&gt; &lt;/span&gt;the&lt;span class="w"&gt; &lt;/span&gt;unit&lt;span class="w"&gt; &lt;/span&gt;definition&lt;span class="w"&gt; &lt;/span&gt;was&lt;span class="w"&gt; &lt;/span&gt;properly&lt;span class="w"&gt; &lt;/span&gt;loaded.
+&lt;span class="nv"&gt;ACTIVE&lt;/span&gt;&lt;span class="w"&gt; &lt;/span&gt;&lt;span class="o"&gt;=&lt;/span&gt;&lt;span class="w"&gt; &lt;/span&gt;The&lt;span class="w"&gt; &lt;/span&gt;high-level&lt;span class="w"&gt; &lt;/span&gt;unit&lt;span class="w"&gt; &lt;/span&gt;activation&lt;span class="w"&gt; &lt;/span&gt;state,&lt;span class="w"&gt; &lt;/span&gt;i.e.&lt;span class="w"&gt; &lt;/span&gt;generalization&lt;span class="w"&gt; &lt;/span&gt;of&lt;span class="w"&gt; &lt;/span&gt;SUB.
+&lt;span class="nv"&gt;SUB&lt;/span&gt;&lt;span class="w"&gt;    &lt;/span&gt;&lt;span class="o"&gt;=&lt;/span&gt;&lt;span class="w"&gt; &lt;/span&gt;The&lt;span class="w"&gt; &lt;/span&gt;low-level&lt;span class="w"&gt; &lt;/span&gt;unit&lt;span class="w"&gt; &lt;/span&gt;activation&lt;span class="w"&gt; &lt;/span&gt;state,&lt;span class="w"&gt; &lt;/span&gt;values&lt;span class="w"&gt; &lt;/span&gt;depend&lt;span class="w"&gt; &lt;/span&gt;on&lt;span class="w"&gt; &lt;/span&gt;unit&lt;span class="w"&gt; &lt;/span&gt;type.
+
+&lt;span class="m"&gt;2&lt;/span&gt;&lt;span class="w"&gt; &lt;/span&gt;loaded&lt;span class="w"&gt; &lt;/span&gt;units&lt;span class="w"&gt; &lt;/span&gt;listed.&lt;span class="w"&gt; &lt;/span&gt;Pass&lt;span class="w"&gt; &lt;/span&gt;--all&lt;span class="w"&gt; &lt;/span&gt;to&lt;span class="w"&gt; &lt;/span&gt;see&lt;span class="w"&gt; &lt;/span&gt;loaded&lt;span class="w"&gt; &lt;/span&gt;but&lt;span class="w"&gt; &lt;/span&gt;inactive&lt;span class="w"&gt; &lt;/span&gt;units,&lt;span class="w"&gt; &lt;/span&gt;too.
+To&lt;span class="w"&gt; &lt;/span&gt;show&lt;span class="w"&gt; &lt;/span&gt;all&lt;span class="w"&gt; &lt;/span&gt;installed&lt;span class="w"&gt; &lt;/span&gt;unit&lt;span class="w"&gt; &lt;/span&gt;files&lt;span class="w"&gt; &lt;/span&gt;use&lt;span class="w"&gt; &lt;/span&gt;&lt;span class="s1"&gt;&amp;#39;systemctl list-unit-files&amp;#39;&lt;/span&gt;.
+&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;
+
+&lt;p&gt;Not sure if this meant anything, but its here.&lt;/p&gt;
+&lt;div class="highlight"&gt;&lt;pre&gt;&lt;span&gt;&lt;/span&gt;&lt;code&gt;&lt;span class="gp"&gt;[root@node129 ~]# &lt;/span&gt;systemctl&lt;span class="w"&gt; &lt;/span&gt;&lt;span class="p"&gt;|&lt;/span&gt;&lt;span class="w"&gt; &lt;/span&gt;grep&lt;span class="w"&gt; &lt;/span&gt;mount
+&lt;span class="go"&gt;  proc-sys-fs-binfmt_misc.automount       loaded active     waiting      Arbitrary Executable File Formats File System Automount Point&lt;/span&gt;
+&lt;span class="go"&gt;● -.mount                                 loaded failed     failed       /&lt;/span&gt;
+&lt;span class="go"&gt;  data.mount                              loaded active     mounted      /data&lt;/span&gt;
+&lt;span class="go"&gt;  data_lake.mount                         loaded active     mounted      /data_lake&lt;/span&gt;
+&lt;span class="go"&gt;  local.mount                             loaded active     mounted      /local&lt;/span&gt;
+&lt;span class="go"&gt;  tmp.mount                               loaded active     mounted      /tmp&lt;/span&gt;
+&lt;span class="go"&gt;  var-lib-nfs-rpc_pipefs.mount            loaded active     mounted      RPC Pipe File System&lt;/span&gt;
+&lt;span class="go"&gt;  var.mount                               loaded active     mounted      /var&lt;/span&gt;
+&lt;span class="go"&gt;  systemd-remount-fs.service              loaded active     exited       Remount Root and Kernel File Systems&lt;/span&gt;
+&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;
+
+&lt;p&gt;The most frustrating thing is I can't get any information on this mount.  Any other mount service I can query, but I only get invalid option errors.&lt;/p&gt;
+&lt;div class="highlight"&gt;&lt;pre&gt;&lt;span&gt;&lt;/span&gt;&lt;code&gt;&lt;span class="o"&gt;[&lt;/span&gt;root@node129&lt;span class="w"&gt; &lt;/span&gt;~&lt;span class="o"&gt;]&lt;/span&gt;&lt;span class="c1"&gt;# systemctl status -.mount&lt;/span&gt;
+systemctl:&lt;span class="w"&gt; &lt;/span&gt;invalid&lt;span class="w"&gt; &lt;/span&gt;option&lt;span class="w"&gt; &lt;/span&gt;--&lt;span class="w"&gt; &lt;/span&gt;&lt;span class="s1"&gt;&amp;#39;.&amp;#39;&lt;/span&gt;
+&lt;span class="o"&gt;[&lt;/span&gt;root@node129&lt;span class="w"&gt; &lt;/span&gt;~&lt;span class="o"&gt;]&lt;/span&gt;&lt;span class="c1"&gt;# systemctl status &amp;quot;-.mount&amp;quot;&lt;/span&gt;
+systemctl:&lt;span class="w"&gt; &lt;/span&gt;invalid&lt;span class="w"&gt; &lt;/span&gt;option&lt;span class="w"&gt; &lt;/span&gt;--&lt;span class="w"&gt; &lt;/span&gt;&lt;span class="s1"&gt;&amp;#39;.&amp;#39;&lt;/span&gt;
+&lt;span class="o"&gt;[&lt;/span&gt;root@node129&lt;span class="w"&gt; &lt;/span&gt;~&lt;span class="o"&gt;]&lt;/span&gt;&lt;span class="c1"&gt;# systemctl status &amp;#39;-.mount&amp;#39;&lt;/span&gt;
+systemctl:&lt;span class="w"&gt; &lt;/span&gt;invalid&lt;span class="w"&gt; &lt;/span&gt;option&lt;span class="w"&gt; &lt;/span&gt;--&lt;span class="w"&gt; &lt;/span&gt;&lt;span class="s1"&gt;&amp;#39;.&amp;#39;&lt;/span&gt;
+&lt;span class="o"&gt;[&lt;/span&gt;root@node129&lt;span class="w"&gt; &lt;/span&gt;~&lt;span class="o"&gt;]&lt;/span&gt;&lt;span class="c1"&gt;# systemctl status &amp;#39;-\.mount&amp;#39;&lt;/span&gt;
+systemctl:&lt;span class="w"&gt; &lt;/span&gt;invalid&lt;span class="w"&gt; &lt;/span&gt;option&lt;span class="w"&gt; &lt;/span&gt;--&lt;span class="w"&gt; &lt;/span&gt;&lt;span class="s1"&gt;&amp;#39;\&amp;#39;&lt;/span&gt;
+&lt;span class="o"&gt;[&lt;/span&gt;root@node129&lt;span class="w"&gt; &lt;/span&gt;~&lt;span class="o"&gt;]&lt;/span&gt;&lt;span class="c1"&gt;# systemctl status &amp;quot;-\.mount&amp;quot;&lt;/span&gt;
+systemctl:&lt;span class="w"&gt; &lt;/span&gt;invalid&lt;span class="w"&gt; &lt;/span&gt;option&lt;span class="w"&gt; &lt;/span&gt;--&lt;span class="w"&gt; &lt;/span&gt;&lt;span class="s1"&gt;&amp;#39;\&amp;#39;&lt;/span&gt;
+&lt;span class="o"&gt;[&lt;/span&gt;root@node129&lt;span class="w"&gt; &lt;/span&gt;~&lt;span class="o"&gt;]&lt;/span&gt;&lt;span class="c1"&gt;# systemctl status &amp;quot;-\\.mount&amp;quot;&lt;/span&gt;
+systemctl:&lt;span class="w"&gt; &lt;/span&gt;invalid&lt;span class="w"&gt; &lt;/span&gt;option&lt;span class="w"&gt; &lt;/span&gt;--&lt;span class="w"&gt; &lt;/span&gt;&lt;span class="s1"&gt;&amp;#39;\&amp;#39;&lt;/span&gt;
+&lt;span class="o"&gt;[&lt;/span&gt;root@node129&lt;span class="w"&gt; &lt;/span&gt;~&lt;span class="o"&gt;]&lt;/span&gt;&lt;span class="c1"&gt;# systemctl status &amp;quot;-/\.mount&amp;quot;&lt;/span&gt;
+systemctl:&lt;span class="w"&gt; &lt;/span&gt;invalid&lt;span class="w"&gt; &lt;/span&gt;option&lt;span class="w"&gt; &lt;/span&gt;--&lt;span class="w"&gt; &lt;/span&gt;&lt;span class="s1"&gt;&amp;#39;/&amp;#39;&lt;/span&gt;
+&lt;span class="o"&gt;[&lt;/span&gt;root@node129&lt;span class="w"&gt; &lt;/span&gt;~&lt;span class="o"&gt;]&lt;/span&gt;&lt;span class="c1"&gt;# systemctl status &amp;quot;\-.mount&amp;quot;&lt;/span&gt;
+Unit&lt;span class="w"&gt; &lt;/span&gt;&lt;span class="se"&gt;\-&lt;/span&gt;.mount&lt;span class="w"&gt; &lt;/span&gt;could&lt;span class="w"&gt; &lt;/span&gt;not&lt;span class="w"&gt; &lt;/span&gt;be&lt;span class="w"&gt; &lt;/span&gt;found.
+&lt;span class="o"&gt;[&lt;/span&gt;root@node129&lt;span class="w"&gt; &lt;/span&gt;~&lt;span class="o"&gt;]&lt;/span&gt;&lt;span class="c1"&gt;# systemctl status &amp;quot;-.mount&amp;quot;&lt;/span&gt;
+systemctl:&lt;span class="w"&gt; &lt;/span&gt;invalid&lt;span class="w"&gt; &lt;/span&gt;option&lt;span class="w"&gt; &lt;/span&gt;--&lt;span class="w"&gt; &lt;/span&gt;&lt;span class="s1"&gt;&amp;#39;.&amp;#39;&lt;/span&gt;
+&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;
+
+&lt;p&gt;While I can see the full dependency tree, it tells me nothing that is blocking "-.mount"&lt;/p&gt;
+&lt;div class="highlight"&gt;&lt;pre&gt;&lt;span&gt;&lt;/span&gt;&lt;code&gt;● │ │ ├─local-fs.target
+● │ │ │ ├─-.mount
+● │ │ │ ├─local.mount
+&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;
+
+&lt;p&gt;Just looking at its parent, I only see one dependency&lt;/p&gt;
+&lt;div class="highlight"&gt;&lt;pre&gt;&lt;span&gt;&lt;/span&gt;&lt;code&gt;&lt;span class="p"&gt;[&lt;/span&gt;&lt;span class="n"&gt;root&lt;/span&gt;&lt;span class="err"&gt;@&lt;/span&gt;&lt;span class="n"&gt;node129&lt;/span&gt;&lt;span class="w"&gt; &lt;/span&gt;&lt;span class="o"&gt;~&lt;/span&gt;&lt;span class="p"&gt;]&lt;/span&gt;&lt;span class="c1"&gt;# systemctl list-dependencies local-fs.target&lt;/span&gt;
+&lt;span class="n"&gt;local&lt;/span&gt;&lt;span class="o"&gt;-&lt;/span&gt;&lt;span class="n"&gt;fs&lt;/span&gt;&lt;span class="o"&gt;.&lt;/span&gt;&lt;span class="n"&gt;target&lt;/span&gt;
+&lt;span class="err"&gt;●&lt;/span&gt;&lt;span class="w"&gt; &lt;/span&gt;&lt;span class="err"&gt;├─&lt;/span&gt;&lt;span class="o"&gt;-.&lt;/span&gt;&lt;span class="n"&gt;mount&lt;/span&gt;
+&lt;span class="err"&gt;●&lt;/span&gt;&lt;span class="w"&gt; &lt;/span&gt;&lt;span class="err"&gt;├─&lt;/span&gt;&lt;span class="n"&gt;local&lt;/span&gt;&lt;span class="o"&gt;.&lt;/span&gt;&lt;span class="n"&gt;mount&lt;/span&gt;
+&lt;span class="err"&gt;●&lt;/span&gt;&lt;span class="w"&gt; &lt;/span&gt;&lt;span class="err"&gt;├─&lt;/span&gt;&lt;span class="n"&gt;rhel&lt;/span&gt;&lt;span class="o"&gt;-&lt;/span&gt;&lt;span class="n"&gt;readonly&lt;/span&gt;&lt;span class="o"&gt;.&lt;/span&gt;&lt;span class="n"&gt;service&lt;/span&gt;
+&lt;span class="err"&gt;●&lt;/span&gt;&lt;span class="w"&gt; &lt;/span&gt;&lt;span class="err"&gt;├─&lt;/span&gt;&lt;span class="n"&gt;systemd&lt;/span&gt;&lt;span class="o"&gt;-&lt;/span&gt;&lt;span class="n"&gt;fsck&lt;/span&gt;&lt;span class="o"&gt;-&lt;/span&gt;&lt;span class="n"&gt;root&lt;/span&gt;&lt;span class="o"&gt;.&lt;/span&gt;&lt;span class="n"&gt;service&lt;/span&gt;
+&lt;span class="err"&gt;●&lt;/span&gt;&lt;span class="w"&gt; &lt;/span&gt;&lt;span class="err"&gt;├─&lt;/span&gt;&lt;span class="n"&gt;systemd&lt;/span&gt;&lt;span class="o"&gt;-&lt;/span&gt;&lt;span class="n"&gt;remount&lt;/span&gt;&lt;span class="o"&gt;-&lt;/span&gt;&lt;span class="n"&gt;fs&lt;/span&gt;&lt;span class="o"&gt;.&lt;/span&gt;&lt;span class="n"&gt;service&lt;/span&gt;
+&lt;span class="err"&gt;●&lt;/span&gt;&lt;span class="w"&gt; &lt;/span&gt;&lt;span class="err"&gt;├─&lt;/span&gt;&lt;span class="n"&gt;tmp&lt;/span&gt;&lt;span class="o"&gt;.&lt;/span&gt;&lt;span class="n"&gt;mount&lt;/span&gt;
+&lt;span class="err"&gt;●&lt;/span&gt;&lt;span class="w"&gt; &lt;/span&gt;&lt;span class="err"&gt;└─&lt;/span&gt;&lt;span class="k"&gt;var&lt;/span&gt;&lt;span class="o"&gt;.&lt;/span&gt;&lt;span class="n"&gt;mount&lt;/span&gt;
+&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;
+
+&lt;p&gt;So time to look elsewhere...&lt;/p&gt;
+&lt;p&gt;One of the more confusing items is mount and lsblk disagreeing.  The mount command shows &lt;code&gt;/&lt;/code&gt; mounted, but lsblk does not.&lt;/p&gt;
+&lt;div class="highlight"&gt;&lt;pre&gt;&lt;span&gt;&lt;/span&gt;&lt;code&gt;&lt;span class="o"&gt;[&lt;/span&gt;&lt;span class="n"&gt;root@node129 ~&lt;/span&gt;&lt;span class="o"&gt;]&lt;/span&gt;&lt;span class="err"&gt;#&lt;/span&gt;&lt;span class="w"&gt; &lt;/span&gt;&lt;span class="n"&gt;lsblk&lt;/span&gt;
+&lt;span class="n"&gt;NAME&lt;/span&gt;&lt;span class="w"&gt;        &lt;/span&gt;&lt;span class="nl"&gt;MAJ&lt;/span&gt;&lt;span class="p"&gt;:&lt;/span&gt;&lt;span class="nf"&gt;MIN&lt;/span&gt;&lt;span class="w"&gt; &lt;/span&gt;&lt;span class="n"&gt;RM&lt;/span&gt;&lt;span class="w"&gt;  &lt;/span&gt;&lt;span class="k"&gt;SIZE&lt;/span&gt;&lt;span class="w"&gt; &lt;/span&gt;&lt;span class="n"&gt;RO&lt;/span&gt;&lt;span class="w"&gt; &lt;/span&gt;&lt;span class="n"&gt;TYPE&lt;/span&gt;&lt;span class="w"&gt; &lt;/span&gt;&lt;span class="n"&gt;MOUNTPOINT&lt;/span&gt;
+&lt;span class="n"&gt;nvme0n1&lt;/span&gt;&lt;span class="w"&gt;     &lt;/span&gt;&lt;span class="mi"&gt;259&lt;/span&gt;&lt;span class="err"&gt;:&lt;/span&gt;&lt;span class="mi"&gt;1&lt;/span&gt;&lt;span class="w"&gt;    &lt;/span&gt;&lt;span class="mi"&gt;0&lt;/span&gt;&lt;span class="w"&gt;  &lt;/span&gt;&lt;span class="mf"&gt;1.8&lt;/span&gt;&lt;span class="n"&gt;T&lt;/span&gt;&lt;span class="w"&gt;  &lt;/span&gt;&lt;span class="mi"&gt;0&lt;/span&gt;&lt;span class="w"&gt; &lt;/span&gt;&lt;span class="k"&gt;disk&lt;/span&gt;
+&lt;span class="err"&gt;├─&lt;/span&gt;&lt;span class="n"&gt;nvme0n1p1&lt;/span&gt;&lt;span class="w"&gt; &lt;/span&gt;&lt;span class="mi"&gt;259&lt;/span&gt;&lt;span class="err"&gt;:&lt;/span&gt;&lt;span class="mi"&gt;4&lt;/span&gt;&lt;span class="w"&gt;    &lt;/span&gt;&lt;span class="mi"&gt;0&lt;/span&gt;&lt;span class="w"&gt;   &lt;/span&gt;&lt;span class="mi"&gt;40&lt;/span&gt;&lt;span class="n"&gt;G&lt;/span&gt;&lt;span class="w"&gt;  &lt;/span&gt;&lt;span class="mi"&gt;0&lt;/span&gt;&lt;span class="w"&gt; &lt;/span&gt;&lt;span class="n"&gt;part&lt;/span&gt;
+&lt;span class="err"&gt;├─&lt;/span&gt;&lt;span class="n"&gt;nvme0n1p2&lt;/span&gt;&lt;span class="w"&gt; &lt;/span&gt;&lt;span class="mi"&gt;259&lt;/span&gt;&lt;span class="err"&gt;:&lt;/span&gt;&lt;span class="mi"&gt;5&lt;/span&gt;&lt;span class="w"&gt;    &lt;/span&gt;&lt;span class="mi"&gt;0&lt;/span&gt;&lt;span class="w"&gt;   &lt;/span&gt;&lt;span class="mi"&gt;20&lt;/span&gt;&lt;span class="n"&gt;G&lt;/span&gt;&lt;span class="w"&gt;  &lt;/span&gt;&lt;span class="mi"&gt;0&lt;/span&gt;&lt;span class="w"&gt; &lt;/span&gt;&lt;span class="n"&gt;part&lt;/span&gt;&lt;span class="w"&gt; &lt;/span&gt;&lt;span class="o"&gt;/&lt;/span&gt;&lt;span class="nf"&gt;var&lt;/span&gt;
+&lt;span class="err"&gt;├─&lt;/span&gt;&lt;span class="n"&gt;nvme0n1p3&lt;/span&gt;&lt;span class="w"&gt; &lt;/span&gt;&lt;span class="mi"&gt;259&lt;/span&gt;&lt;span class="err"&gt;:&lt;/span&gt;&lt;span class="mi"&gt;6&lt;/span&gt;&lt;span class="w"&gt;    &lt;/span&gt;&lt;span class="mi"&gt;0&lt;/span&gt;&lt;span class="w"&gt;   &lt;/span&gt;&lt;span class="mi"&gt;20&lt;/span&gt;&lt;span class="n"&gt;G&lt;/span&gt;&lt;span class="w"&gt;  &lt;/span&gt;&lt;span class="mi"&gt;0&lt;/span&gt;&lt;span class="w"&gt; &lt;/span&gt;&lt;span class="n"&gt;part&lt;/span&gt;&lt;span class="w"&gt; &lt;/span&gt;&lt;span class="o"&gt;/&lt;/span&gt;&lt;span class="n"&gt;tmp&lt;/span&gt;
+&lt;span class="err"&gt;├─&lt;/span&gt;&lt;span class="n"&gt;nvme0n1p4&lt;/span&gt;&lt;span class="w"&gt; &lt;/span&gt;&lt;span class="mi"&gt;259&lt;/span&gt;&lt;span class="err"&gt;:&lt;/span&gt;&lt;span class="mi"&gt;7&lt;/span&gt;&lt;span class="w"&gt;    &lt;/span&gt;&lt;span class="mi"&gt;0&lt;/span&gt;&lt;span class="w"&gt;   &lt;/span&gt;&lt;span class="mi"&gt;12&lt;/span&gt;&lt;span class="n"&gt;G&lt;/span&gt;&lt;span class="w"&gt;  &lt;/span&gt;&lt;span class="mi"&gt;0&lt;/span&gt;&lt;span class="w"&gt; &lt;/span&gt;&lt;span class="n"&gt;part&lt;/span&gt;&lt;span class="w"&gt; &lt;/span&gt;&lt;span class="o"&gt;[&lt;/span&gt;&lt;span class="n"&gt;SWAP&lt;/span&gt;&lt;span class="o"&gt;]&lt;/span&gt;
+&lt;span class="err"&gt;└─&lt;/span&gt;&lt;span class="n"&gt;nvme0n1p5&lt;/span&gt;&lt;span class="w"&gt; &lt;/span&gt;&lt;span class="mi"&gt;259&lt;/span&gt;&lt;span class="err"&gt;:&lt;/span&gt;&lt;span class="mi"&gt;8&lt;/span&gt;&lt;span class="w"&gt;    &lt;/span&gt;&lt;span class="mi"&gt;0&lt;/span&gt;&lt;span class="w"&gt;  &lt;/span&gt;&lt;span class="mf"&gt;1.7&lt;/span&gt;&lt;span class="n"&gt;T&lt;/span&gt;&lt;span class="w"&gt;  &lt;/span&gt;&lt;span class="mi"&gt;0&lt;/span&gt;&lt;span class="w"&gt; &lt;/span&gt;&lt;span class="n"&gt;part&lt;/span&gt;&lt;span class="w"&gt; &lt;/span&gt;&lt;span class="o"&gt;/&lt;/span&gt;&lt;span class="k"&gt;local&lt;/span&gt;
+&lt;span class="o"&gt;[&lt;/span&gt;&lt;span class="n"&gt;root@node129 ~&lt;/span&gt;&lt;span class="o"&gt;]&lt;/span&gt;&lt;span class="err"&gt;#&lt;/span&gt;&lt;span class="w"&gt; &lt;/span&gt;&lt;span class="n"&gt;df&lt;/span&gt;&lt;span class="w"&gt; &lt;/span&gt;&lt;span class="o"&gt;-&lt;/span&gt;&lt;span class="n"&gt;h&lt;/span&gt;
+&lt;span class="n"&gt;Filesystem&lt;/span&gt;&lt;span class="w"&gt;                                                      &lt;/span&gt;&lt;span class="k"&gt;Size&lt;/span&gt;&lt;span class="w"&gt;  &lt;/span&gt;&lt;span class="n"&gt;Used&lt;/span&gt;&lt;span class="w"&gt; &lt;/span&gt;&lt;span class="n"&gt;Avail&lt;/span&gt;&lt;span class="w"&gt; &lt;/span&gt;&lt;span class="k"&gt;Use&lt;/span&gt;&lt;span class="o"&gt;%&lt;/span&gt;&lt;span class="w"&gt; &lt;/span&gt;&lt;span class="n"&gt;Mounted&lt;/span&gt;&lt;span class="w"&gt; &lt;/span&gt;&lt;span class="k"&gt;on&lt;/span&gt;
+&lt;span class="n"&gt;devtmpfs&lt;/span&gt;&lt;span class="w"&gt;                                                        &lt;/span&gt;&lt;span class="mi"&gt;504&lt;/span&gt;&lt;span class="n"&gt;G&lt;/span&gt;&lt;span class="w"&gt;     &lt;/span&gt;&lt;span class="mi"&gt;0&lt;/span&gt;&lt;span class="w"&gt;  &lt;/span&gt;&lt;span class="mi"&gt;504&lt;/span&gt;&lt;span class="n"&gt;G&lt;/span&gt;&lt;span class="w"&gt;   &lt;/span&gt;&lt;span class="mi"&gt;0&lt;/span&gt;&lt;span class="o"&gt;%&lt;/span&gt;&lt;span class="w"&gt; &lt;/span&gt;&lt;span class="o"&gt;/&lt;/span&gt;&lt;span class="n"&gt;dev&lt;/span&gt;
+&lt;span class="n"&gt;tmpfs&lt;/span&gt;&lt;span class="w"&gt;                                                           &lt;/span&gt;&lt;span class="mi"&gt;504&lt;/span&gt;&lt;span class="n"&gt;G&lt;/span&gt;&lt;span class="w"&gt;  &lt;/span&gt;&lt;span class="mf"&gt;3.2&lt;/span&gt;&lt;span class="n"&gt;M&lt;/span&gt;&lt;span class="w"&gt;  &lt;/span&gt;&lt;span class="mi"&gt;504&lt;/span&gt;&lt;span class="n"&gt;G&lt;/span&gt;&lt;span class="w"&gt;   &lt;/span&gt;&lt;span class="mi"&gt;1&lt;/span&gt;&lt;span class="o"&gt;%&lt;/span&gt;&lt;span class="w"&gt; &lt;/span&gt;&lt;span class="o"&gt;/&lt;/span&gt;&lt;span class="n"&gt;run&lt;/span&gt;
+&lt;span class="o"&gt;/&lt;/span&gt;&lt;span class="n"&gt;dev&lt;/span&gt;&lt;span class="o"&gt;/&lt;/span&gt;&lt;span class="n"&gt;nvme0n1p1&lt;/span&gt;&lt;span class="w"&gt;                                                   &lt;/span&gt;&lt;span class="mi"&gt;40&lt;/span&gt;&lt;span class="n"&gt;G&lt;/span&gt;&lt;span class="w"&gt;   &lt;/span&gt;&lt;span class="mi"&gt;19&lt;/span&gt;&lt;span class="n"&gt;G&lt;/span&gt;&lt;span class="w"&gt;   &lt;/span&gt;&lt;span class="mi"&gt;22&lt;/span&gt;&lt;span class="n"&gt;G&lt;/span&gt;&lt;span class="w"&gt;  &lt;/span&gt;&lt;span class="mi"&gt;46&lt;/span&gt;&lt;span class="o"&gt;%&lt;/span&gt;&lt;span class="w"&gt; &lt;/span&gt;&lt;span class="o"&gt;/&lt;/span&gt;
+&lt;span class="n"&gt;tmpfs&lt;/span&gt;&lt;span class="w"&gt;                                                           &lt;/span&gt;&lt;span class="mi"&gt;504&lt;/span&gt;&lt;span class="n"&gt;G&lt;/span&gt;&lt;span class="w"&gt;     &lt;/span&gt;&lt;span class="mi"&gt;0&lt;/span&gt;&lt;span class="w"&gt;  &lt;/span&gt;&lt;span class="mi"&gt;504&lt;/span&gt;&lt;span class="n"&gt;G&lt;/span&gt;&lt;span class="w"&gt;   &lt;/span&gt;&lt;span class="mi"&gt;0&lt;/span&gt;&lt;span class="o"&gt;%&lt;/span&gt;&lt;span class="w"&gt; &lt;/span&gt;&lt;span class="o"&gt;/&lt;/span&gt;&lt;span class="n"&gt;dev&lt;/span&gt;&lt;span class="o"&gt;/&lt;/span&gt;&lt;span class="n"&gt;shm&lt;/span&gt;
+&lt;span class="n"&gt;tmpfs&lt;/span&gt;&lt;span class="w"&gt;                                                           &lt;/span&gt;&lt;span class="mi"&gt;504&lt;/span&gt;&lt;span class="n"&gt;G&lt;/span&gt;&lt;span class="w"&gt;     &lt;/span&gt;&lt;span class="mi"&gt;0&lt;/span&gt;&lt;span class="w"&gt;  &lt;/span&gt;&lt;span class="mi"&gt;504&lt;/span&gt;&lt;span class="n"&gt;G&lt;/span&gt;&lt;span class="w"&gt;   &lt;/span&gt;&lt;span class="mi"&gt;0&lt;/span&gt;&lt;span class="o"&gt;%&lt;/span&gt;&lt;span class="w"&gt; &lt;/span&gt;&lt;span class="o"&gt;/&lt;/span&gt;&lt;span class="n"&gt;sys&lt;/span&gt;&lt;span class="o"&gt;/&lt;/span&gt;&lt;span class="n"&gt;fs&lt;/span&gt;&lt;span class="o"&gt;/&lt;/span&gt;&lt;span class="n"&gt;cgroup&lt;/span&gt;
+&lt;span class="o"&gt;/&lt;/span&gt;&lt;span class="n"&gt;dev&lt;/span&gt;&lt;span class="o"&gt;/&lt;/span&gt;&lt;span class="n"&gt;nvme0n1p3&lt;/span&gt;&lt;span class="w"&gt;                                                   &lt;/span&gt;&lt;span class="mi"&gt;20&lt;/span&gt;&lt;span class="n"&gt;G&lt;/span&gt;&lt;span class="w"&gt;   &lt;/span&gt;&lt;span class="mi"&gt;33&lt;/span&gt;&lt;span class="n"&gt;M&lt;/span&gt;&lt;span class="w"&gt;   &lt;/span&gt;&lt;span class="mi"&gt;20&lt;/span&gt;&lt;span class="n"&gt;G&lt;/span&gt;&lt;span class="w"&gt;   &lt;/span&gt;&lt;span class="mi"&gt;1&lt;/span&gt;&lt;span class="o"&gt;%&lt;/span&gt;&lt;span class="w"&gt; &lt;/span&gt;&lt;span class="o"&gt;/&lt;/span&gt;&lt;span class="n"&gt;tmp&lt;/span&gt;
+&lt;span class="o"&gt;/&lt;/span&gt;&lt;span class="n"&gt;dev&lt;/span&gt;&lt;span class="o"&gt;/&lt;/span&gt;&lt;span class="n"&gt;nvme0n1p2&lt;/span&gt;&lt;span class="w"&gt;                                                   &lt;/span&gt;&lt;span class="mi"&gt;20&lt;/span&gt;&lt;span class="n"&gt;G&lt;/span&gt;&lt;span class="w"&gt;  &lt;/span&gt;&lt;span class="mf"&gt;4.6&lt;/span&gt;&lt;span class="n"&gt;G&lt;/span&gt;&lt;span class="w"&gt;   &lt;/span&gt;&lt;span class="mi"&gt;16&lt;/span&gt;&lt;span class="n"&gt;G&lt;/span&gt;&lt;span class="w"&gt;  &lt;/span&gt;&lt;span class="mi"&gt;23&lt;/span&gt;&lt;span class="o"&gt;%&lt;/span&gt;&lt;span class="w"&gt; &lt;/span&gt;&lt;span class="o"&gt;/&lt;/span&gt;&lt;span class="nf"&gt;var&lt;/span&gt;
+&lt;span class="o"&gt;/&lt;/span&gt;&lt;span class="n"&gt;dev&lt;/span&gt;&lt;span class="o"&gt;/&lt;/span&gt;&lt;span class="n"&gt;nvme0n1p5&lt;/span&gt;&lt;span class="w"&gt;                                                  &lt;/span&gt;&lt;span class="mf"&gt;1.7&lt;/span&gt;&lt;span class="n"&gt;T&lt;/span&gt;&lt;span class="w"&gt;   &lt;/span&gt;&lt;span class="mi"&gt;33&lt;/span&gt;&lt;span class="n"&gt;M&lt;/span&gt;&lt;span class="w"&gt;  &lt;/span&gt;&lt;span class="mf"&gt;1.7&lt;/span&gt;&lt;span class="n"&gt;T&lt;/span&gt;&lt;span class="w"&gt;   &lt;/span&gt;&lt;span class="mi"&gt;1&lt;/span&gt;&lt;span class="o"&gt;%&lt;/span&gt;&lt;span class="w"&gt; &lt;/span&gt;&lt;span class="o"&gt;/&lt;/span&gt;&lt;span class="k"&gt;local&lt;/span&gt;
+&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;
+
+&lt;p&gt;Next I tried doing an update, which did include some updates to the kernel and systemd but alas the issue persisted.&lt;/p&gt;
+&lt;p&gt;After pulling my hair out for a few days my only option was to take a known good image from another node class
+and rebuild our image.  In the end, this worked but has still left puzzled as to what actually happened here.&lt;/p&gt;
+&lt;p&gt;If anyone has experienced this before on BCM or other cluster management software please reach out and let me
+know what you found or possibly did to resolve it.&lt;/p&gt;</content><category term="Linux"></category><category term="linux"></category><category term="systemd"></category><category term="bright"></category></entry><entry><title>Simple Nvidia PyTorch Container</title><link href="https://blog.kail.io/simple-nvidia-pytorch-container.html" rel="alternate"></link><published>2023-09-06T00:00:00-04:00</published><updated>2023-09-06T00:00:00-04:00</updated><author><name>Andrew Kail</name></author><id>tag:blog.kail.io,2023-09-06:/simple-nvidia-pytorch-container.html</id><summary type="html">&lt;p&gt;Another quick Apptainer example for getting pytorch quickly up and
+running.&lt;/p&gt;
+&lt;p&gt;&lt;strong&gt;The Definition File&lt;/strong&gt;&lt;/p&gt;
+&lt;div class="highlight"&gt;&lt;pre&gt;&lt;span&gt;&lt;/span&gt;&lt;code&gt;&lt;span class="k"&gt;Bootstrap&lt;/span&gt;:&lt;span class="w"&gt; &lt;/span&gt;docker
+&lt;span class="k"&gt;From&lt;/span&gt;:&lt;span class="w"&gt; &lt;/span&gt;nvidia/cuda:&lt;span class="m"&gt;11.7.1&lt;/span&gt;-runtime-ubuntu22&lt;span class="m"&gt;.04&lt;/span&gt;
+
+&lt;span class="gh"&gt;%post&lt;/span&gt;
+&lt;span class="w"&gt;    &lt;/span&gt;apt-get&lt;span class="w"&gt; &lt;/span&gt;-y&lt;span class="w"&gt; &lt;/span&gt;update
+&lt;span class="w"&gt;    &lt;/span&gt;apt&lt;span class="w"&gt; &lt;/span&gt;install&lt;span class="w"&gt; &lt;/span&gt;-y&lt;span class="w"&gt; &lt;/span&gt;python3&lt;span class="w"&gt; &lt;/span&gt;python3-pip
+&lt;span class="w"&gt;    &lt;/span&gt;pip3&lt;span class="w"&gt; &lt;/span&gt;install&lt;span class="w"&gt; &lt;/span&gt;torch&lt;span class="w"&gt; &lt;/span&gt;torchvision&lt;span class="w"&gt; &lt;/span&gt;torchaudio
+&lt;span class="w"&gt;    &lt;/span&gt;pip3&lt;span class="w"&gt; &lt;/span&gt;install&lt;span class="w"&gt; &lt;/span&gt;ipykernel
+&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;
+
+&lt;p&gt;&lt;strong&gt;Build the Container&lt;/strong&gt;&lt;/p&gt;
+&lt;div class="highlight"&gt;&lt;pre&gt;&lt;span&gt;&lt;/span&gt;&lt;code&gt;apptainer build pytorch.sif pytorch.def …&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;</summary><content type="html">&lt;p&gt;Another quick Apptainer example for getting pytorch quickly up and
+running.&lt;/p&gt;
+&lt;p&gt;&lt;strong&gt;The Definition File&lt;/strong&gt;&lt;/p&gt;
+&lt;div class="highlight"&gt;&lt;pre&gt;&lt;span&gt;&lt;/span&gt;&lt;code&gt;&lt;span class="k"&gt;Bootstrap&lt;/span&gt;:&lt;span class="w"&gt; &lt;/span&gt;docker
+&lt;span class="k"&gt;From&lt;/span&gt;:&lt;span class="w"&gt; &lt;/span&gt;nvidia/cuda:&lt;span class="m"&gt;11.7.1&lt;/span&gt;-runtime-ubuntu22&lt;span class="m"&gt;.04&lt;/span&gt;
+
+&lt;span class="gh"&gt;%post&lt;/span&gt;
+&lt;span class="w"&gt;    &lt;/span&gt;apt-get&lt;span class="w"&gt; &lt;/span&gt;-y&lt;span class="w"&gt; &lt;/span&gt;update
+&lt;span class="w"&gt;    &lt;/span&gt;apt&lt;span class="w"&gt; &lt;/span&gt;install&lt;span class="w"&gt; &lt;/span&gt;-y&lt;span class="w"&gt; &lt;/span&gt;python3&lt;span class="w"&gt; &lt;/span&gt;python3-pip
+&lt;span class="w"&gt;    &lt;/span&gt;pip3&lt;span class="w"&gt; &lt;/span&gt;install&lt;span class="w"&gt; &lt;/span&gt;torch&lt;span class="w"&gt; &lt;/span&gt;torchvision&lt;span class="w"&gt; &lt;/span&gt;torchaudio
+&lt;span class="w"&gt;    &lt;/span&gt;pip3&lt;span class="w"&gt; &lt;/span&gt;install&lt;span class="w"&gt; &lt;/span&gt;ipykernel
+&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;
+
+&lt;p&gt;&lt;strong&gt;Build the Container&lt;/strong&gt;&lt;/p&gt;
+&lt;div class="highlight"&gt;&lt;pre&gt;&lt;span&gt;&lt;/span&gt;&lt;code&gt;apptainer build pytorch.sif pytorch.def
+&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;
+
+&lt;p&gt;&lt;strong&gt;Test&lt;/strong&gt;&lt;/p&gt;
+&lt;p&gt;Passing &lt;code&gt;--nv&lt;/code&gt; tells apptainer to setup apptainer for running with the Nvidia GPU.&lt;/p&gt;
+&lt;div class="highlight"&gt;&lt;pre&gt;&lt;span&gt;&lt;/span&gt;&lt;code&gt;&lt;span class="n"&gt;apptainer&lt;/span&gt; &lt;span class="n"&gt;exec&lt;/span&gt; &lt;span class="o"&gt;--&lt;/span&gt;&lt;span class="n"&gt;nv&lt;/span&gt; &lt;span class="n"&gt;pytorch&lt;/span&gt;&lt;span class="o"&gt;.&lt;/span&gt;&lt;span class="n"&gt;sif&lt;/span&gt; &lt;span class="n"&gt;python3&lt;/span&gt; &lt;span class="o"&gt;-&lt;/span&gt;&lt;span class="n"&gt;c&lt;/span&gt; &lt;span class="s2"&gt;&amp;quot;import torch; print(torch.cuda.is_available())&amp;quot;&lt;/span&gt;
+&lt;span class="kc"&gt;True&lt;/span&gt;
+&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;</content><category term="Python"></category><category term="apptainer"></category><category term="jupyter"></category><category term="nvidia"></category><category term="pytorch"></category></entry><entry><title>Running A Jupyter Kernel In Apptainer</title><link href="https://blog.kail.io/running-a-jupyter-kernel-in-apptainer.html" rel="alternate"></link><published>2023-08-30T00:00:00-04:00</published><updated>2023-08-30T00:00:00-04:00</updated><author><name>Andrew Kail</name></author><id>tag:blog.kail.io,2023-08-30:/running-a-jupyter-kernel-in-apptainer.html</id><summary type="html">&lt;p&gt;Just a quick example of running a Jupyter kernel inside an &lt;del&gt;Singularity&lt;/del&gt; 
+Apptainer container.&lt;/p&gt;
+&lt;p&gt;First define a container with all the required applications, in particular &lt;code&gt;ipykernel&lt;/code&gt;.&lt;/p&gt;
+&lt;div class="highlight"&gt;&lt;pre&gt;&lt;span&gt;&lt;/span&gt;&lt;code&gt;&lt;span class="k"&gt;bootstrap&lt;/span&gt;:&lt;span class="w"&gt; &lt;/span&gt;docker
+&lt;span class="k"&gt;From&lt;/span&gt;:&lt;span class="w"&gt; &lt;/span&gt;python:&lt;span class="m"&gt;3.11&lt;/span&gt;-slim-buster
+
+&lt;span class="gh"&gt;%runscript&lt;/span&gt;
+&lt;span class="w"&gt;    &lt;/span&gt;&lt;span class="nb"&gt;echo&lt;/span&gt;&lt;span class="w"&gt; &lt;/span&gt;&lt;span class="s2"&gt;&amp;quot;Hello... I am a new Singularity container&amp;quot;&lt;/span&gt;
+
+&lt;span class="gh"&gt;%labels&lt;/span&gt;
+&lt;span class="w"&gt;    &lt;/span&gt;AUTHOR&lt;span class="w"&gt; &lt;/span&gt;andrew@kail.io
+
+&lt;span class="gh"&gt;%post&lt;/span&gt;
+&lt;span class="w"&gt;    &lt;/span&gt;apt-get&lt;span class="w"&gt; &lt;/span&gt;update …&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;</summary><content type="html">&lt;p&gt;Just a quick example of running a Jupyter kernel inside an &lt;del&gt;Singularity&lt;/del&gt; 
+Apptainer container.&lt;/p&gt;
+&lt;p&gt;First define a container with all the required applications, in particular &lt;code&gt;ipykernel&lt;/code&gt;.&lt;/p&gt;
+&lt;div class="highlight"&gt;&lt;pre&gt;&lt;span&gt;&lt;/span&gt;&lt;code&gt;&lt;span class="k"&gt;bootstrap&lt;/span&gt;:&lt;span class="w"&gt; &lt;/span&gt;docker
+&lt;span class="k"&gt;From&lt;/span&gt;:&lt;span class="w"&gt; &lt;/span&gt;python:&lt;span class="m"&gt;3.11&lt;/span&gt;-slim-buster
+
+&lt;span class="gh"&gt;%runscript&lt;/span&gt;
+&lt;span class="w"&gt;    &lt;/span&gt;&lt;span class="nb"&gt;echo&lt;/span&gt;&lt;span class="w"&gt; &lt;/span&gt;&lt;span class="s2"&gt;&amp;quot;Hello... I am a new Singularity container&amp;quot;&lt;/span&gt;
+
+&lt;span class="gh"&gt;%labels&lt;/span&gt;
+&lt;span class="w"&gt;    &lt;/span&gt;AUTHOR&lt;span class="w"&gt; &lt;/span&gt;andrew@kail.io
+
+&lt;span class="gh"&gt;%post&lt;/span&gt;
+&lt;span class="w"&gt;    &lt;/span&gt;apt-get&lt;span class="w"&gt; &lt;/span&gt;update&lt;span class="w"&gt; &lt;/span&gt;&lt;span class="o"&gt;&amp;amp;&amp;amp;&lt;/span&gt;&lt;span class="w"&gt; &lt;/span&gt;apt-get&lt;span class="w"&gt; &lt;/span&gt;install&lt;span class="w"&gt; &lt;/span&gt;-y&lt;span class="w"&gt; &lt;/span&gt;python-pip&lt;span class="w"&gt; &lt;/span&gt;python-dev&lt;span class="w"&gt; &lt;/span&gt;build-essential
+&lt;span class="w"&gt;    &lt;/span&gt;pip&lt;span class="w"&gt; &lt;/span&gt;install&lt;span class="w"&gt; &lt;/span&gt;--upgrade&lt;span class="w"&gt; &lt;/span&gt;pip
+&lt;span class="w"&gt;    &lt;/span&gt;pip&lt;span class="w"&gt; &lt;/span&gt;install&lt;span class="w"&gt; &lt;/span&gt;numpy
+&lt;span class="w"&gt;    &lt;/span&gt;pip&lt;span class="w"&gt; &lt;/span&gt;install&lt;span class="w"&gt; &lt;/span&gt;ipykernel
+&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;
+
+&lt;p&gt;Build the container image.&lt;/p&gt;
+&lt;div class="highlight"&gt;&lt;pre&gt;&lt;span&gt;&lt;/span&gt;&lt;code&gt;apptainer&lt;span class="w"&gt; &lt;/span&gt;build&lt;span class="w"&gt; &lt;/span&gt;ipykernel.sif&lt;span class="w"&gt; &lt;/span&gt;ipykernel.def
+&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;
+
+&lt;p&gt;Finally, add the following to kernel specification under &lt;code&gt;/home/&amp;lt;user&amp;gt;/.local/share/jupyter/kernels/&amp;lt;kernelname&amp;gt;/kernel.json&lt;/code&gt;&lt;/p&gt;
+&lt;div class="highlight"&gt;&lt;pre&gt;&lt;span&gt;&lt;/span&gt;&lt;code&gt;&lt;span class="p"&gt;{&lt;/span&gt;
+&lt;span class="w"&gt; &lt;/span&gt;&lt;span class="nt"&gt;&amp;quot;argv&amp;quot;&lt;/span&gt;&lt;span class="p"&gt;:&lt;/span&gt;&lt;span class="w"&gt; &lt;/span&gt;&lt;span class="p"&gt;[&lt;/span&gt;
+&lt;span class="w"&gt;   &lt;/span&gt;&lt;span class="s2"&gt;&amp;quot;singularity&amp;quot;&lt;/span&gt;&lt;span class="p"&gt;,&lt;/span&gt;
+&lt;span class="w"&gt;   &lt;/span&gt;&lt;span class="s2"&gt;&amp;quot;exec&amp;quot;&lt;/span&gt;&lt;span class="p"&gt;,&lt;/span&gt;
+&lt;span class="w"&gt;   &lt;/span&gt;&lt;span class="s2"&gt;&amp;quot;--cleanenv&amp;quot;&lt;/span&gt;&lt;span class="p"&gt;,&lt;/span&gt;
+&lt;span class="w"&gt;   &lt;/span&gt;&lt;span class="s2"&gt;&amp;quot;/home/akail/Projects/singularity/kernel/ipykernel.sif&amp;quot;&lt;/span&gt;&lt;span class="p"&gt;,&lt;/span&gt;
+&lt;span class="w"&gt;   &lt;/span&gt;&lt;span class="s2"&gt;&amp;quot;python&amp;quot;&lt;/span&gt;&lt;span class="p"&gt;,&lt;/span&gt;
+&lt;span class="w"&gt;   &lt;/span&gt;&lt;span class="s2"&gt;&amp;quot;-m&amp;quot;&lt;/span&gt;&lt;span class="p"&gt;,&lt;/span&gt;
+&lt;span class="w"&gt;   &lt;/span&gt;&lt;span class="s2"&gt;&amp;quot;ipykernel&amp;quot;&lt;/span&gt;&lt;span class="p"&gt;,&lt;/span&gt;
+&lt;span class="w"&gt;   &lt;/span&gt;&lt;span class="s2"&gt;&amp;quot;-f&amp;quot;&lt;/span&gt;&lt;span class="p"&gt;,&lt;/span&gt;
+&lt;span class="w"&gt;   &lt;/span&gt;&lt;span class="s2"&gt;&amp;quot;{connection_file}&amp;quot;&lt;/span&gt;
+&lt;span class="w"&gt; &lt;/span&gt;&lt;span class="p"&gt;],&lt;/span&gt;
+&lt;span class="w"&gt; &lt;/span&gt;&lt;span class="nt"&gt;&amp;quot;language&amp;quot;&lt;/span&gt;&lt;span class="p"&gt;:&lt;/span&gt;&lt;span class="w"&gt; &lt;/span&gt;&lt;span class="s2"&gt;&amp;quot;python&amp;quot;&lt;/span&gt;&lt;span class="p"&gt;,&lt;/span&gt;
+&lt;span class="w"&gt; &lt;/span&gt;&lt;span class="nt"&gt;&amp;quot;display_name&amp;quot;&lt;/span&gt;&lt;span class="p"&gt;:&lt;/span&gt;&lt;span class="w"&gt; &lt;/span&gt;&lt;span class="s2"&gt;&amp;quot;singularity-kernel&amp;quot;&lt;/span&gt;
+&lt;span class="p"&gt;}&lt;/span&gt;
+&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;
+
+&lt;p&gt;Restart Jupyter or Jupyter lab and you're all set.&lt;/p&gt;</content><category term="Python"></category><category term="apptainer"></category><category term="jupyter"></category></entry><entry><title>Integrating Anaconda with Lmod</title><link href="https://blog.kail.io/integrating-anaconda-with-lmod.html" rel="alternate"></link><published>2023-08-22T12:00:00-04:00</published><updated>2023-08-22T12:00:00-04:00</updated><author><name>Andrew Kail</name></author><id>tag:blog.kail.io,2023-08-22:/integrating-anaconda-with-lmod.html</id><summary type="html">&lt;p&gt;In a previous &lt;a href="https://blog.kail.io/performance-impact-of-anaconda-initialization.html"&gt;post&lt;/a&gt; I looked into performance issues with Anaconda initialization.  To
+get around users modifying their &lt;code&gt;.bashrc&lt;/code&gt; and breaking their environment, 
+I have instead written an Lmod modulefile that handles setting and unsetting the variables and
+fuctions it needs.  This works for both bash and csh.&lt;/p&gt;
+&lt;div class="highlight"&gt;&lt;table class="highlighttable"&gt;&lt;tr&gt;&lt;td class="linenos"&gt;&lt;div class="linenodiv"&gt;&lt;pre&gt;&lt;span class="normal"&gt; 1&lt;/span&gt;
+&lt;span class="normal"&gt; 2 …&lt;/span&gt;&lt;/pre&gt;&lt;/div&gt;&lt;/td&gt;&lt;/tr&gt;&lt;/table&gt;&lt;/div&gt;</summary><content type="html">&lt;p&gt;In a previous &lt;a href="https://blog.kail.io/performance-impact-of-anaconda-initialization.html"&gt;post&lt;/a&gt; I looked into performance issues with Anaconda initialization.  To
+get around users modifying their &lt;code&gt;.bashrc&lt;/code&gt; and breaking their environment, 
+I have instead written an Lmod modulefile that handles setting and unsetting the variables and
+fuctions it needs.  This works for both bash and csh.&lt;/p&gt;
+&lt;div class="highlight"&gt;&lt;table class="highlighttable"&gt;&lt;tr&gt;&lt;td class="linenos"&gt;&lt;div class="linenodiv"&gt;&lt;pre&gt;&lt;span class="normal"&gt; 1&lt;/span&gt;
+&lt;span class="normal"&gt; 2&lt;/span&gt;
+&lt;span class="normal"&gt; 3&lt;/span&gt;
+&lt;span class="normal"&gt; 4&lt;/span&gt;
+&lt;span class="normal"&gt; 5&lt;/span&gt;
+&lt;span class="normal"&gt; 6&lt;/span&gt;
+&lt;span class="normal"&gt; 7&lt;/span&gt;
+&lt;span class="normal"&gt; 8&lt;/span&gt;
+&lt;span class="normal"&gt; 9&lt;/span&gt;
+&lt;span class="normal"&gt;10&lt;/span&gt;
+&lt;span class="normal"&gt;11&lt;/span&gt;
+&lt;span class="normal"&gt;12&lt;/span&gt;
+&lt;span class="normal"&gt;13&lt;/span&gt;
+&lt;span class="normal"&gt;14&lt;/span&gt;
+&lt;span class="normal"&gt;15&lt;/span&gt;
+&lt;span class="normal"&gt;16&lt;/span&gt;
+&lt;span class="normal"&gt;17&lt;/span&gt;
+&lt;span class="normal"&gt;18&lt;/span&gt;
+&lt;span class="normal"&gt;19&lt;/span&gt;
+&lt;span class="normal"&gt;20&lt;/span&gt;
+&lt;span class="normal"&gt;21&lt;/span&gt;
+&lt;span class="normal"&gt;22&lt;/span&gt;
+&lt;span class="normal"&gt;23&lt;/span&gt;
+&lt;span class="normal"&gt;24&lt;/span&gt;
+&lt;span class="normal"&gt;25&lt;/span&gt;
+&lt;span class="normal"&gt;26&lt;/span&gt;
+&lt;span class="normal"&gt;27&lt;/span&gt;
+&lt;span class="normal"&gt;28&lt;/span&gt;
+&lt;span class="normal"&gt;29&lt;/span&gt;
+&lt;span class="normal"&gt;30&lt;/span&gt;
+&lt;span class="normal"&gt;31&lt;/span&gt;
+&lt;span class="normal"&gt;32&lt;/span&gt;
+&lt;span class="normal"&gt;33&lt;/span&gt;
+&lt;span class="normal"&gt;34&lt;/span&gt;
+&lt;span class="normal"&gt;35&lt;/span&gt;
+&lt;span class="normal"&gt;36&lt;/span&gt;&lt;/pre&gt;&lt;/div&gt;&lt;/td&gt;&lt;td class="code"&gt;&lt;div&gt;&lt;pre&gt;&lt;span&gt;&lt;/span&gt;&lt;code&gt;&lt;span class="c1"&gt;-- Point to where your anaconda root directory is&lt;/span&gt;
+&lt;span class="kd"&gt;local&lt;/span&gt; &lt;span class="n"&gt;root&lt;/span&gt; &lt;span class="o"&gt;=&lt;/span&gt; &lt;span class="s2"&gt;&amp;quot;/data/apps/anaconda/2022.11/&amp;quot;&lt;/span&gt;
+
+&lt;span class="n"&gt;prepend_path&lt;/span&gt;&lt;span class="p"&gt;(&lt;/span&gt;&lt;span class="s2"&gt;&amp;quot;MANPATH&amp;quot;&lt;/span&gt;&lt;span class="p"&gt;,&lt;/span&gt; &lt;span class="n"&gt;pathJoin&lt;/span&gt;&lt;span class="p"&gt;(&lt;/span&gt;&lt;span class="n"&gt;root&lt;/span&gt;&lt;span class="p"&gt;,&lt;/span&gt; &lt;span class="s2"&gt;&amp;quot;man&amp;quot;&lt;/span&gt;&lt;span class="p"&gt;))&lt;/span&gt;
+&lt;span class="n"&gt;prepend_path&lt;/span&gt;&lt;span class="p"&gt;(&lt;/span&gt;&lt;span class="s2"&gt;&amp;quot;MANPATH&amp;quot;&lt;/span&gt;&lt;span class="p"&gt;,&lt;/span&gt; &lt;span class="n"&gt;pathJoin&lt;/span&gt;&lt;span class="p"&gt;(&lt;/span&gt;&lt;span class="n"&gt;root&lt;/span&gt;&lt;span class="p"&gt;,&lt;/span&gt; &lt;span class="s2"&gt;&amp;quot;share/man&amp;quot;&lt;/span&gt;&lt;span class="p"&gt;))&lt;/span&gt;
+&lt;span class="n"&gt;prepend_path&lt;/span&gt;&lt;span class="p"&gt;(&lt;/span&gt;&lt;span class="s2"&gt;&amp;quot;PATH&amp;quot;&lt;/span&gt;&lt;span class="p"&gt;,&lt;/span&gt; &lt;span class="n"&gt;pathJoin&lt;/span&gt;&lt;span class="p"&gt;(&lt;/span&gt;&lt;span class="n"&gt;root&lt;/span&gt;&lt;span class="p"&gt;,&lt;/span&gt; &lt;span class="s2"&gt;&amp;quot;bin&amp;quot;&lt;/span&gt;&lt;span class="p"&gt;))&lt;/span&gt;
+&lt;span class="n"&gt;prepend_path&lt;/span&gt;&lt;span class="p"&gt;(&lt;/span&gt;&lt;span class="s2"&gt;&amp;quot;PATH&amp;quot;&lt;/span&gt;&lt;span class="p"&gt;,&lt;/span&gt; &lt;span class="n"&gt;pathJoin&lt;/span&gt;&lt;span class="p"&gt;(&lt;/span&gt;&lt;span class="n"&gt;root&lt;/span&gt;&lt;span class="p"&gt;,&lt;/span&gt; &lt;span class="s2"&gt;&amp;quot;sbin&amp;quot;&lt;/span&gt;&lt;span class="p"&gt;))&lt;/span&gt;
+&lt;span class="n"&gt;prepend_path&lt;/span&gt;&lt;span class="p"&gt;(&lt;/span&gt;&lt;span class="s2"&gt;&amp;quot;PKG_CONFIG_PATH&amp;quot;&lt;/span&gt;&lt;span class="p"&gt;,&lt;/span&gt; &lt;span class="n"&gt;pathJoin&lt;/span&gt;&lt;span class="p"&gt;(&lt;/span&gt;&lt;span class="n"&gt;root&lt;/span&gt;&lt;span class="p"&gt;,&lt;/span&gt; &lt;span class="s2"&gt;&amp;quot;lib/pkgconfig&amp;quot;&lt;/span&gt;&lt;span class="p"&gt;))&lt;/span&gt;
+
+&lt;span class="n"&gt;prepend_path&lt;/span&gt;&lt;span class="p"&gt;(&lt;/span&gt;&lt;span class="s2"&gt;&amp;quot;PATH&amp;quot;&lt;/span&gt;&lt;span class="p"&gt;,&lt;/span&gt; &lt;span class="n"&gt;root&lt;/span&gt;&lt;span class="p"&gt;)&lt;/span&gt;
+
+&lt;span class="c1"&gt;-- Execute existing shell source files&lt;/span&gt;
+&lt;span class="n"&gt;execute&lt;/span&gt;&lt;span class="p"&gt;{&lt;/span&gt;&lt;span class="n"&gt;cmd&lt;/span&gt;&lt;span class="o"&gt;=&lt;/span&gt;&lt;span class="s2"&gt;&amp;quot;source &amp;quot;&lt;/span&gt; &lt;span class="o"&gt;..&lt;/span&gt; &lt;span class="n"&gt;root&lt;/span&gt; &lt;span class="o"&gt;..&lt;/span&gt; &lt;span class="s2"&gt;&amp;quot;/etc/profile.d/conda.&amp;quot;&lt;/span&gt;&lt;span class="o"&gt;..&lt;/span&gt;&lt;span class="n"&gt;myShellType&lt;/span&gt;&lt;span class="p"&gt;(),&lt;/span&gt; &lt;span class="n"&gt;modeA&lt;/span&gt;&lt;span class="o"&gt;=&lt;/span&gt;&lt;span class="p"&gt;{&lt;/span&gt;&lt;span class="s2"&gt;&amp;quot;load&amp;quot;&lt;/span&gt;&lt;span class="p"&gt;}}&lt;/span&gt;
+
+&lt;span class="c1"&gt;-- This happens at unload for csh&lt;/span&gt;
+&lt;span class="kr"&gt;if&lt;/span&gt; &lt;span class="p"&gt;(&lt;/span&gt;&lt;span class="n"&gt;myShellType&lt;/span&gt;&lt;span class="p"&gt;()&lt;/span&gt; &lt;span class="o"&gt;==&lt;/span&gt; &lt;span class="s2"&gt;&amp;quot;csh&amp;quot;&lt;/span&gt;&lt;span class="p"&gt;)&lt;/span&gt; &lt;span class="kr"&gt;then&lt;/span&gt;
+  &lt;span class="c1"&gt;-- csh sets these environment variables and an alias for conda&lt;/span&gt;
+  &lt;span class="n"&gt;cmd&lt;/span&gt; &lt;span class="o"&gt;=&lt;/span&gt; &lt;span class="s2"&gt;&amp;quot;unsetenv CONDA_EXE; unsetenv _CONDA_ROOT; unsetenv _CONDA_EXE; unsetenv CONDA_PYTHON_EXE; &amp;quot;&lt;/span&gt; &lt;span class="o"&gt;..&lt;/span&gt;
+        &lt;span class="s2"&gt;&amp;quot;unsetenv CONDA_SHLVL; unalias conda&amp;quot;&lt;/span&gt;
+  &lt;span class="n"&gt;execute&lt;/span&gt;&lt;span class="p"&gt;{&lt;/span&gt;&lt;span class="n"&gt;cmd&lt;/span&gt;&lt;span class="o"&gt;=&lt;/span&gt;&lt;span class="n"&gt;cmd&lt;/span&gt;&lt;span class="p"&gt;,&lt;/span&gt; &lt;span class="n"&gt;modeA&lt;/span&gt;&lt;span class="o"&gt;=&lt;/span&gt;&lt;span class="p"&gt;{&lt;/span&gt;&lt;span class="s2"&gt;&amp;quot;unload&amp;quot;&lt;/span&gt;&lt;span class="p"&gt;}}&lt;/span&gt;
+&lt;span class="kr"&gt;end&lt;/span&gt;
+
+&lt;span class="c1"&gt;-- This happens at unload for Bash&lt;/span&gt;
+&lt;span class="kr"&gt;if&lt;/span&gt; &lt;span class="p"&gt;(&lt;/span&gt;&lt;span class="n"&gt;myShellType&lt;/span&gt;&lt;span class="p"&gt;()&lt;/span&gt; &lt;span class="o"&gt;==&lt;/span&gt; &lt;span class="s2"&gt;&amp;quot;sh&amp;quot;&lt;/span&gt;&lt;span class="p"&gt;)&lt;/span&gt; &lt;span class="kr"&gt;then&lt;/span&gt;
+  &lt;span class="c1"&gt;-- bash sets environment variables, shell functions and path to condabin&lt;/span&gt;
+  &lt;span class="kr"&gt;if&lt;/span&gt; &lt;span class="p"&gt;(&lt;/span&gt;&lt;span class="n"&gt;mode&lt;/span&gt;&lt;span class="p"&gt;()&lt;/span&gt; &lt;span class="o"&gt;==&lt;/span&gt; &lt;span class="s2"&gt;&amp;quot;unload&amp;quot;&lt;/span&gt;&lt;span class="p"&gt;)&lt;/span&gt; &lt;span class="kr"&gt;then&lt;/span&gt;
+    &lt;span class="n"&gt;remove_path&lt;/span&gt;&lt;span class="p"&gt;(&lt;/span&gt;&lt;span class="s2"&gt;&amp;quot;PATH&amp;quot;&lt;/span&gt;&lt;span class="p"&gt;,&lt;/span&gt; &lt;span class="n"&gt;pathJoin&lt;/span&gt;&lt;span class="p"&gt;(&lt;/span&gt;&lt;span class="n"&gt;root&lt;/span&gt;&lt;span class="p"&gt;,&lt;/span&gt;&lt;span class="s2"&gt;&amp;quot;condabin&amp;quot;&lt;/span&gt;&lt;span class="p"&gt;))&lt;/span&gt;
+  &lt;span class="kr"&gt;end&lt;/span&gt;
+  &lt;span class="n"&gt;cmd&lt;/span&gt; &lt;span class="o"&gt;=&lt;/span&gt; &lt;span class="s2"&gt;&amp;quot;conda deactivate; &amp;quot;&lt;/span&gt; &lt;span class="o"&gt;..&lt;/span&gt;
+        &lt;span class="s2"&gt;&amp;quot;unset CONDA_EXE; unset _CE_CONDA; unset _CE_M; &amp;quot;&lt;/span&gt; &lt;span class="o"&gt;..&lt;/span&gt;
+        &lt;span class="s2"&gt;&amp;quot;unset -f __conda_activate; unset -f __conda_reactivate; &amp;quot;&lt;/span&gt; &lt;span class="o"&gt;..&lt;/span&gt;
+        &lt;span class="s2"&gt;&amp;quot;unset -f __conda_hashr; unset CONDA_SHLVL; unset _CONDA_EXE; &amp;quot;&lt;/span&gt; &lt;span class="o"&gt;..&lt;/span&gt;
+        &lt;span class="s2"&gt;&amp;quot;unset _CONDA_ROOT; unset -f conda; &amp;quot;&lt;/span&gt; &lt;span class="o"&gt;..&lt;/span&gt;
+        &lt;span class="s2"&gt;&amp;quot;unset CONDA_PYTHON_EXE;&amp;quot;&lt;/span&gt;
+  &lt;span class="n"&gt;execute&lt;/span&gt;&lt;span class="p"&gt;{&lt;/span&gt;&lt;span class="n"&gt;cmd&lt;/span&gt;&lt;span class="o"&gt;=&lt;/span&gt;&lt;span class="n"&gt;cmd&lt;/span&gt;&lt;span class="p"&gt;,&lt;/span&gt; &lt;span class="n"&gt;modeA&lt;/span&gt;&lt;span class="o"&gt;=&lt;/span&gt;&lt;span class="p"&gt;{&lt;/span&gt;&lt;span class="s2"&gt;&amp;quot;unload&amp;quot;&lt;/span&gt;&lt;span class="p"&gt;}}&lt;/span&gt;
+&lt;span class="kr"&gt;end&lt;/span&gt;
+&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;/td&gt;&lt;/tr&gt;&lt;/table&gt;&lt;/div&gt;
+
+&lt;p&gt;Users can even add the &lt;code&gt;module load anaconda&lt;/code&gt; to their bashrc safely as this will initialize
+anaconda without the penalty of running the &lt;code&gt;__conda_setup&lt;/code&gt; function from the last article.&lt;/p&gt;
+&lt;p&gt;This also has the added benefit of allowing for multiple Anaconda installations in single environment
+as a users &lt;code&gt;.bashrc&lt;/code&gt; will not point to a hard-coded location.&lt;/p&gt;</content><category term="HPC,Python"></category><category term="hpc"></category><category term="anaconda"></category></entry><entry><title>Performance Impact of Anaconda Initialization</title><link href="https://blog.kail.io/performance-impact-of-anaconda-initialization.html" rel="alternate"></link><published>2023-08-15T12:00:00-04:00</published><updated>2023-08-15T12:00:00-04:00</updated><author><name>Andrew Kail</name></author><id>tag:blog.kail.io,2023-08-15:/performance-impact-of-anaconda-initialization.html</id><summary type="html">&lt;p&gt;One of the biggest complaints we get from many users is a delayed login when they initially
+get into the cluster.  In most cases, we have narrowed it down to users either installing
+their own version of &lt;a href="https://anaconda.org"&gt;Anaconda&lt;/a&gt; or they're using an existing install
+without without a customized modulefile.&lt;/p&gt;
+&lt;p&gt;The …&lt;/p&gt;</summary><content type="html">&lt;p&gt;One of the biggest complaints we get from many users is a delayed login when they initially
+get into the cluster.  In most cases, we have narrowed it down to users either installing
+their own version of &lt;a href="https://anaconda.org"&gt;Anaconda&lt;/a&gt; or they're using an existing install
+without without a customized modulefile.&lt;/p&gt;
+&lt;p&gt;The cause of this is conda requiring environment variables and fuctions be defined in order
+for it to function.  Usually a user will be asked to run &lt;code&gt;conda init&lt;/code&gt; when these variables do not exist.  On linux in bash, it adds the following to the users &lt;code&gt;.bashrc&lt;/code&gt;.&lt;/p&gt;
+&lt;div class="highlight"&gt;&lt;table class="highlighttable"&gt;&lt;tr&gt;&lt;td class="linenos"&gt;&lt;div class="linenodiv"&gt;&lt;pre&gt;&lt;span class="normal"&gt; 1&lt;/span&gt;
+&lt;span class="normal"&gt; 2&lt;/span&gt;
+&lt;span class="normal"&gt; 3&lt;/span&gt;
+&lt;span class="normal"&gt; 4&lt;/span&gt;
+&lt;span class="normal"&gt; 5&lt;/span&gt;
+&lt;span class="normal"&gt; 6&lt;/span&gt;
+&lt;span class="normal"&gt; 7&lt;/span&gt;
+&lt;span class="normal"&gt; 8&lt;/span&gt;
+&lt;span class="normal"&gt; 9&lt;/span&gt;
+&lt;span class="normal"&gt;10&lt;/span&gt;
+&lt;span class="normal"&gt;11&lt;/span&gt;
+&lt;span class="normal"&gt;12&lt;/span&gt;
+&lt;span class="normal"&gt;13&lt;/span&gt;
+&lt;span class="normal"&gt;14&lt;/span&gt;&lt;/pre&gt;&lt;/div&gt;&lt;/td&gt;&lt;td class="code"&gt;&lt;div&gt;&lt;pre&gt;&lt;span&gt;&lt;/span&gt;&lt;code&gt;&lt;span class="c1"&gt;# &amp;gt;&amp;gt;&amp;gt; conda initialize &amp;gt;&amp;gt;&amp;gt;&lt;/span&gt;
+&lt;span class="c1"&gt;# !! Contents within this block are managed by &amp;#39;conda init&amp;#39; !!&lt;/span&gt;
+&lt;span class="nv"&gt;__conda_setup&lt;/span&gt;&lt;span class="o"&gt;=&lt;/span&gt;&lt;span class="s2"&gt;&amp;quot;&lt;/span&gt;&lt;span class="k"&gt;$(&lt;/span&gt;&lt;span class="s1"&gt;&amp;#39;/data/apps/anaconda/3.9/bin/conda&amp;#39;&lt;/span&gt;&lt;span class="w"&gt; &lt;/span&gt;&lt;span class="s1"&gt;&amp;#39;shell.bash&amp;#39;&lt;/span&gt;&lt;span class="w"&gt; &lt;/span&gt;&lt;span class="s1"&gt;&amp;#39;hook&amp;#39;&lt;/span&gt;&lt;span class="w"&gt; &lt;/span&gt;&lt;span class="m"&gt;2&lt;/span&gt;&amp;gt;&lt;span class="w"&gt; &lt;/span&gt;/dev/null&lt;span class="k"&gt;)&lt;/span&gt;&lt;span class="s2"&gt;&amp;quot;&lt;/span&gt;
+&lt;span class="k"&gt;if&lt;/span&gt;&lt;span class="w"&gt; &lt;/span&gt;&lt;span class="o"&gt;[&lt;/span&gt;&lt;span class="w"&gt; &lt;/span&gt;&lt;span class="nv"&gt;$?&lt;/span&gt;&lt;span class="w"&gt; &lt;/span&gt;-eq&lt;span class="w"&gt; &lt;/span&gt;&lt;span class="m"&gt;0&lt;/span&gt;&lt;span class="w"&gt; &lt;/span&gt;&lt;span class="o"&gt;]&lt;/span&gt;&lt;span class="p"&gt;;&lt;/span&gt;&lt;span class="w"&gt; &lt;/span&gt;&lt;span class="k"&gt;then&lt;/span&gt;
+&lt;span class="w"&gt;    &lt;/span&gt;&lt;span class="nb"&gt;eval&lt;/span&gt;&lt;span class="w"&gt; &lt;/span&gt;&lt;span class="s2"&gt;&amp;quot;&lt;/span&gt;&lt;span class="nv"&gt;$__conda_setup&lt;/span&gt;&lt;span class="s2"&gt;&amp;quot;&lt;/span&gt;
+&lt;span class="k"&gt;else&lt;/span&gt;
+&lt;span class="w"&gt;    &lt;/span&gt;&lt;span class="k"&gt;if&lt;/span&gt;&lt;span class="w"&gt; &lt;/span&gt;&lt;span class="o"&gt;[&lt;/span&gt;&lt;span class="w"&gt; &lt;/span&gt;-f&lt;span class="w"&gt; &lt;/span&gt;&lt;span class="s2"&gt;&amp;quot;/data/apps/anaconda/3.9/etc/profile.d/conda.sh&amp;quot;&lt;/span&gt;&lt;span class="w"&gt; &lt;/span&gt;&lt;span class="o"&gt;]&lt;/span&gt;&lt;span class="p"&gt;;&lt;/span&gt;&lt;span class="w"&gt; &lt;/span&gt;&lt;span class="k"&gt;then&lt;/span&gt;
+&lt;span class="w"&gt;        &lt;/span&gt;.&lt;span class="w"&gt; &lt;/span&gt;&lt;span class="s2"&gt;&amp;quot;/data/apps/anaconda/3.9/etc/profile.d/conda.sh&amp;quot;&lt;/span&gt;
+&lt;span class="w"&gt;    &lt;/span&gt;&lt;span class="k"&gt;else&lt;/span&gt;
+&lt;span class="w"&gt;        &lt;/span&gt;&lt;span class="nb"&gt;export&lt;/span&gt;&lt;span class="w"&gt; &lt;/span&gt;&lt;span class="nv"&gt;PATH&lt;/span&gt;&lt;span class="o"&gt;=&lt;/span&gt;&lt;span class="s2"&gt;&amp;quot;/data/apps/anaconda/3.9/bin:&lt;/span&gt;&lt;span class="nv"&gt;$PATH&lt;/span&gt;&lt;span class="s2"&gt;&amp;quot;&lt;/span&gt;
+&lt;span class="w"&gt;    &lt;/span&gt;&lt;span class="k"&gt;fi&lt;/span&gt;
+&lt;span class="k"&gt;fi&lt;/span&gt;
+&lt;span class="nb"&gt;unset&lt;/span&gt;&lt;span class="w"&gt; &lt;/span&gt;__conda_setup
+&lt;span class="c1"&gt;# &amp;lt;&amp;lt;&amp;lt; conda initialize &amp;lt;&amp;lt;&amp;lt;&lt;/span&gt;
+&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;/td&gt;&lt;/tr&gt;&lt;/table&gt;&lt;/div&gt;
+
+&lt;p&gt;The issue on our systems has been line 3, where the conda python executable is called every time the the user logs in.  Essentially every time the user logs in conda is called to generate the proper environment variables.  This launches python, loads conda and other libraires, and possibly writes many &lt;code&gt;.pyc&lt;/code&gt; files depending on where anaconda is installed.&lt;/p&gt;
+&lt;p&gt;Using the python trace module, we can see how many files are accessed.&lt;/p&gt;
+&lt;div class="highlight"&gt;&lt;pre&gt;&lt;span&gt;&lt;/span&gt;&lt;code&gt;mkdir&lt;span class="w"&gt; &lt;/span&gt;cover&lt;span class="p"&gt;;&lt;/span&gt;&lt;span class="w"&gt; &lt;/span&gt;&lt;span class="nb"&gt;cd&lt;/span&gt;&lt;span class="w"&gt; &lt;/span&gt;cover
+python&lt;span class="w"&gt; &lt;/span&gt;-m&lt;span class="w"&gt; &lt;/span&gt;trace&lt;span class="w"&gt; &lt;/span&gt;-c&lt;span class="w"&gt; &lt;/span&gt;-C&lt;span class="w"&gt; &lt;/span&gt;/data/apps/anaconda/3.9/bin/conda&lt;span class="w"&gt; &lt;/span&gt;shell.bash&lt;span class="w"&gt; &lt;/span&gt;hook
+&lt;span class="c1"&gt;# Get the number of files generated&lt;/span&gt;
+ls&lt;span class="w"&gt; &lt;/span&gt;-al&lt;span class="w"&gt; &lt;/span&gt;&lt;span class="p"&gt;|&lt;/span&gt;&lt;span class="w"&gt; &lt;/span&gt;wc&lt;span class="w"&gt; &lt;/span&gt;-l
+&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;
+
+&lt;p&gt;This will generate a &lt;code&gt;.cover&lt;/code&gt; file for each python file that is executed.  In this particular case I had 146 Python files executed.  While this doesn't mean that each file was actually used, in Python, each file is read and byte compiled when imported if not already done so.  Thankfully most of these are byte compiled already so there shouldn't bee too many writes, just a few reads. Depending on the filesystem, such as a parallel filesystem, this could be less performant if on a shared filesystem.  Many small file access has always been a little problematic for us, even with some optimizations.&lt;/p&gt;
+&lt;p&gt;For some empirical measurement on a cluster we know this is a problem I ran an ssh test from a local node 10 times with and 10 times without call the &lt;code&gt;__conda_setup&lt;/code&gt;, both ending up with the same environment configuration.&lt;/p&gt;
+&lt;div class="highlight"&gt;&lt;pre&gt;&lt;span&gt;&lt;/span&gt;&lt;code&gt;&lt;span class="nb"&gt;time&lt;/span&gt;&lt;span class="w"&gt; &lt;/span&gt;ssh&lt;span class="w"&gt; &lt;/span&gt;login&lt;span class="w"&gt; &lt;/span&gt;uptime
+&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;
+
+&lt;table&gt;
+&lt;thead&gt;
+&lt;tr&gt;
+&lt;th&gt;&lt;/th&gt;
+&lt;th&gt;SSH Setup Call&lt;/th&gt;
+&lt;th&gt;SSH Direct Source&lt;/th&gt;
+&lt;/tr&gt;
+&lt;/thead&gt;
+&lt;tbody&gt;
+&lt;tr&gt;
+&lt;td&gt;Min&lt;/td&gt;
+&lt;td&gt;8.8936&lt;/td&gt;
+&lt;td&gt;3.562&lt;/td&gt;
+&lt;/tr&gt;
+&lt;tr&gt;
+&lt;td&gt;Max&lt;/td&gt;
+&lt;td&gt;10.049&lt;/td&gt;
+&lt;td&gt;4.558&lt;/td&gt;
+&lt;/tr&gt;
+&lt;tr&gt;
+&lt;td&gt;Mean&lt;/td&gt;
+&lt;td&gt;9.7646&lt;/td&gt;
+&lt;td&gt;4.0282&lt;/td&gt;
+&lt;/tr&gt;
+&lt;/tbody&gt;
+&lt;/table&gt;
+&lt;p&gt;I also took a look at the timing for running the setup directly and got the following times:&lt;/p&gt;
+&lt;table&gt;
+&lt;thead&gt;
+&lt;tr&gt;
+&lt;th&gt;&lt;/th&gt;
+&lt;th&gt;Local Setup&lt;/th&gt;
+&lt;/tr&gt;
+&lt;/thead&gt;
+&lt;tbody&gt;
+&lt;tr&gt;
+&lt;td&gt;Min&lt;/td&gt;
+&lt;td&gt;2.324&lt;/td&gt;
+&lt;/tr&gt;
+&lt;tr&gt;
+&lt;td&gt;Max&lt;/td&gt;
+&lt;td&gt;4.199&lt;/td&gt;
+&lt;/tr&gt;
+&lt;tr&gt;
+&lt;td&gt;Mean&lt;/td&gt;
+&lt;td&gt;3.2227&lt;/td&gt;
+&lt;/tr&gt;
+&lt;/tbody&gt;
+&lt;/table&gt;
+&lt;p&gt;Now, there are a few caveats about my tests above I noticed when taking a look at performance on other nodes:&lt;/p&gt;
+&lt;ol&gt;
+&lt;li&gt;This login node is very busy with a lot of small IO operations in progress&lt;/li&gt;
+&lt;li&gt;There is an existing performance issue on this file system client&lt;/li&gt;
+&lt;/ol&gt;
+&lt;p&gt;Looking at another server in the same cluster I got the following timing profiles:&lt;/p&gt;
+&lt;table&gt;
+&lt;thead&gt;
+&lt;tr&gt;
+&lt;th&gt;&lt;/th&gt;
+&lt;th&gt;SSH Setup Call&lt;/th&gt;
+&lt;th&gt;SSH Direct Source&lt;/th&gt;
+&lt;th&gt;Local Setup&lt;/th&gt;
+&lt;/tr&gt;
+&lt;/thead&gt;
+&lt;tbody&gt;
+&lt;tr&gt;
+&lt;td&gt;Min&lt;/td&gt;
+&lt;td&gt;3.582&lt;/td&gt;
+&lt;td&gt;2.256&lt;/td&gt;
+&lt;td&gt;0.396&lt;/td&gt;
+&lt;/tr&gt;
+&lt;tr&gt;
+&lt;td&gt;Max&lt;/td&gt;
+&lt;td&gt;5.548&lt;/td&gt;
+&lt;td&gt;3.284&lt;/td&gt;
+&lt;td&gt;0.884&lt;/td&gt;
+&lt;/tr&gt;
+&lt;tr&gt;
+&lt;td&gt;Mean&lt;/td&gt;
+&lt;td&gt;4.2926&lt;/td&gt;
+&lt;td&gt;2.7692&lt;/td&gt;
+&lt;td&gt;0.516&lt;/td&gt;
+&lt;/tr&gt;
+&lt;/tbody&gt;
+&lt;/table&gt;
+&lt;p&gt;While definitely better than the login node, there is still a 1-2 second performance hit when doing the conda setup over ssh. &lt;/p&gt;
+&lt;p&gt;On my local machine the performance for local setup matches that of the second node above and definitely more consistent.&lt;/p&gt;
+&lt;table&gt;
+&lt;thead&gt;
+&lt;tr&gt;
+&lt;th&gt;&lt;/th&gt;
+&lt;th&gt;Local Setup&lt;/th&gt;
+&lt;/tr&gt;
+&lt;/thead&gt;
+&lt;tbody&gt;
+&lt;tr&gt;
+&lt;td&gt;Min&lt;/td&gt;
+&lt;td&gt;0.17&lt;/td&gt;
+&lt;/tr&gt;
+&lt;tr&gt;
+&lt;td&gt;Max&lt;/td&gt;
+&lt;td&gt;2.14&lt;/td&gt;
+&lt;/tr&gt;
+&lt;tr&gt;
+&lt;td&gt;Mean&lt;/td&gt;
+&lt;td&gt;0.1797&lt;/td&gt;
+&lt;/tr&gt;
+&lt;/tbody&gt;
+&lt;/table&gt;
+&lt;p&gt;I'm going to continue to look into why the &lt;code&gt;__conda_setup&lt;/code&gt; call takes up to 3 times longer over ssh as opposed to being run locally. 
+I have a feeling there is something else going on under the hood and there may be a way to squeak out better performance.&lt;/p&gt;
+&lt;p&gt;I'm a little confused though by the auto-generated initialization above.  By default, it executes conda to generate the environment variables and if that fails, it then sources a pre-generated file directly without executing any python code.  I would recommend it instead attempt to source the files directly first then fall back to generating the bash initialization after that.   I'm sure the Anaconda developers have their reason for doing it in that order but it just doesn't seem necessary to me.&lt;/p&gt;
+&lt;p&gt;In my opinion the performance hit over ssh is more than I care for and I wish conda did not require this in order to properly function.  Our recommendation  to prevent this is to use a centrally managed 
+anaconda install with a custom modulefile to manage these environment variables, then follow up with the users to make sure they're &lt;code&gt;.bashrc&lt;/code&gt; files are cleaned up.&lt;/p&gt;
+&lt;p&gt;I'll be following up this article with a brief look at a modulefile to handle this on HPC clusters using Lmod.&lt;/p&gt;</content><category term="HPC,Python"></category><category term="hpc"></category><category term="anaconda"></category></entry><entry><title>Block IOT Network Outbound on OpnSense</title><link href="https://blog.kail.io/block-iot-network-outbound-on-opnsense.html" rel="alternate"></link><published>2023-07-05T12:00:00-04:00</published><updated>2023-07-05T12:00:00-04:00</updated><author><name>Andrew Kail</name></author><id>tag:blog.kail.io,2023-07-05:/block-iot-network-outbound-on-opnsense.html</id><summary type="html">&lt;p&gt;I have recently set up an IOT VLAN on my OPNsense router to move some devices to. How to block
+the outbound took a little work to figure out but finally found the rule settings to get it working.&lt;/p&gt;
+&lt;p&gt;In my example below I'll be blocking all outbound network traffic …&lt;/p&gt;</summary><content type="html">&lt;p&gt;I have recently set up an IOT VLAN on my OPNsense router to move some devices to. How to block
+the outbound took a little work to figure out but finally found the rule settings to get it working.&lt;/p&gt;
+&lt;p&gt;In my example below I'll be blocking all outbound network traffic on the IOT Vlan except to a single
+host I expect the devices to talk to.  &lt;/p&gt;
+&lt;p&gt;The difficult part for me to wrap my brain around was blocking "inbound" traffic to the interface.  Once I understood
+I would be blocking IOT "network" traffic to the interface it was relatively easy to finish setting up.&lt;/p&gt;
+&lt;p&gt;Relevant rule settings:&lt;/p&gt;
+&lt;table&gt;
+&lt;thead&gt;
+&lt;tr&gt;
+&lt;th&gt;Setting&lt;/th&gt;
+&lt;th&gt;Value&lt;/th&gt;
+&lt;/tr&gt;
+&lt;/thead&gt;
+&lt;tbody&gt;
+&lt;tr&gt;
+&lt;td&gt;Action&lt;/td&gt;
+&lt;td&gt;Reject&lt;/td&gt;
+&lt;/tr&gt;
+&lt;tr&gt;
+&lt;td&gt;Quick&lt;/td&gt;
+&lt;td&gt;True&lt;/td&gt;
+&lt;/tr&gt;
+&lt;tr&gt;
+&lt;td&gt;Interface&lt;/td&gt;
+&lt;td&gt;IOT&lt;/td&gt;
+&lt;/tr&gt;
+&lt;tr&gt;
+&lt;td&gt;Direction&lt;/td&gt;
+&lt;td&gt;in&lt;/td&gt;
+&lt;/tr&gt;
+&lt;tr&gt;
+&lt;td&gt;TCP/IP Version&lt;/td&gt;
+&lt;td&gt;IPv4&lt;/td&gt;
+&lt;/tr&gt;
+&lt;tr&gt;
+&lt;td&gt;Protocol&lt;/td&gt;
+&lt;td&gt;any&lt;/td&gt;
+&lt;/tr&gt;
+&lt;tr&gt;
+&lt;td&gt;Source&lt;/td&gt;
+&lt;td&gt;IOT net&lt;/td&gt;
+&lt;/tr&gt;
+&lt;tr&gt;
+&lt;td&gt;Destination Invert&lt;/td&gt;
+&lt;td&gt;True&lt;/td&gt;
+&lt;/tr&gt;
+&lt;tr&gt;
+&lt;td&gt;Destination&lt;/td&gt;
+&lt;td&gt;Single host or Network&lt;/td&gt;
+&lt;/tr&gt;
+&lt;tr&gt;
+&lt;td&gt;Destination IP&lt;/td&gt;
+&lt;td&gt;192.168.1.100&lt;/td&gt;
+&lt;/tr&gt;
+&lt;/tbody&gt;
+&lt;/table&gt;
+&lt;p&gt;&lt;img alt="Example Rule" src="https://blog.kail.io/images/2023/opnsense-iot-fw/opnsense-iot-fw-1.png"&gt;&lt;/p&gt;
+&lt;p&gt;Once the rule is created be sure to apply the changes.&lt;/p&gt;
+&lt;p&gt;Now all devices on the IOT network will only be able to access the ip address defined above.  This was just the first step
+in getting my IOT network up and will need to open up to other things I'm sure but its a start.&lt;/p&gt;
+&lt;h2&gt;Notes&lt;/h2&gt;
+&lt;ul&gt;
+&lt;li&gt;TCP/IP Version will be limited to IPv4 if you Destination IP is IPv4.&lt;/li&gt;
+&lt;/ul&gt;
+&lt;h2&gt;Versions&lt;/h2&gt;
+&lt;table&gt;
+&lt;thead&gt;
+&lt;tr&gt;
+&lt;th&gt;Software&lt;/th&gt;
+&lt;th&gt;Version&lt;/th&gt;
+&lt;/tr&gt;
+&lt;/thead&gt;
+&lt;tbody&gt;
+&lt;tr&gt;
+&lt;td&gt;OPNsense&lt;/td&gt;
+&lt;td&gt;23.1.9&lt;/td&gt;
+&lt;/tr&gt;
+&lt;/tbody&gt;
+&lt;/table&gt;</content><category term="OPNsense"></category><category term="opnsense"></category></entry><entry><title>The Impact of RHEL Changes on an HPC MSP</title><link href="https://blog.kail.io/the-impact-of-rhel-changes-on-an-hpc-msp.html" rel="alternate"></link><published>2023-06-27T12:00:00-04:00</published><updated>2023-06-27T12:00:00-04:00</updated><author><name>Andrew Kail</name></author><id>tag:blog.kail.io,2023-06-27:/the-impact-of-rhel-changes-on-an-hpc-msp.html</id><summary type="html">&lt;p&gt;Its been nearly a week now and after having stewed on it I think its time to speak my piece on this debacle.&lt;/p&gt;
+&lt;p&gt;The recent changes to how Red Hat Enterprise Linux (RHEL) distributes their
+source code has caused quite a stir in the Linux and HPC community.  &lt;/p&gt;
+&lt;p&gt;While I …&lt;/p&gt;</summary><content type="html">&lt;p&gt;Its been nearly a week now and after having stewed on it I think its time to speak my piece on this debacle.&lt;/p&gt;
+&lt;p&gt;The recent changes to how Red Hat Enterprise Linux (RHEL) distributes their
+source code has caused quite a stir in the Linux and HPC community.  &lt;/p&gt;
+&lt;p&gt;While I can't fault RedHat/IBM for the business decision they have made, it does
+leave us in a bit of a pickle with regard to the support we provide long term.&lt;/p&gt;
+&lt;h2&gt;What Happened&lt;/h2&gt;
+&lt;p&gt;This feels like beating a dead horse really, so I'll just leave a few links on the situation:&lt;/p&gt;
+&lt;ul&gt;
+&lt;li&gt;&lt;a href="https://www.redhat.com/en/blog/furthering-evolution-centos-stream"&gt;The initial announcement&lt;/a&gt;&lt;/li&gt;
+&lt;li&gt;&lt;a href="https://www.redhat.com/en/blog/red-hats-commitment-open-source-response-gitcentosorg-changes"&gt;The RedHat response to Cricism&lt;/a&gt;&lt;/li&gt;
+&lt;li&gt;Rocky Linux &lt;a href="https://rockylinux.org/news/2023-06-22-press-release/"&gt;1&lt;/a&gt; &lt;a href="https://rockylinux.org/news/brave-new-world-path-forward/"&gt;2&lt;/a&gt;&lt;/li&gt;
+&lt;li&gt;&lt;a href="https://almalinux.org/blog/impact-of-rhel-changes/"&gt;Alma Linux&lt;/a&gt;&lt;/li&gt;
+&lt;li&gt;&lt;a href="https://sfconservancy.org/blog/2023/jun/23/rhel-gpl-analysis/"&gt;Software Freedom Conservancy&lt;/a&gt;&lt;/li&gt;
+&lt;li&gt;Jeff Geerling &lt;a href="https://www.jeffgeerling.com/blog/2023/dear-red-hat-are-you-dumb"&gt;1&lt;/a&gt; &lt;a href="https://www.jeffgeerling.com/blog/2023/removing-official-support-red-hat-enterprise-linux"&gt;2&lt;/a&gt; &lt;a href="https://www.jeffgeerling.com/blog/2023/im-done-red-hat-enterprise-linux"&gt;3&lt;/a&gt;&lt;/li&gt;
+&lt;/ul&gt;
+&lt;p&gt;&lt;strong&gt;tldr&lt;/strong&gt; - RedHad sees no value in allowing rebuilds, so they're closing it off.&lt;/p&gt;
+&lt;h2&gt;How This Impacts Us&lt;/h2&gt;
+&lt;p&gt;At the moment it doesn't thanks to the engineering teams at CIQ stepping up to provide continued updates which we are extremelly grateful for.  We are currently in the process of migrating customers from CentOS 7 clusters to Rocky 8 or 9 depending on the environment, with plans to migrate several more over the course of the year. This, of course, excludes the several we have that are running RHEL which will not be impacted at all by the change.&lt;/p&gt;
+&lt;p&gt;The big question is how long can CIQ keep these updates going? Or how long can Alma maintain cherry picking updates out of CentOS Stream? Once RedHat realizes they didn't kill off the derivative rebuilds will they pursue other legal or more drastic actions?  Going a step further, what about other open source projects from RedHat?  Looking at you Ansible, Podman, etc.&lt;/p&gt;
+&lt;p&gt;And what will IBM be doing for their products running on RHEL and OpenShift?  I'm worried about IBM Storage Scale (GPFS) only support clients on RHEL.&lt;/p&gt;
+&lt;p&gt;The bigger blow for our engineering or is Jeff Geerling dropping support for Enterprise Linux with his ansible roles,
+which are used heavily for some of our deployments.  Who will follow in dropping support?  We've already seen some application developers, namely GROMACS, state they will only officially support container stacks.&lt;/p&gt;
+&lt;p&gt;Then, for so many of our clients, they can't absorb the licensing costs for the number of licenses they need.  Many are smaller clients on a budget and a huge increase in license costs will reduce the value they can provide to their users.  &lt;/p&gt;
+&lt;h2&gt;What next&lt;/h2&gt;
+&lt;p&gt;We honestly don't know what the future holds for us in our space.  Most of our clients are on CentOS, Rocky, or RHEL spanning multiple versions.  Most of our storage stack are supported only on Enterprise Linux or heavily favor it.  If Rocky or Alma eventually go away we'll have to make some decisions on those clients.&lt;/p&gt;
+&lt;p&gt;In the meantime, we'll be prioritizing containerization of user applications via Singularity, Shifter, or CharlieCloud (Upcoming Article on this), as well as experiment with containerization of our supporting infrastructure.  While some pieces like the majority of the monitoring stack are easy to containerize, I am even looking at moving tools like Warewulf to a container which should be interesting.&lt;/p&gt;
+&lt;p&gt;Our other option is to migrate some of our customer base to OpenSuse Leap and offer paid support if they need it. Leap is the CentOS/Rocky equiavalent of Suse Enterprise Linux (SLES) and is maintained directly by Suse.  We've met with their team in the past and have dedicated resources and packages for HPC environments.  I think this is their opportunity to step into the HPC space for many institutions and I really hope they don't miss it.  I'll be exploring openSuseLeap and warewulf in the coming weeks with some blog posts I hope.&lt;/p&gt;
+&lt;h2&gt;Conclusion&lt;/h2&gt;
+&lt;p&gt;This announcement hit me right before bed unfortunately what followed was not a good night's sleep as I wrestled with the implications.&lt;/p&gt;
+&lt;p&gt;We'll be fine for now and we have some work to do to support our customers in the long term. &lt;/p&gt;
+&lt;p&gt;Also, what they have done doesn't appear to be illegal nor violate the GPL license. Time will tell, but I'm starting to see some bleedover of Big Blue into RedHat more and more and have deep concerns about how we can support our clients long term. I hope I'm wrong.&lt;/p&gt;</content><category term="HPC"></category><category term="hpc"></category><category term="linux"></category></entry><entry><title>PXE Booting on Proxmox</title><link href="https://blog.kail.io/pxe-booting-on-proxmox.html" rel="alternate"></link><published>2023-04-05T01:00:00-04:00</published><updated>2023-04-05T01:00:00-04:00</updated><author><name>Andrew Kail</name></author><id>tag:blog.kail.io,2023-04-05:/pxe-booting-on-proxmox.html</id><summary type="html">&lt;p&gt;In last's week post I &lt;a href="https://blog.kail.io/running-netbootxyz-from-opnsense.html"&gt;installed netboot.xyz on an OPNSense firewall&lt;/a&gt;. Now its
+time to test the PXE boot process on a VM on my Proxmox Host.  Its very
+straightforward, but there are a few caveats I found with netboot.&lt;/p&gt;
+&lt;p&gt;First, start the VM Creation process in Proxmox.  You …&lt;/p&gt;</summary><content type="html">&lt;p&gt;In last's week post I &lt;a href="https://blog.kail.io/running-netbootxyz-from-opnsense.html"&gt;installed netboot.xyz on an OPNSense firewall&lt;/a&gt;. Now its
+time to test the PXE boot process on a VM on my Proxmox Host.  Its very
+straightforward, but there are a few caveats I found with netboot.&lt;/p&gt;
+&lt;p&gt;First, start the VM Creation process in Proxmox.  You will use the defaults on
+most of the pages, but there are two important menu's you'll need to fill out.&lt;/p&gt;
+&lt;p&gt;&lt;img alt="Create VM" src="https://blog.kail.io/images/2023/proxmox-pxe/proxmox-pxe-1.png"&gt;&lt;/p&gt;
+&lt;p&gt;The first is in the OS menu.  Instead of selecting an ISO which has been loaded
+to the node, you'll want to select &lt;code&gt;Do no use any media&lt;/code&gt;&lt;/p&gt;
+&lt;p&gt;&lt;img alt="Select Install Media" src="https://blog.kail.io/images/2023/proxmox-pxe/proxmox-pxe-2.png"&gt;&lt;/p&gt;
+&lt;p&gt;The second caveat is when configuring the RAM.  During testing, I found there is
+a minimum amount of RAM you need with PXE booting.  This is due to downloaded
+media having to be stored in RAM before starting. Usually happens when running a
+live OS like EndeavourOS.  You'll want to configure at least 4 Gigabytes of RAM.&lt;/p&gt;
+&lt;p&gt;&lt;img alt="Select Ram" src="https://blog.kail.io/images/2023/proxmox-pxe/proxmox-pxe-3.png"&gt;&lt;/p&gt;
+&lt;p&gt;Finish creating the VM and go to the VM's console menu to start the VM.&lt;/p&gt;
+&lt;p&gt;&lt;img alt="Start VM" src="https://blog.kail.io/images/2023/proxmox-pxe/proxmox-pxe-4.png"&gt;&lt;/p&gt;
+&lt;p&gt;Without any media configured and nothing installed to the virtual disk the VM
+will automatically network boot and should pick up netboot.xyz right away.
+You'll the be able to select from the menu what you want to boot.&lt;/p&gt;
+&lt;p&gt;&lt;img alt="Netboot" src="https://blog.kail.io/images/2023/proxmox-pxe/proxmox-pxe-5.png"&gt;&lt;/p&gt;
+&lt;p&gt;I'm really impressed with how easy netboot.xyz was to install and use and I look
+forward to using it.&lt;/p&gt;</content><category term="Proxmox"></category><category term="proxmox"></category><category term="netboot"></category></entry><entry><title>Running Netboot.xyz From OPNSense</title><link href="https://blog.kail.io/running-netbootxyz-from-opnsense.html" rel="alternate"></link><published>2023-03-29T01:00:00-04:00</published><updated>2023-03-29T01:00:00-04:00</updated><author><name>Andrew Kail</name></author><id>tag:blog.kail.io,2023-03-29:/running-netbootxyz-from-opnsense.html</id><summary type="html">&lt;p&gt;After working with some PXE booting at work recently, I decided to pick up a
+long standing todo of installing netboot.xyz on my network.  When I started to
+take a deeper look into it I realized I could probably install it on my OPNSense
+VM as it is the …&lt;/p&gt;</summary><content type="html">&lt;p&gt;After working with some PXE booting at work recently, I decided to pick up a
+long standing todo of installing netboot.xyz on my network.  When I started to
+take a deeper look into it I realized I could probably install it on my OPNSense
+VM as it is the DHCP server and comes with a TFTP plugin.&lt;/p&gt;
+&lt;h2&gt;Install TFTP&lt;/h2&gt;
+&lt;p&gt;The first thing we need to do is install the TFTP plugin.  One note about this
+plugin is that it is no longer maintained so there is a possibility it may go
+away in the future.  Hopefully that is not the case.&lt;/p&gt;
+&lt;p&gt;Navigate to &lt;code&gt;System &amp;gt; Firmware &amp;gt; Plugins&lt;/code&gt; and search for &lt;code&gt;os-tftp&lt;/code&gt;, then click
+the &lt;code&gt;+&lt;/code&gt; button to install the plugin.&lt;/p&gt;
+&lt;p&gt;&lt;img alt="Install TFTP Plugin" src="https://blog.kail.io/images/2023/opnsense-pxe/opnsense-pxe-1.png"&gt;&lt;/p&gt;
+&lt;p&gt;Once we have the plugin installed we'll need to create the tftp directory and
+install netboot before enabling the service.  Otherwise it will fail. This step
+requires ssh access.&lt;/p&gt;
+&lt;div class="highlight"&gt;&lt;pre&gt;&lt;span&gt;&lt;/span&gt;&lt;code&gt;&lt;span class="n"&gt;ssh&lt;/span&gt;&lt;span class="w"&gt; &lt;/span&gt;&lt;span class="n"&gt;root&lt;/span&gt;&lt;span class="err"&gt;@&lt;/span&gt;&lt;span class="n"&gt;opnsense&lt;/span&gt;
+
+&lt;span class="c1"&gt;# Select &amp;#39;8&amp;#39; at the menu to enter the shell&lt;/span&gt;
+
+&lt;span class="n"&gt;mkdir&lt;/span&gt;&lt;span class="w"&gt; &lt;/span&gt;&lt;span class="o"&gt;/&lt;/span&gt;&lt;span class="n"&gt;usr&lt;/span&gt;&lt;span class="o"&gt;/&lt;/span&gt;&lt;span class="n"&gt;local&lt;/span&gt;&lt;span class="o"&gt;/&lt;/span&gt;&lt;span class="n"&gt;tftp&lt;/span&gt;
+&lt;span class="n"&gt;cd&lt;/span&gt;&lt;span class="w"&gt; &lt;/span&gt;&lt;span class="o"&gt;/&lt;/span&gt;&lt;span class="n"&gt;usr&lt;/span&gt;&lt;span class="o"&gt;/&lt;/span&gt;&lt;span class="n"&gt;local&lt;/span&gt;&lt;span class="o"&gt;/&lt;/span&gt;&lt;span class="n"&gt;tftp&lt;/span&gt;
+
+&lt;span class="c1"&gt;# Download netboot files&lt;/span&gt;
+&lt;span class="n"&gt;fetch&lt;/span&gt;&lt;span class="w"&gt; &lt;/span&gt;&lt;span class="n"&gt;https&lt;/span&gt;&lt;span class="p"&gt;:&lt;/span&gt;&lt;span class="o"&gt;//&lt;/span&gt;&lt;span class="n"&gt;boot&lt;/span&gt;&lt;span class="o"&gt;.&lt;/span&gt;&lt;span class="n"&gt;netboot&lt;/span&gt;&lt;span class="o"&gt;.&lt;/span&gt;&lt;span class="n"&gt;xyz&lt;/span&gt;&lt;span class="o"&gt;/&lt;/span&gt;&lt;span class="n"&gt;ipxe&lt;/span&gt;&lt;span class="o"&gt;/&lt;/span&gt;&lt;span class="n"&gt;netboot&lt;/span&gt;&lt;span class="o"&gt;.&lt;/span&gt;&lt;span class="n"&gt;xyz&lt;/span&gt;&lt;span class="o"&gt;.&lt;/span&gt;&lt;span class="n"&gt;kpxe&lt;/span&gt;
+&lt;span class="n"&gt;fetch&lt;/span&gt;&lt;span class="w"&gt; &lt;/span&gt;&lt;span class="n"&gt;https&lt;/span&gt;&lt;span class="p"&gt;:&lt;/span&gt;&lt;span class="o"&gt;//&lt;/span&gt;&lt;span class="n"&gt;boot&lt;/span&gt;&lt;span class="o"&gt;.&lt;/span&gt;&lt;span class="n"&gt;netboot&lt;/span&gt;&lt;span class="o"&gt;.&lt;/span&gt;&lt;span class="n"&gt;xyz&lt;/span&gt;&lt;span class="o"&gt;/&lt;/span&gt;&lt;span class="n"&gt;ipxe&lt;/span&gt;&lt;span class="o"&gt;/&lt;/span&gt;&lt;span class="n"&gt;netboot&lt;/span&gt;&lt;span class="o"&gt;.&lt;/span&gt;&lt;span class="n"&gt;xyz&lt;/span&gt;&lt;span class="o"&gt;.&lt;/span&gt;&lt;span class="n"&gt;efi&lt;/span&gt;
+&lt;span class="n"&gt;fetch&lt;/span&gt;&lt;span class="w"&gt; &lt;/span&gt;&lt;span class="n"&gt;https&lt;/span&gt;&lt;span class="p"&gt;:&lt;/span&gt;&lt;span class="o"&gt;//&lt;/span&gt;&lt;span class="n"&gt;boot&lt;/span&gt;&lt;span class="o"&gt;.&lt;/span&gt;&lt;span class="n"&gt;netboot&lt;/span&gt;&lt;span class="o"&gt;.&lt;/span&gt;&lt;span class="n"&gt;xyz&lt;/span&gt;&lt;span class="o"&gt;/&lt;/span&gt;&lt;span class="n"&gt;ipxe&lt;/span&gt;&lt;span class="o"&gt;/&lt;/span&gt;&lt;span class="n"&gt;netboot&lt;/span&gt;&lt;span class="o"&gt;.&lt;/span&gt;&lt;span class="n"&gt;xyz&lt;/span&gt;&lt;span class="o"&gt;-&lt;/span&gt;&lt;span class="n"&gt;arm64&lt;/span&gt;&lt;span class="o"&gt;.&lt;/span&gt;&lt;span class="n"&gt;efi&lt;/span&gt;
+&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;
+
+&lt;p&gt;I downloaded three files above to support the main types of network booting I
+expect on my home network.  Namely Bios, EFI, and ARM EFI.  If you feel you need
+to use a different bootloader you'll want to read the netboot documenation for
+that.&lt;/p&gt;
+&lt;p&gt;Now we can enable the service, making sure to set the "Listen Address" to the ip
+we expect to boot from. &lt;/p&gt;
+&lt;p&gt;&lt;img alt="Enalbe TFTP" src="https://blog.kail.io/images/2023/opnsense-pxe/opnsense-pxe-2.png"&gt;&lt;/p&gt;
+&lt;p&gt;Click save and make sure the TFTP service has properly started.  You should see
+a green play button in the top right indicating the service is running.&lt;/p&gt;
+&lt;h2&gt;Configure DHCP&lt;/h2&gt;
+&lt;p&gt;Now we need to enable the dhcp server to allow network booting.&lt;/p&gt;
+&lt;p&gt;Navigate to &lt;code&gt;Services &amp;gt; DHCPv4 &amp;gt; [Name of you boot network]&lt;/code&gt;.  Making sure to
+select the network you wish to boot from.  In my case, its my Internal network.&lt;/p&gt;
+&lt;p&gt;&lt;img alt="Configure Network Booting" class="center-img" src="https://blog.kail.io/images/2023/opnsense-pxe/opnsense-pxe-3.png" width="300"&gt;&lt;/p&gt;
+&lt;p&gt;Scroll down till you see  &lt;code&gt;Network Booting&lt;/code&gt; and click the &lt;code&gt;Advanced&lt;/code&gt; button to
+show all the full settings.&lt;/p&gt;
+&lt;p&gt;&lt;img alt="Advanced Settings" src="https://blog.kail.io/images/2023/opnsense-pxe/opnsense-pxe-4.png"&gt;&lt;/p&gt;
+&lt;p&gt;Fill out the form with the IP Address we configured for the TFTP service.  For
+the filenames, you can do the following:&lt;/p&gt;
+&lt;table&gt;
+&lt;thead&gt;
+&lt;tr&gt;
+&lt;th&gt;Setting&lt;/th&gt;
+&lt;th&gt;Filename&lt;/th&gt;
+&lt;/tr&gt;
+&lt;/thead&gt;
+&lt;tbody&gt;
+&lt;tr&gt;
+&lt;td&gt;bios&lt;/td&gt;
+&lt;td&gt;netboot.xyz.kpxe&lt;/td&gt;
+&lt;/tr&gt;
+&lt;tr&gt;
+&lt;td&gt;x86 UEFI (32-bit)&lt;/td&gt;
+&lt;td&gt;netboot.xyz.efi&lt;/td&gt;
+&lt;/tr&gt;
+&lt;tr&gt;
+&lt;td&gt;x86 UEFI (64-bit)&lt;/td&gt;
+&lt;td&gt;netboot.xyz.efi&lt;/td&gt;
+&lt;/tr&gt;
+&lt;tr&gt;
+&lt;td&gt;ARM x86 UEFI (32-bit)&lt;/td&gt;
+&lt;td&gt;netboot.xyz-arm64.efi&lt;/td&gt;
+&lt;/tr&gt;
+&lt;tr&gt;
+&lt;td&gt;ARM x86 UEFI (64-bit)&lt;/td&gt;
+&lt;td&gt;netboot.xyz-arm64.efi&lt;/td&gt;
+&lt;/tr&gt;
+&lt;/tbody&gt;
+&lt;/table&gt;
+&lt;p&gt;&lt;img alt="Boot Filenames" src="https://blog.kail.io/images/2023/opnsense-pxe/opnsense-pxe-5.png"&gt;&lt;/p&gt;
+&lt;p&gt;Scrool down to click save and the DHCP service should restart.  Now when you do
+network booting with a system on the network it will bring up a slick menu to
+boot your favorite distribution.&lt;/p&gt;
+&lt;h2&gt;References&lt;/h2&gt;
+&lt;ul&gt;
+&lt;li&gt;&lt;a href="https://netboot.xyz/docs/booting/tftp"&gt;Netboot.xyz&lt;/a&gt;&lt;/li&gt;
+&lt;li&gt;&lt;a href="https://www.reddit.com/r/OPNsenseFirewall/comments/zx86ve/how_to_configure_opnsense_for_netbootxyz/"&gt;Reddit
+Thread&lt;/a&gt;&lt;/li&gt;
+&lt;/ul&gt;</content><category term="OPNSense"></category><category term="opnsense"></category><category term="netboot"></category></entry><entry><title>Adding Anaconda Environment to Jupyter</title><link href="https://blog.kail.io/adding-anaconda-environment-to-jupyter.html" rel="alternate"></link><published>2023-02-13T12:00:00-05:00</published><updated>2023-02-13T12:00:00-05:00</updated><author><name>Andrew Kail</name></author><id>tag:blog.kail.io,2023-02-13:/adding-anaconda-environment-to-jupyter.html</id><summary type="html">&lt;p&gt;When using Jupyter, or Jupyterlab, you'll often times want to use different anaconda
+environments for different projects.  Especially when you are working on a
+personal workstation.  Unfortunately, even when installed with anaconda at the
+root level, jupyter doesn't automatically detect installed anaconda
+environments.&lt;/p&gt;
+&lt;p&gt;For example, in a default jupyterhub install …&lt;/p&gt;</summary><content type="html">&lt;p&gt;When using Jupyter, or Jupyterlab, you'll often times want to use different anaconda
+environments for different projects.  Especially when you are working on a
+personal workstation.  Unfortunately, even when installed with anaconda at the
+root level, jupyter doesn't automatically detect installed anaconda
+environments.&lt;/p&gt;
+&lt;p&gt;For example, in a default jupyterhub install you will only have a single kernel
+installed.&lt;/p&gt;
+&lt;p&gt;&lt;img alt="Default Jupyterlab" src="https://blog.kail.io/images/2023/jupyter_kernelspecs/default_kernels.png"&gt;&lt;/p&gt;
+&lt;h2&gt;Adding the Kernel&lt;/h2&gt;
+&lt;p&gt;Start be creating a new anaconda environment, or optionally a python virtual
+environment using one of the several available tools.&lt;/p&gt;
+&lt;p&gt;At a minimum, the &lt;code&gt;ipykernel&lt;/code&gt; package must be installed.&lt;/p&gt;
+&lt;div class="highlight"&gt;&lt;pre&gt;&lt;span&gt;&lt;/span&gt;&lt;code&gt;&lt;span class="c1"&gt;# create and activate a new anaconda environment&lt;/span&gt;
+conda&lt;span class="w"&gt; &lt;/span&gt;create&lt;span class="w"&gt; &lt;/span&gt;-n&lt;span class="w"&gt; &lt;/span&gt;newkernel&lt;span class="w"&gt; &lt;/span&gt;ipykernel
+conda&lt;span class="w"&gt; &lt;/span&gt;activate&lt;span class="w"&gt; &lt;/span&gt;
+&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;
+
+&lt;p&gt;Now add the kernel, being sure to add the &lt;code&gt;--user&lt;/code&gt; flag if anaconda is installed
+somewhere the user does not have permission to write to.  Also, a name for the
+kernel should also be provided as the default name may conflict with the default
+kernel installed.&lt;/p&gt;
+&lt;div class="highlight"&gt;&lt;pre&gt;&lt;span&gt;&lt;/span&gt;&lt;code&gt;python3&lt;span class="w"&gt; &lt;/span&gt;-m&lt;span class="w"&gt; &lt;/span&gt;ipykernel&lt;span class="w"&gt; &lt;/span&gt;install&lt;span class="w"&gt; &lt;/span&gt;--user&lt;span class="w"&gt; &lt;/span&gt;--name&lt;span class="w"&gt; &lt;/span&gt;newkernel
+&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;
+
+&lt;p&gt;Now a new kernel should be available without having to restart the jupyter
+instance.&lt;/p&gt;
+&lt;p&gt;&lt;img alt="New Kernel" src="https://blog.kail.io/images/2023/jupyter_kernelspecs/kernel_installed.png"&gt;&lt;/p&gt;
+&lt;h2&gt;How does it work?&lt;/h2&gt;
+&lt;p&gt;When a kernel is installed, a json file is installed in the user's home
+directory at &lt;code&gt;$HOME/.local/share/jupyter/kernels&lt;/code&gt;.  This json file defines where
+jupyter will look to start kernel.&lt;/p&gt;
+&lt;div class="highlight"&gt;&lt;pre&gt;&lt;span&gt;&lt;/span&gt;&lt;code&gt;&lt;span class="p"&gt;{&lt;/span&gt;
+&lt;span class="w"&gt; &lt;/span&gt;&lt;span class="nt"&gt;&amp;quot;argv&amp;quot;&lt;/span&gt;&lt;span class="p"&gt;:&lt;/span&gt;&lt;span class="w"&gt; &lt;/span&gt;&lt;span class="p"&gt;[&lt;/span&gt;
+&lt;span class="w"&gt;  &lt;/span&gt;&lt;span class="s2"&gt;&amp;quot;/home/akail/.conda/envs/newkernel/bin/python3&amp;quot;&lt;/span&gt;&lt;span class="p"&gt;,&lt;/span&gt;
+&lt;span class="w"&gt;  &lt;/span&gt;&lt;span class="s2"&gt;&amp;quot;-m&amp;quot;&lt;/span&gt;&lt;span class="p"&gt;,&lt;/span&gt;
+&lt;span class="w"&gt;  &lt;/span&gt;&lt;span class="s2"&gt;&amp;quot;ipykernel_launcher&amp;quot;&lt;/span&gt;&lt;span class="p"&gt;,&lt;/span&gt;
+&lt;span class="w"&gt;  &lt;/span&gt;&lt;span class="s2"&gt;&amp;quot;-f&amp;quot;&lt;/span&gt;&lt;span class="p"&gt;,&lt;/span&gt;
+&lt;span class="w"&gt;  &lt;/span&gt;&lt;span class="s2"&gt;&amp;quot;{connection_file}&amp;quot;&lt;/span&gt;
+&lt;span class="w"&gt; &lt;/span&gt;&lt;span class="p"&gt;],&lt;/span&gt;
+&lt;span class="w"&gt; &lt;/span&gt;&lt;span class="nt"&gt;&amp;quot;display_name&amp;quot;&lt;/span&gt;&lt;span class="p"&gt;:&lt;/span&gt;&lt;span class="w"&gt; &lt;/span&gt;&lt;span class="s2"&gt;&amp;quot;testing&amp;quot;&lt;/span&gt;&lt;span class="p"&gt;,&lt;/span&gt;
+&lt;span class="w"&gt; &lt;/span&gt;&lt;span class="nt"&gt;&amp;quot;language&amp;quot;&lt;/span&gt;&lt;span class="p"&gt;:&lt;/span&gt;&lt;span class="w"&gt; &lt;/span&gt;&lt;span class="s2"&gt;&amp;quot;python&amp;quot;&lt;/span&gt;&lt;span class="p"&gt;,&lt;/span&gt;
+&lt;span class="w"&gt; &lt;/span&gt;&lt;span class="nt"&gt;&amp;quot;metadata&amp;quot;&lt;/span&gt;&lt;span class="p"&gt;:&lt;/span&gt;&lt;span class="w"&gt; &lt;/span&gt;&lt;span class="p"&gt;{&lt;/span&gt;
+&lt;span class="w"&gt;  &lt;/span&gt;&lt;span class="nt"&gt;&amp;quot;debugger&amp;quot;&lt;/span&gt;&lt;span class="p"&gt;:&lt;/span&gt;&lt;span class="w"&gt; &lt;/span&gt;&lt;span class="kc"&gt;true&lt;/span&gt;
+&lt;span class="w"&gt; &lt;/span&gt;&lt;span class="p"&gt;}&lt;/span&gt;
+&lt;span class="p"&gt;}&lt;/span&gt;
+&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;
+
+&lt;h2&gt;References&lt;/h2&gt;
+&lt;ul&gt;
+&lt;li&gt;&lt;a href="https://jupyter-client.readthedocs.io/en/latest/kernels.html#kernelspecs"&gt;Jupyter Documentation&lt;/a&gt;&lt;/li&gt;
+&lt;/ul&gt;</content><category term="Jupyter"></category><category term="jupyter"></category><category term="python"></category></entry><entry><title>Cleaning Scratch Sub-directories</title><link href="https://blog.kail.io/cleaning-scratch-sub-directories.html" rel="alternate"></link><published>2023-01-09T00:00:00-05:00</published><updated>2023-01-09T00:00:00-05:00</updated><author><name>Andrew Kail</name></author><id>tag:blog.kail.io,2023-01-09:/cleaning-scratch-sub-directories.html</id><summary type="html">&lt;p&gt;We recently ran into an issue with a high speed scratch file system after some drive failures.  While the metadata was intact we could not guarantee
+that any of the user data was any good.  Since the metadata was good, we could keep the top level user scratch directories intact …&lt;/p&gt;</summary><content type="html">&lt;p&gt;We recently ran into an issue with a high speed scratch file system after some drive failures.  While the metadata was intact we could not guarantee
+that any of the user data was any good.  Since the metadata was good, we could keep the top level user scratch directories intact and remove all other files
+under them, saving a bit of time recreating everything.&lt;/p&gt;
+&lt;div class="highlight"&gt;&lt;pre&gt;&lt;span&gt;&lt;/span&gt;&lt;code&gt;&lt;span class="nv"&gt;find&lt;/span&gt;&lt;span class="w"&gt; &lt;/span&gt;.&lt;span class="w"&gt; &lt;/span&gt;&lt;span class="o"&gt;-&lt;/span&gt;&lt;span class="nv"&gt;maxdepth&lt;/span&gt;&lt;span class="w"&gt; &lt;/span&gt;&lt;span class="mi"&gt;2&lt;/span&gt;&lt;span class="w"&gt; &lt;/span&gt;&lt;span class="o"&gt;-&lt;/span&gt;&lt;span class="nv"&gt;mindepth&lt;/span&gt;&lt;span class="w"&gt; &lt;/span&gt;&lt;span class="mi"&gt;2&lt;/span&gt;&lt;span class="w"&gt; &lt;/span&gt;&lt;span class="o"&gt;-&lt;/span&gt;&lt;span class="k"&gt;exec&lt;/span&gt;&lt;span class="w"&gt; &lt;/span&gt;&lt;span class="nv"&gt;rm&lt;/span&gt;&lt;span class="w"&gt; &lt;/span&gt;&lt;span class="o"&gt;-&lt;/span&gt;&lt;span class="nv"&gt;rf&lt;/span&gt;&lt;span class="w"&gt; &lt;/span&gt;{}&lt;span class="w"&gt; &lt;/span&gt;\&lt;span class="c1"&gt;;&lt;/span&gt;
+&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;
+
+&lt;p&gt;This snippet should be run with care.&lt;/p&gt;</content><category term="Snippet"></category><category term="storage"></category><category term="snippets"></category></entry><entry><title>Hide Pelican Articles on Output</title><link href="https://blog.kail.io/hide-pelican-articles-on-output.html" rel="alternate"></link><published>2023-01-02T00:00:00-05:00</published><updated>2023-01-02T00:00:00-05:00</updated><author><name>Andrew Kail</name></author><id>tag:blog.kail.io,2023-01-02:/hide-pelican-articles-on-output.html</id><summary type="html">&lt;p&gt;Authors: Andrew Kail&lt;/p&gt;
+&lt;p&gt;While working on this website I had started to draft a lot of articles in preparation
+to develop some consistency and start to flesh out a book on &lt;a href="https://hpc.kail.io"&gt;HPC&lt;/a&gt;.&lt;/p&gt;
+&lt;p&gt;In doing so, I found that there was no way to prevent these articles from being generated and …&lt;/p&gt;</summary><content type="html">&lt;p&gt;Authors: Andrew Kail&lt;/p&gt;
+&lt;p&gt;While working on this website I had started to draft a lot of articles in preparation
+to develop some consistency and start to flesh out a book on &lt;a href="https://hpc.kail.io"&gt;HPC&lt;/a&gt;.&lt;/p&gt;
+&lt;p&gt;In doing so, I found that there was no way to prevent these articles from being generated and could be
+accessed by anyone digging through the site or my github repository.  While not a big deal since the drafts
+themselves exist as markdown files, I wanted to keep the published website clean and began looking for a way
+to clean things up.&lt;/p&gt;
+&lt;p&gt;Pelican offers a few ways to control what gets generated on your website.  The first is by using the "Status" metadata
+tag on an article or page.  The status can be draft, hidden, or published.  If an article is in draft, it will be listed under
+the drafts directory of the web page.  If the article is hidden, it will be generated under the root directory as normal,
+but will not have any links to it via tags or categories.  Published means the article is published.&lt;/p&gt;
+&lt;p&gt;No matter which status we chose, the html for the article will be generated.&lt;/p&gt;
+&lt;p&gt;There have been a few &lt;a href="https://github.com/getpelican/pelican/issues/1965"&gt;attempts&lt;/a&gt; at adding this feature, but
+no one has stepped forward to implement it unfortunately.  From reading this issue the simplest solution is to leverage the &lt;code&gt;IGNORE_FILES&lt;/code&gt; setting
+in &lt;code&gt;publishconf.py&lt;/code&gt; and move all drafts to a sub-folder in the &lt;code&gt;content&lt;/code&gt; directory. &lt;code&gt;IGNORE_FILES&lt;/code&gt; takes a list of regular
+expressions one can use to exclude files and directories from generation.  For example, I created a directory &lt;code&gt;drafts&lt;/code&gt;
+and moved all my draft files under there, and then kept my published files under a year based structure.  To exclude
+files in the drafts folder and maintain the pelican defaults, the following should be added:&lt;/p&gt;
+&lt;div class="highlight"&gt;&lt;pre&gt;&lt;span&gt;&lt;/span&gt;&lt;code&gt;&lt;span class="n"&gt;IGNORE_FILES&lt;/span&gt; &lt;span class="o"&gt;=&lt;/span&gt; &lt;span class="p"&gt;[&lt;/span&gt;&lt;span class="s2"&gt;&amp;quot;.#*&amp;quot;&lt;/span&gt;&lt;span class="p"&gt;,&lt;/span&gt; &lt;span class="s2"&gt;&amp;quot;drafts&amp;quot;&lt;/span&gt;&lt;span class="p"&gt;]&lt;/span&gt;
+&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;
+
+&lt;p&gt;Now to ensure that all files under the drafts directory have the appropriate statue, we set &lt;code&gt;EXTRA_PATH_METADATA&lt;/code&gt;
+in &lt;code&gt;pelicanconf.py&lt;/code&gt; to set the default status.&lt;/p&gt;
+&lt;div class="highlight"&gt;&lt;pre&gt;&lt;span&gt;&lt;/span&gt;&lt;code&gt;&lt;span class="n"&gt;EXTRA_PATH_METADATA&lt;/span&gt; &lt;span class="o"&gt;=&lt;/span&gt; &lt;span class="p"&gt;{&lt;/span&gt;
+    &lt;span class="s2"&gt;&amp;quot;drafts&amp;quot;&lt;/span&gt;&lt;span class="p"&gt;:&lt;/span&gt; &lt;span class="p"&gt;{&lt;/span&gt;&lt;span class="s2"&gt;&amp;quot;status&amp;quot;&lt;/span&gt;&lt;span class="p"&gt;:&lt;/span&gt; &lt;span class="s2"&gt;&amp;quot;draft&amp;quot;&lt;/span&gt;&lt;span class="p"&gt;},&lt;/span&gt;
+&lt;span class="p"&gt;}&lt;/span&gt;
+&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;
+
+&lt;p&gt;This will ensure drafts do not accidently populate the post list while developing and reduce the extra step of 
+setting the status.&lt;/p&gt;</content><category term="Python"></category><category term="pelican"></category></entry></feed>

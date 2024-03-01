@@ -1,0 +1,445 @@
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="utf-8" />
+  <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+  <meta name="HandheldFriendly" content="True" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <meta name="robots" content="" />
+  <meta name="google-site-verification" content="ZlfC6LPbIl8QMogAf9hWUt9xNqocwt4niXcpc56reIs" />
+
+  <link href="https://fonts.googleapis.com/css2?family=Source+Code+Pro:ital,wght@0,400;0,700;1,400&family=Source+Sans+Pro:ital,wght@0,300;0,400;0,700;1,400&display=swap" rel="stylesheet">
+
+    <link rel="stylesheet" type="text/css" href="https://blog.kail.io/theme/stylesheet/style.min.css">
+
+
+    <link id="pygments-light-theme" rel="stylesheet" type="text/css"
+          href="https://blog.kail.io/theme/pygments/gruvbox-dark.min.css">
+
+
+
+  <link rel="stylesheet" type="text/css" href="https://blog.kail.io/theme/font-awesome/css/fontawesome.css">
+  <link rel="stylesheet" type="text/css" href="https://blog.kail.io/theme/font-awesome/css/brands.css">
+  <link rel="stylesheet" type="text/css" href="https://blog.kail.io/theme/font-awesome/css/solid.css">
+
+  <link rel="stylesheet" type="text/css" href="https://blog.kail.io/static/custom.css">
+  <link rel="stylesheet" type="text/css" href="https://blog.kail.io/theme//copy/copy.css">
+
+  <link rel="shortcut icon" href="/images/favicon.ico" type="image/x-icon">
+  <link rel="icon" href="/images/favicon.ico" type="image/x-icon">
+
+
+  <link href="https://blog.kail.io/feeds/all.atom.xml" type="application/atom+xml" rel="alternate" title="Andrew Kail's Blog Atom">
+
+
+
+
+<script defer data-domain="blog.kail.io" src="https://plausible.kail.io/js/script.js"></script>
+
+
+
+
+ 
+
+    <meta name="author" content="Andrew Kail" />
+    <meta name="description" content="The personal blog of Andrew Kail, an HPC enthusiast, PhD Student, and homelaber." />
+  <meta property="og:site_name" content="Andrew Kail's Blog"/>
+  <meta property="og:type" content="blog"/>
+  <meta property="og:title" content="Andrew Kail's Blog"/>
+  <meta property="og:description" content="The personal blog of Andrew Kail, an HPC enthusiast, PhD Student, and homelaber."/>
+  <meta property="og:locale" content="en_US"/>
+  <meta property="og:url" content="https://blog.kail.io"/>
+  <meta property="og:image" content="https://blog.kail.io/images/profile.png">
+
+  <title>Andrew Kail's Blog</title>
+
+
+</head>
+<body class="light-theme">
+
+<aside>
+  <div>
+    <a href="https://blog.kail.io/">
+      <img src="https://blog.kail.io/images/profile.png" alt="Andrew Kail's Blog" title="Andrew Kail's Blog">
+    </a>
+
+    <h1>
+      <a href="https://blog.kail.io/">Andrew Kail's Blog</a>
+    </h1>
+
+    <p>Somewhat HPC related blog</p>
+
+
+    <nav>
+      <ul class="list">
+
+
+            <li>
+              <a target="_self"
+                 href="https://blog.kail.io/pages/about.html#about">
+                About
+              </a>
+            </li>
+            <li>
+              <a target="_self"
+                 href="https://blog.kail.io/pages/get-in-touch.html#get-in-touch">
+                Get in Touch
+              </a>
+            </li>
+            <li>
+              <a target="_self"
+                 href="https://blog.kail.io/pages/projects.html#projects">
+                Projects
+              </a>
+            </li>
+
+          <li>
+            <a target="_self" href="https://github.com/akail/Configs" >My Configs</a>
+          </li>
+      </ul>
+    </nav>
+
+    <ul class="social">
+      <li>
+        <a class="sc-github"
+           href="https://github.com/akail"
+           target="_blank">
+          <i class="fa-brands fa-github"></i>
+        </a>
+      </li>
+      <li>
+        <a class="sc-rss"
+           href="/feeds/all.atom.xml"
+           target="_blank">
+          <i class="fa-solid fa-rss"></i>
+        </a>
+      </li>
+      <li>
+        <a class="sc-linkedin"
+           href="https://www.linkedin.com/in/andrewkail/"
+           target="_blank">
+          <i class="fa-brands fa-linkedin"></i>
+        </a>
+      </li>
+      <li>
+        <a class="sc-mastodon"
+rel="me"           href="https://fosstodon.org/@akail"
+           target="_blank">
+          <i class="fa-brands fa-mastodon"></i>
+        </a>
+      </li>
+    </ul>
+  </div>
+
+</aside>
+  <main>
+
+<nav>
+  <a href="https://blog.kail.io/">Home</a>
+
+  <a href="/archives.html">Archives</a>
+  <a href="/categories.html">Categories</a>
+  <a href="/tags.html">Tags</a>
+
+  <a href="https://blog.kail.io/feeds/all.atom.xml">Atom</a>
+
+</nav>
+
+
+
+<article>
+  <header>
+    <h2><a href="https://blog.kail.io/comparison-of-provisioningcluster-managers-in-hpc.html#comparison-of-provisioningcluster-managers-in-hpc">Comparison of Provisioning/Cluster Managers in HPC</a></h2>
+    <p>
+      Posted on Fri 08 December 2023 in <a href="https://blog.kail.io/category/hpc.html">HPC</a>
+
+          &#8226; Tagged with
+              <a href="https://blog.kail.io/tag/hpc.html">hpc</a>,              <a href="https://blog.kail.io/tag/linux.html">linux</a>,              <a href="https://blog.kail.io/tag/provisioning.html">provisioning</a>
+    </p>
+  </header>
+  <div>
+      <div><p>We are primarily a <del>Bright Cluster Manager</del> Base Command Manager (BCM) 
+shop and recently some
+uncertainty has arisen around the future of BCM after its purchase by Nvidia last year.
+More specifically how 
+pricing will be handled and whether BCM will only be available with Nvidia
+superpods and DGX systems …</p></div>
+        <br>
+        <a class="btn"
+           href="https://blog.kail.io/comparison-of-provisioningcluster-managers-in-hpc.html#comparison-of-provisioningcluster-managers-in-hpc">
+          Continue reading
+        </a>
+  </div>
+  <hr />
+</article>
+<article>
+  <header>
+    <h2><a href="https://blog.kail.io/some-systemd-root-mount-confusion.html#some-systemd-root-mount-confusion">Some Systemd Root Mount Confusion</a></h2>
+    <p>
+      Posted on Thu 14 September 2023 in <a href="https://blog.kail.io/category/linux.html">Linux</a>
+
+          &#8226; Tagged with
+              <a href="https://blog.kail.io/tag/linux.html">linux</a>,              <a href="https://blog.kail.io/tag/systemd.html">systemd</a>,              <a href="https://blog.kail.io/tag/bright.html">bright</a>
+    </p>
+  </header>
+  <div>
+      <div><p>I recently ran into an interesting issue with systemd on a Bright Cluster. </p>
+<p>Bright Cluster Manager (BCM) has a tendency to restart the Slurm Daemons when
+certain changes are made, such as adding a new partition.  Recently when we did this,
+we found the daemon failed to restart on a …</p></div>
+        <br>
+        <a class="btn"
+           href="https://blog.kail.io/some-systemd-root-mount-confusion.html#some-systemd-root-mount-confusion">
+          Continue reading
+        </a>
+  </div>
+  <hr />
+</article>
+<article>
+  <header>
+    <h2><a href="https://blog.kail.io/simple-nvidia-pytorch-container.html#simple-nvidia-pytorch-container">Simple Nvidia PyTorch Container</a></h2>
+    <p>
+      Posted on Wed 06 September 2023 in <a href="https://blog.kail.io/category/python.html">Python</a>
+
+          &#8226; Tagged with
+              <a href="https://blog.kail.io/tag/apptainer.html">apptainer</a>,              <a href="https://blog.kail.io/tag/jupyter.html">jupyter</a>,              <a href="https://blog.kail.io/tag/nvidia.html">nvidia</a>,              <a href="https://blog.kail.io/tag/pytorch.html">pytorch</a>
+    </p>
+  </header>
+  <div>
+      <div><p>Another quick Apptainer example for getting pytorch quickly up and
+running.</p>
+<p><strong>The Definition File</strong></p>
+<div class="highlight"><pre><span></span><code><span class="k">Bootstrap</span>:<span class="w"> </span>docker
+<span class="k">From</span>:<span class="w"> </span>nvidia/cuda:<span class="m">11.7.1</span>-runtime-ubuntu22<span class="m">.04</span>
+
+<span class="gh">%post</span>
+<span class="w">    </span>apt-get<span class="w"> </span>-y<span class="w"> </span>update
+<span class="w">    </span>apt<span class="w"> </span>install<span class="w"> </span>-y<span class="w"> </span>python3<span class="w"> </span>python3-pip
+<span class="w">    </span>pip3<span class="w"> </span>install<span class="w"> </span>torch<span class="w"> </span>torchvision<span class="w"> </span>torchaudio
+<span class="w">    </span>pip3<span class="w"> </span>install<span class="w"> </span>ipykernel
+</code></pre></div>
+
+<p><strong>Build the Container</strong></p>
+<div class="highlight"><pre><span></span><code>apptainer build pytorch.sif pytorch.def …</code></pre></div></div>
+        <br>
+        <a class="btn"
+           href="https://blog.kail.io/simple-nvidia-pytorch-container.html#simple-nvidia-pytorch-container">
+          Continue reading
+        </a>
+  </div>
+  <hr />
+</article>
+<article>
+  <header>
+    <h2><a href="https://blog.kail.io/running-a-jupyter-kernel-in-apptainer.html#running-a-jupyter-kernel-in-apptainer">Running A Jupyter Kernel In Apptainer</a></h2>
+    <p>
+      Posted on Wed 30 August 2023 in <a href="https://blog.kail.io/category/python.html">Python</a>
+
+          &#8226; Tagged with
+              <a href="https://blog.kail.io/tag/apptainer.html">apptainer</a>,              <a href="https://blog.kail.io/tag/jupyter.html">jupyter</a>
+    </p>
+  </header>
+  <div>
+      <div><p>Just a quick example of running a Jupyter kernel inside an <del>Singularity</del> 
+Apptainer container.</p>
+<p>First define a container with all the required applications, in particular <code>ipykernel</code>.</p>
+<div class="highlight"><pre><span></span><code><span class="k">bootstrap</span>:<span class="w"> </span>docker
+<span class="k">From</span>:<span class="w"> </span>python:<span class="m">3.11</span>-slim-buster
+
+<span class="gh">%runscript</span>
+<span class="w">    </span><span class="nb">echo</span><span class="w"> </span><span class="s2">&quot;Hello... I am a new Singularity container&quot;</span>
+
+<span class="gh">%labels</span>
+<span class="w">    </span>AUTHOR<span class="w"> </span>andrew@kail.io
+
+<span class="gh">%post</span>
+<span class="w">    </span>apt-get<span class="w"> </span>update …</code></pre></div></div>
+        <br>
+        <a class="btn"
+           href="https://blog.kail.io/running-a-jupyter-kernel-in-apptainer.html#running-a-jupyter-kernel-in-apptainer">
+          Continue reading
+        </a>
+  </div>
+  <hr />
+</article>
+<article>
+  <header>
+    <h2><a href="https://blog.kail.io/integrating-anaconda-with-lmod.html#integrating-anaconda-with-lmod">Integrating Anaconda with Lmod</a></h2>
+    <p>
+      Posted on Tue 22 August 2023 in <a href="https://blog.kail.io/category/hpcpython.html">HPC,Python</a>
+
+          &#8226; Tagged with
+              <a href="https://blog.kail.io/tag/hpc.html">hpc</a>,              <a href="https://blog.kail.io/tag/anaconda.html">anaconda</a>
+    </p>
+  </header>
+  <div>
+      <div><p>In a previous <a href="https://blog.kail.io/performance-impact-of-anaconda-initialization.html">post</a> I looked into performance issues with Anaconda initialization.  To
+get around users modifying their <code>.bashrc</code> and breaking their environment, 
+I have instead written an Lmod modulefile that handles setting and unsetting the variables and
+fuctions it needs.  This works for both bash and csh.</p>
+<div class="highlight"><table class="highlighttable"><tr><td class="linenos"><div class="linenodiv"><pre><span class="normal"> 1</span>
+<span class="normal"> 2 …</span></pre></div></td></tr></table></div></div>
+        <br>
+        <a class="btn"
+           href="https://blog.kail.io/integrating-anaconda-with-lmod.html#integrating-anaconda-with-lmod">
+          Continue reading
+        </a>
+  </div>
+  <hr />
+</article>
+<article>
+  <header>
+    <h2><a href="https://blog.kail.io/performance-impact-of-anaconda-initialization.html#performance-impact-of-anaconda-initialization">Performance Impact of Anaconda Initialization</a></h2>
+    <p>
+      Posted on Tue 15 August 2023 in <a href="https://blog.kail.io/category/hpcpython.html">HPC,Python</a>
+
+          &#8226; Tagged with
+              <a href="https://blog.kail.io/tag/hpc.html">hpc</a>,              <a href="https://blog.kail.io/tag/anaconda.html">anaconda</a>
+    </p>
+  </header>
+  <div>
+      <div><p>One of the biggest complaints we get from many users is a delayed login when they initially
+get into the cluster.  In most cases, we have narrowed it down to users either installing
+their own version of <a href="https://anaconda.org">Anaconda</a> or they're using an existing install
+without without a customized modulefile.</p>
+<p>The …</p></div>
+        <br>
+        <a class="btn"
+           href="https://blog.kail.io/performance-impact-of-anaconda-initialization.html#performance-impact-of-anaconda-initialization">
+          Continue reading
+        </a>
+  </div>
+  <hr />
+</article>
+<article>
+  <header>
+    <h2><a href="https://blog.kail.io/block-iot-network-outbound-on-opnsense.html#block-iot-network-outbound-on-opnsense">Block IOT Network Outbound on OpnSense</a></h2>
+    <p>
+      Posted on Wed 05 July 2023 in <a href="https://blog.kail.io/category/opnsense.html">OPNsense</a>
+
+          &#8226; Tagged with
+              <a href="https://blog.kail.io/tag/opnsense.html">opnsense</a>
+    </p>
+  </header>
+  <div>
+      <div><p>I have recently set up an IOT VLAN on my OPNsense router to move some devices to. How to block
+the outbound took a little work to figure out but finally found the rule settings to get it working.</p>
+<p>In my example below I'll be blocking all outbound network traffic …</p></div>
+        <br>
+        <a class="btn"
+           href="https://blog.kail.io/block-iot-network-outbound-on-opnsense.html#block-iot-network-outbound-on-opnsense">
+          Continue reading
+        </a>
+  </div>
+  <hr />
+</article>
+<article>
+  <header>
+    <h2><a href="https://blog.kail.io/the-impact-of-rhel-changes-on-an-hpc-msp.html#the-impact-of-rhel-changes-on-an-hpc-msp">The Impact of RHEL Changes on an HPC MSP</a></h2>
+    <p>
+      Posted on Tue 27 June 2023 in <a href="https://blog.kail.io/category/hpc.html">HPC</a>
+
+          &#8226; Tagged with
+              <a href="https://blog.kail.io/tag/hpc.html">hpc</a>,              <a href="https://blog.kail.io/tag/linux.html">linux</a>
+    </p>
+  </header>
+  <div>
+      <div><p>Its been nearly a week now and after having stewed on it I think its time to speak my piece on this debacle.</p>
+<p>The recent changes to how Red Hat Enterprise Linux (RHEL) distributes their
+source code has caused quite a stir in the Linux and HPC community.  </p>
+<p>While I …</p></div>
+        <br>
+        <a class="btn"
+           href="https://blog.kail.io/the-impact-of-rhel-changes-on-an-hpc-msp.html#the-impact-of-rhel-changes-on-an-hpc-msp">
+          Continue reading
+        </a>
+  </div>
+  <hr />
+</article>
+<article>
+  <header>
+    <h2><a href="https://blog.kail.io/pxe-booting-on-proxmox.html#pxe-booting-on-proxmox">PXE Booting on Proxmox</a></h2>
+    <p>
+      Posted on Wed 05 April 2023 in <a href="https://blog.kail.io/category/proxmox.html">Proxmox</a>
+
+          &#8226; Tagged with
+              <a href="https://blog.kail.io/tag/proxmox.html">proxmox</a>,              <a href="https://blog.kail.io/tag/netboot.html">netboot</a>
+    </p>
+  </header>
+  <div>
+      <div><p>In last's week post I <a href="https://blog.kail.io/running-netbootxyz-from-opnsense.html">installed netboot.xyz on an OPNSense firewall</a>. Now its
+time to test the PXE boot process on a VM on my Proxmox Host.  Its very
+straightforward, but there are a few caveats I found with netboot.</p>
+<p>First, start the VM Creation process in Proxmox.  You …</p></div>
+        <br>
+        <a class="btn"
+           href="https://blog.kail.io/pxe-booting-on-proxmox.html#pxe-booting-on-proxmox">
+          Continue reading
+        </a>
+  </div>
+  <hr />
+</article>
+<article>
+  <header>
+    <h2><a href="https://blog.kail.io/running-netbootxyz-from-opnsense.html#running-netbootxyz-from-opnsense">Running Netboot.xyz From OPNSense</a></h2>
+    <p>
+      Posted on Wed 29 March 2023 in <a href="https://blog.kail.io/category/opnsense.html">OPNSense</a>
+
+          &#8226; Tagged with
+              <a href="https://blog.kail.io/tag/opnsense.html">opnsense</a>,              <a href="https://blog.kail.io/tag/netboot.html">netboot</a>
+    </p>
+  </header>
+  <div>
+      <div><p>After working with some PXE booting at work recently, I decided to pick up a
+long standing todo of installing netboot.xyz on my network.  When I started to
+take a deeper look into it I realized I could probably install it on my OPNSense
+VM as it is the …</p></div>
+        <br>
+        <a class="btn"
+           href="https://blog.kail.io/running-netbootxyz-from-opnsense.html#running-netbootxyz-from-opnsense">
+          Continue reading
+        </a>
+  </div>
+</article>
+
+  <div class="pagination">
+    <a class="btn float-left" href="https://blog.kail.io/index2.html">
+      <i class="fa fa-angle-left"></i> Older Posts
+    </a>
+  </div>
+
+
+
+<footer>
+<p>
+  &copy;   - This work is licensed under a <a rel="license" href="http://creativecommons.org/licenses/by-sa/4.0/deed.en_US" target="_blank">Creative Commons Attribution-ShareAlike</a>
+</p>
+<p>
+Built with <a href="http://getpelican.com" target="_blank">Pelican</a> using <a href="http://bit.ly/flex-pelican" target="_blank">Flex</a> theme
+</p><p>
+  <a rel="license"
+     href="http://creativecommons.org/licenses/by-sa/4.0/"
+     target="_blank">
+    <img alt="Creative Commons License"
+         title="Creative Commons License"
+         style="border-width:0"
+           src="https://i.creativecommons.org/l/by-sa/4.0/80x15.png"
+         width="80"
+         height="15"/>
+  </a>
+</p></footer>  </main>
+
+<script type="application/ld+json">
+{
+  "@context" : "http://schema.org",
+  "@type" : "Blog",
+  "name": " Andrew Kail's Blog ",
+  "url" : "https://blog.kail.io",
+  "image": "https://blog.kail.io/images/profile.png",
+  "description": "The personal blog of Andrew Kail, an HPC enthusiast, PhD Student, and homelaber."
+}
+</script>
+  <script src="https://blog.kail.io/theme/copy/copy.js"></script>
+</body>
+</html>

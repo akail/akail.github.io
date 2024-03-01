@@ -1,0 +1,343 @@
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="utf-8" />
+  <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+  <meta name="HandheldFriendly" content="True" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <meta name="robots" content="" />
+  <meta name="google-site-verification" content="ZlfC6LPbIl8QMogAf9hWUt9xNqocwt4niXcpc56reIs" />
+
+  <link href="https://fonts.googleapis.com/css2?family=Source+Code+Pro:ital,wght@0,400;0,700;1,400&family=Source+Sans+Pro:ital,wght@0,300;0,400;0,700;1,400&display=swap" rel="stylesheet">
+
+    <link rel="stylesheet" type="text/css" href="https://blog.kail.io/theme/stylesheet/style.min.css">
+
+
+    <link id="pygments-light-theme" rel="stylesheet" type="text/css"
+          href="https://blog.kail.io/theme/pygments/gruvbox-dark.min.css">
+
+
+
+  <link rel="stylesheet" type="text/css" href="https://blog.kail.io/theme/font-awesome/css/fontawesome.css">
+  <link rel="stylesheet" type="text/css" href="https://blog.kail.io/theme/font-awesome/css/brands.css">
+  <link rel="stylesheet" type="text/css" href="https://blog.kail.io/theme/font-awesome/css/solid.css">
+
+  <link rel="stylesheet" type="text/css" href="https://blog.kail.io/static/custom.css">
+  <link rel="stylesheet" type="text/css" href="https://blog.kail.io/theme//copy/copy.css">
+
+  <link rel="shortcut icon" href="/images/favicon.ico" type="image/x-icon">
+  <link rel="icon" href="/images/favicon.ico" type="image/x-icon">
+
+
+  <link href="https://blog.kail.io/feeds/all.atom.xml" type="application/atom+xml" rel="alternate" title="Andrew Kail's Blog Atom">
+
+
+
+
+<script defer data-domain="blog.kail.io" src="https://plausible.kail.io/js/script.js"></script>
+
+
+
+
+ 
+
+<meta name="author" content="Andrew Kail" />
+<meta name="description" content="I recently ran into an interesting issue with systemd on a Bright Cluster. Bright Cluster Manager (BCM) has a tendency to restart the Slurm Daemons when certain changes are made, such as adding a new partition. Recently when we did this, we found the daemon failed to restart on a …" />
+<meta name="keywords" content="linux, systemd, bright">
+
+
+  <meta property="og:site_name" content="Andrew Kail's Blog"/>
+  <meta property="og:title" content="Some Systemd Root Mount Confusion"/>
+  <meta property="og:description" content="I recently ran into an interesting issue with systemd on a Bright Cluster. Bright Cluster Manager (BCM) has a tendency to restart the Slurm Daemons when certain changes are made, such as adding a new partition. Recently when we did this, we found the daemon failed to restart on a …"/>
+  <meta property="og:locale" content="en_US"/>
+  <meta property="og:url" content="https://blog.kail.io/some-systemd-root-mount-confusion.html"/>
+  <meta property="og:type" content="article"/>
+  <meta property="article:published_time" content="2023-09-14 00:00:00-04:00"/>
+  <meta property="article:modified_time" content=""/>
+  <meta property="article:author" content="https://blog.kail.io/author/andrew-kail.html">
+  <meta property="article:section" content="Linux"/>
+  <meta property="article:tag" content="linux"/>
+  <meta property="article:tag" content="systemd"/>
+  <meta property="article:tag" content="bright"/>
+  <meta property="og:image" content="https://blog.kail.io/images/profile.png">
+
+  <title>Andrew Kail's Blog &ndash; Some Systemd Root Mount Confusion</title>
+
+
+</head>
+<body class="light-theme">
+
+<aside>
+  <div>
+    <a href="https://blog.kail.io/">
+      <img src="https://blog.kail.io/images/profile.png" alt="Andrew Kail's Blog" title="Andrew Kail's Blog">
+    </a>
+
+    <h1>
+      <a href="https://blog.kail.io/">Andrew Kail's Blog</a>
+    </h1>
+
+    <p>Somewhat HPC related blog</p>
+
+
+    <nav>
+      <ul class="list">
+
+
+            <li>
+              <a target="_self"
+                 href="https://blog.kail.io/pages/about.html#about">
+                About
+              </a>
+            </li>
+            <li>
+              <a target="_self"
+                 href="https://blog.kail.io/pages/get-in-touch.html#get-in-touch">
+                Get in Touch
+              </a>
+            </li>
+            <li>
+              <a target="_self"
+                 href="https://blog.kail.io/pages/projects.html#projects">
+                Projects
+              </a>
+            </li>
+
+          <li>
+            <a target="_self" href="https://github.com/akail/Configs" >My Configs</a>
+          </li>
+      </ul>
+    </nav>
+
+    <ul class="social">
+      <li>
+        <a class="sc-github"
+           href="https://github.com/akail"
+           target="_blank">
+          <i class="fa-brands fa-github"></i>
+        </a>
+      </li>
+      <li>
+        <a class="sc-rss"
+           href="/feeds/all.atom.xml"
+           target="_blank">
+          <i class="fa-solid fa-rss"></i>
+        </a>
+      </li>
+      <li>
+        <a class="sc-linkedin"
+           href="https://www.linkedin.com/in/andrewkail/"
+           target="_blank">
+          <i class="fa-brands fa-linkedin"></i>
+        </a>
+      </li>
+      <li>
+        <a class="sc-mastodon"
+rel="me"           href="https://fosstodon.org/@akail"
+           target="_blank">
+          <i class="fa-brands fa-mastodon"></i>
+        </a>
+      </li>
+    </ul>
+  </div>
+
+</aside>
+  <main>
+
+<nav>
+  <a href="https://blog.kail.io/">Home</a>
+
+  <a href="/archives.html">Archives</a>
+  <a href="/categories.html">Categories</a>
+  <a href="/tags.html">Tags</a>
+
+  <a href="https://blog.kail.io/feeds/all.atom.xml">Atom</a>
+
+</nav>
+
+<article class="single">
+  <header>
+      
+    <h1 id="some-systemd-root-mount-confusion">Some Systemd Root Mount Confusion</h1>
+    <p>
+      Posted on Thu 14 September 2023 in <a href="https://blog.kail.io/category/linux.html">Linux</a>
+
+    </p>
+  </header>
+
+
+  <div>
+    <p>I recently ran into an interesting issue with systemd on a Bright Cluster. </p>
+<p>Bright Cluster Manager (BCM) has a tendency to restart the Slurm Daemons when
+certain changes are made, such as adding a new partition.  Recently when we did this,
+we found the daemon failed to restart on a large chunk of the nodes stating:</p>
+<div class="highlight"><pre><span></span><code><span class="nv">Aug</span><span class="w"> </span><span class="mi">29</span><span class="w"> </span><span class="mi">14</span>:<span class="mi">11</span>:<span class="mi">15</span><span class="w"> </span><span class="nv">node129</span><span class="w"> </span><span class="nv">systemd</span>[<span class="mi">1</span>]:<span class="w"> </span><span class="nv">Dependency</span><span class="w"> </span><span class="nv">failed</span><span class="w"> </span><span class="k">for</span><span class="w"> </span><span class="nv">Slurm</span><span class="w"> </span><span class="nv">node</span><span class="w"> </span><span class="nv">daemon</span>.
+<span class="nv">Aug</span><span class="w"> </span><span class="mi">29</span><span class="w"> </span><span class="mi">14</span>:<span class="mi">11</span>:<span class="mi">15</span><span class="w"> </span><span class="nv">node129</span><span class="w"> </span><span class="nv">systemd</span>[<span class="mi">1</span>]:<span class="w"> </span><span class="nv">Job</span><span class="w"> </span><span class="nv">slurmd</span>.<span class="nv">service</span><span class="o">/</span><span class="nv">start</span><span class="w"> </span><span class="nv">failed</span><span class="w"> </span><span class="nv">with</span><span class="w"> </span><span class="nb">result</span><span class="w"> </span><span class="s1">&#39;dependency&#39;</span>.
+</code></pre></div>
+
+<p>A very confusing message as the system is up and running.  Fine.  Lets see which units have failed.</p>
+<div class="highlight"><pre><span></span><code><span class="p">[</span><span class="n">root</span><span class="err">@</span><span class="n">node</span><span class="w"> </span><span class="o">~</span><span class="p">]</span><span class="c1"># systemctl list-units --state failed</span>
+<span class="w">  </span><span class="n">UNIT</span><span class="w">    </span><span class="n">LOAD</span><span class="w">   </span><span class="n">ACTIVE</span><span class="w"> </span><span class="n">SUB</span><span class="w">    </span><span class="n">DESCRIPTION</span>
+<span class="err">●</span><span class="w"> </span><span class="o">-.</span><span class="n">mount</span><span class="w"> </span><span class="n">loaded</span><span class="w"> </span><span class="n">failed</span><span class="w"> </span><span class="n">failed</span><span class="w"> </span><span class="o">/</span>
+</code></pre></div>
+
+<p>Root failed to mount?</p>
+<p>:suprised pikachu:</p>
+<p>No amount of rebooting an</p>
+<p>So, since this is a Brigth cluster, a <code>node-installer</code> is initially booted to and the system process are then turned over to the installed image.  Grossly over simplifying the process but that is the gist of it.  </p>
+<div class="highlight"><pre><span></span><code>systemd-analays dot  | dot -Tsvg &gt; plot.svg
+</code></pre></div>
+
+<p>While neat, was not helpful as all I could see what maybe <code>-.mount</code> depended on system.slic.  Which did start up just fine.</p>
+<p>Interestingly enough, I did accidentally find "-.mount" entered a failed state after the node was up.</p>
+<div class="highlight"><pre><span></span><code><span class="o">[</span>root@node<span class="w"> </span>~<span class="o">]</span><span class="c1"># systemctl list-units --state failed</span>
+<span class="w">  </span>UNIT<span class="w">           </span>LOAD<span class="w">   </span>ACTIVE<span class="w"> </span>SUB<span class="w">    </span>DESCRIPTION
+●<span class="w"> </span>slurmd.service<span class="w"> </span>loaded<span class="w"> </span>failed<span class="w"> </span>failed<span class="w"> </span>Slurm<span class="w"> </span>node<span class="w"> </span>daemon
+
+<span class="nv">LOAD</span><span class="w">   </span><span class="o">=</span><span class="w"> </span>Reflects<span class="w"> </span>whether<span class="w"> </span>the<span class="w"> </span>unit<span class="w"> </span>definition<span class="w"> </span>was<span class="w"> </span>properly<span class="w"> </span>loaded.
+<span class="nv">ACTIVE</span><span class="w"> </span><span class="o">=</span><span class="w"> </span>The<span class="w"> </span>high-level<span class="w"> </span>unit<span class="w"> </span>activation<span class="w"> </span>state,<span class="w"> </span>i.e.<span class="w"> </span>generalization<span class="w"> </span>of<span class="w"> </span>SUB.
+<span class="nv">SUB</span><span class="w">    </span><span class="o">=</span><span class="w"> </span>The<span class="w"> </span>low-level<span class="w"> </span>unit<span class="w"> </span>activation<span class="w"> </span>state,<span class="w"> </span>values<span class="w"> </span>depend<span class="w"> </span>on<span class="w"> </span>unit<span class="w"> </span>type.
+
+<span class="m">1</span><span class="w"> </span>loaded<span class="w"> </span>units<span class="w"> </span>listed.<span class="w"> </span>Pass<span class="w"> </span>--all<span class="w"> </span>to<span class="w"> </span>see<span class="w"> </span>loaded<span class="w"> </span>but<span class="w"> </span>inactive<span class="w"> </span>units,<span class="w"> </span>too.
+To<span class="w"> </span>show<span class="w"> </span>all<span class="w"> </span>installed<span class="w"> </span>unit<span class="w"> </span>files<span class="w"> </span>use<span class="w"> </span><span class="s1">&#39;systemctl list-unit-files&#39;</span>.
+<span class="o">[</span>root@node<span class="w"> </span>~<span class="o">]</span><span class="c1"># systemctl list-units --state failed</span>
+<span class="w">  </span>UNIT<span class="w">           </span>LOAD<span class="w">   </span>ACTIVE<span class="w"> </span>SUB<span class="w">    </span>DESCRIPTION
+●<span class="w"> </span>-.mount<span class="w">        </span>loaded<span class="w"> </span>failed<span class="w"> </span>failed<span class="w"> </span>/
+●<span class="w"> </span>slurmd.service<span class="w"> </span>loaded<span class="w"> </span>failed<span class="w"> </span>failed<span class="w"> </span>Slurm<span class="w"> </span>node<span class="w"> </span>daemon
+
+<span class="nv">LOAD</span><span class="w">   </span><span class="o">=</span><span class="w"> </span>Reflects<span class="w"> </span>whether<span class="w"> </span>the<span class="w"> </span>unit<span class="w"> </span>definition<span class="w"> </span>was<span class="w"> </span>properly<span class="w"> </span>loaded.
+<span class="nv">ACTIVE</span><span class="w"> </span><span class="o">=</span><span class="w"> </span>The<span class="w"> </span>high-level<span class="w"> </span>unit<span class="w"> </span>activation<span class="w"> </span>state,<span class="w"> </span>i.e.<span class="w"> </span>generalization<span class="w"> </span>of<span class="w"> </span>SUB.
+<span class="nv">SUB</span><span class="w">    </span><span class="o">=</span><span class="w"> </span>The<span class="w"> </span>low-level<span class="w"> </span>unit<span class="w"> </span>activation<span class="w"> </span>state,<span class="w"> </span>values<span class="w"> </span>depend<span class="w"> </span>on<span class="w"> </span>unit<span class="w"> </span>type.
+
+<span class="m">2</span><span class="w"> </span>loaded<span class="w"> </span>units<span class="w"> </span>listed.<span class="w"> </span>Pass<span class="w"> </span>--all<span class="w"> </span>to<span class="w"> </span>see<span class="w"> </span>loaded<span class="w"> </span>but<span class="w"> </span>inactive<span class="w"> </span>units,<span class="w"> </span>too.
+To<span class="w"> </span>show<span class="w"> </span>all<span class="w"> </span>installed<span class="w"> </span>unit<span class="w"> </span>files<span class="w"> </span>use<span class="w"> </span><span class="s1">&#39;systemctl list-unit-files&#39;</span>.
+</code></pre></div>
+
+<p>Not sure if this meant anything, but its here.</p>
+<div class="highlight"><pre><span></span><code><span class="gp">[root@node129 ~]# </span>systemctl<span class="w"> </span><span class="p">|</span><span class="w"> </span>grep<span class="w"> </span>mount
+<span class="go">  proc-sys-fs-binfmt_misc.automount       loaded active     waiting      Arbitrary Executable File Formats File System Automount Point</span>
+<span class="go">● -.mount                                 loaded failed     failed       /</span>
+<span class="go">  data.mount                              loaded active     mounted      /data</span>
+<span class="go">  data_lake.mount                         loaded active     mounted      /data_lake</span>
+<span class="go">  local.mount                             loaded active     mounted      /local</span>
+<span class="go">  tmp.mount                               loaded active     mounted      /tmp</span>
+<span class="go">  var-lib-nfs-rpc_pipefs.mount            loaded active     mounted      RPC Pipe File System</span>
+<span class="go">  var.mount                               loaded active     mounted      /var</span>
+<span class="go">  systemd-remount-fs.service              loaded active     exited       Remount Root and Kernel File Systems</span>
+</code></pre></div>
+
+<p>The most frustrating thing is I can't get any information on this mount.  Any other mount service I can query, but I only get invalid option errors.</p>
+<div class="highlight"><pre><span></span><code><span class="o">[</span>root@node129<span class="w"> </span>~<span class="o">]</span><span class="c1"># systemctl status -.mount</span>
+systemctl:<span class="w"> </span>invalid<span class="w"> </span>option<span class="w"> </span>--<span class="w"> </span><span class="s1">&#39;.&#39;</span>
+<span class="o">[</span>root@node129<span class="w"> </span>~<span class="o">]</span><span class="c1"># systemctl status &quot;-.mount&quot;</span>
+systemctl:<span class="w"> </span>invalid<span class="w"> </span>option<span class="w"> </span>--<span class="w"> </span><span class="s1">&#39;.&#39;</span>
+<span class="o">[</span>root@node129<span class="w"> </span>~<span class="o">]</span><span class="c1"># systemctl status &#39;-.mount&#39;</span>
+systemctl:<span class="w"> </span>invalid<span class="w"> </span>option<span class="w"> </span>--<span class="w"> </span><span class="s1">&#39;.&#39;</span>
+<span class="o">[</span>root@node129<span class="w"> </span>~<span class="o">]</span><span class="c1"># systemctl status &#39;-\.mount&#39;</span>
+systemctl:<span class="w"> </span>invalid<span class="w"> </span>option<span class="w"> </span>--<span class="w"> </span><span class="s1">&#39;\&#39;</span>
+<span class="o">[</span>root@node129<span class="w"> </span>~<span class="o">]</span><span class="c1"># systemctl status &quot;-\.mount&quot;</span>
+systemctl:<span class="w"> </span>invalid<span class="w"> </span>option<span class="w"> </span>--<span class="w"> </span><span class="s1">&#39;\&#39;</span>
+<span class="o">[</span>root@node129<span class="w"> </span>~<span class="o">]</span><span class="c1"># systemctl status &quot;-\\.mount&quot;</span>
+systemctl:<span class="w"> </span>invalid<span class="w"> </span>option<span class="w"> </span>--<span class="w"> </span><span class="s1">&#39;\&#39;</span>
+<span class="o">[</span>root@node129<span class="w"> </span>~<span class="o">]</span><span class="c1"># systemctl status &quot;-/\.mount&quot;</span>
+systemctl:<span class="w"> </span>invalid<span class="w"> </span>option<span class="w"> </span>--<span class="w"> </span><span class="s1">&#39;/&#39;</span>
+<span class="o">[</span>root@node129<span class="w"> </span>~<span class="o">]</span><span class="c1"># systemctl status &quot;\-.mount&quot;</span>
+Unit<span class="w"> </span><span class="se">\-</span>.mount<span class="w"> </span>could<span class="w"> </span>not<span class="w"> </span>be<span class="w"> </span>found.
+<span class="o">[</span>root@node129<span class="w"> </span>~<span class="o">]</span><span class="c1"># systemctl status &quot;-.mount&quot;</span>
+systemctl:<span class="w"> </span>invalid<span class="w"> </span>option<span class="w"> </span>--<span class="w"> </span><span class="s1">&#39;.&#39;</span>
+</code></pre></div>
+
+<p>While I can see the full dependency tree, it tells me nothing that is blocking "-.mount"</p>
+<div class="highlight"><pre><span></span><code>● │ │ ├─local-fs.target
+● │ │ │ ├─-.mount
+● │ │ │ ├─local.mount
+</code></pre></div>
+
+<p>Just looking at its parent, I only see one dependency</p>
+<div class="highlight"><pre><span></span><code><span class="p">[</span><span class="n">root</span><span class="err">@</span><span class="n">node129</span><span class="w"> </span><span class="o">~</span><span class="p">]</span><span class="c1"># systemctl list-dependencies local-fs.target</span>
+<span class="n">local</span><span class="o">-</span><span class="n">fs</span><span class="o">.</span><span class="n">target</span>
+<span class="err">●</span><span class="w"> </span><span class="err">├─</span><span class="o">-.</span><span class="n">mount</span>
+<span class="err">●</span><span class="w"> </span><span class="err">├─</span><span class="n">local</span><span class="o">.</span><span class="n">mount</span>
+<span class="err">●</span><span class="w"> </span><span class="err">├─</span><span class="n">rhel</span><span class="o">-</span><span class="n">readonly</span><span class="o">.</span><span class="n">service</span>
+<span class="err">●</span><span class="w"> </span><span class="err">├─</span><span class="n">systemd</span><span class="o">-</span><span class="n">fsck</span><span class="o">-</span><span class="n">root</span><span class="o">.</span><span class="n">service</span>
+<span class="err">●</span><span class="w"> </span><span class="err">├─</span><span class="n">systemd</span><span class="o">-</span><span class="n">remount</span><span class="o">-</span><span class="n">fs</span><span class="o">.</span><span class="n">service</span>
+<span class="err">●</span><span class="w"> </span><span class="err">├─</span><span class="n">tmp</span><span class="o">.</span><span class="n">mount</span>
+<span class="err">●</span><span class="w"> </span><span class="err">└─</span><span class="k">var</span><span class="o">.</span><span class="n">mount</span>
+</code></pre></div>
+
+<p>So time to look elsewhere...</p>
+<p>One of the more confusing items is mount and lsblk disagreeing.  The mount command shows <code>/</code> mounted, but lsblk does not.</p>
+<div class="highlight"><pre><span></span><code><span class="o">[</span><span class="n">root@node129 ~</span><span class="o">]</span><span class="err">#</span><span class="w"> </span><span class="n">lsblk</span>
+<span class="n">NAME</span><span class="w">        </span><span class="nl">MAJ</span><span class="p">:</span><span class="nf">MIN</span><span class="w"> </span><span class="n">RM</span><span class="w">  </span><span class="k">SIZE</span><span class="w"> </span><span class="n">RO</span><span class="w"> </span><span class="n">TYPE</span><span class="w"> </span><span class="n">MOUNTPOINT</span>
+<span class="n">nvme0n1</span><span class="w">     </span><span class="mi">259</span><span class="err">:</span><span class="mi">1</span><span class="w">    </span><span class="mi">0</span><span class="w">  </span><span class="mf">1.8</span><span class="n">T</span><span class="w">  </span><span class="mi">0</span><span class="w"> </span><span class="k">disk</span>
+<span class="err">├─</span><span class="n">nvme0n1p1</span><span class="w"> </span><span class="mi">259</span><span class="err">:</span><span class="mi">4</span><span class="w">    </span><span class="mi">0</span><span class="w">   </span><span class="mi">40</span><span class="n">G</span><span class="w">  </span><span class="mi">0</span><span class="w"> </span><span class="n">part</span>
+<span class="err">├─</span><span class="n">nvme0n1p2</span><span class="w"> </span><span class="mi">259</span><span class="err">:</span><span class="mi">5</span><span class="w">    </span><span class="mi">0</span><span class="w">   </span><span class="mi">20</span><span class="n">G</span><span class="w">  </span><span class="mi">0</span><span class="w"> </span><span class="n">part</span><span class="w"> </span><span class="o">/</span><span class="nf">var</span>
+<span class="err">├─</span><span class="n">nvme0n1p3</span><span class="w"> </span><span class="mi">259</span><span class="err">:</span><span class="mi">6</span><span class="w">    </span><span class="mi">0</span><span class="w">   </span><span class="mi">20</span><span class="n">G</span><span class="w">  </span><span class="mi">0</span><span class="w"> </span><span class="n">part</span><span class="w"> </span><span class="o">/</span><span class="n">tmp</span>
+<span class="err">├─</span><span class="n">nvme0n1p4</span><span class="w"> </span><span class="mi">259</span><span class="err">:</span><span class="mi">7</span><span class="w">    </span><span class="mi">0</span><span class="w">   </span><span class="mi">12</span><span class="n">G</span><span class="w">  </span><span class="mi">0</span><span class="w"> </span><span class="n">part</span><span class="w"> </span><span class="o">[</span><span class="n">SWAP</span><span class="o">]</span>
+<span class="err">└─</span><span class="n">nvme0n1p5</span><span class="w"> </span><span class="mi">259</span><span class="err">:</span><span class="mi">8</span><span class="w">    </span><span class="mi">0</span><span class="w">  </span><span class="mf">1.7</span><span class="n">T</span><span class="w">  </span><span class="mi">0</span><span class="w"> </span><span class="n">part</span><span class="w"> </span><span class="o">/</span><span class="k">local</span>
+<span class="o">[</span><span class="n">root@node129 ~</span><span class="o">]</span><span class="err">#</span><span class="w"> </span><span class="n">df</span><span class="w"> </span><span class="o">-</span><span class="n">h</span>
+<span class="n">Filesystem</span><span class="w">                                                      </span><span class="k">Size</span><span class="w">  </span><span class="n">Used</span><span class="w"> </span><span class="n">Avail</span><span class="w"> </span><span class="k">Use</span><span class="o">%</span><span class="w"> </span><span class="n">Mounted</span><span class="w"> </span><span class="k">on</span>
+<span class="n">devtmpfs</span><span class="w">                                                        </span><span class="mi">504</span><span class="n">G</span><span class="w">     </span><span class="mi">0</span><span class="w">  </span><span class="mi">504</span><span class="n">G</span><span class="w">   </span><span class="mi">0</span><span class="o">%</span><span class="w"> </span><span class="o">/</span><span class="n">dev</span>
+<span class="n">tmpfs</span><span class="w">                                                           </span><span class="mi">504</span><span class="n">G</span><span class="w">  </span><span class="mf">3.2</span><span class="n">M</span><span class="w">  </span><span class="mi">504</span><span class="n">G</span><span class="w">   </span><span class="mi">1</span><span class="o">%</span><span class="w"> </span><span class="o">/</span><span class="n">run</span>
+<span class="o">/</span><span class="n">dev</span><span class="o">/</span><span class="n">nvme0n1p1</span><span class="w">                                                   </span><span class="mi">40</span><span class="n">G</span><span class="w">   </span><span class="mi">19</span><span class="n">G</span><span class="w">   </span><span class="mi">22</span><span class="n">G</span><span class="w">  </span><span class="mi">46</span><span class="o">%</span><span class="w"> </span><span class="o">/</span>
+<span class="n">tmpfs</span><span class="w">                                                           </span><span class="mi">504</span><span class="n">G</span><span class="w">     </span><span class="mi">0</span><span class="w">  </span><span class="mi">504</span><span class="n">G</span><span class="w">   </span><span class="mi">0</span><span class="o">%</span><span class="w"> </span><span class="o">/</span><span class="n">dev</span><span class="o">/</span><span class="n">shm</span>
+<span class="n">tmpfs</span><span class="w">                                                           </span><span class="mi">504</span><span class="n">G</span><span class="w">     </span><span class="mi">0</span><span class="w">  </span><span class="mi">504</span><span class="n">G</span><span class="w">   </span><span class="mi">0</span><span class="o">%</span><span class="w"> </span><span class="o">/</span><span class="n">sys</span><span class="o">/</span><span class="n">fs</span><span class="o">/</span><span class="n">cgroup</span>
+<span class="o">/</span><span class="n">dev</span><span class="o">/</span><span class="n">nvme0n1p3</span><span class="w">                                                   </span><span class="mi">20</span><span class="n">G</span><span class="w">   </span><span class="mi">33</span><span class="n">M</span><span class="w">   </span><span class="mi">20</span><span class="n">G</span><span class="w">   </span><span class="mi">1</span><span class="o">%</span><span class="w"> </span><span class="o">/</span><span class="n">tmp</span>
+<span class="o">/</span><span class="n">dev</span><span class="o">/</span><span class="n">nvme0n1p2</span><span class="w">                                                   </span><span class="mi">20</span><span class="n">G</span><span class="w">  </span><span class="mf">4.6</span><span class="n">G</span><span class="w">   </span><span class="mi">16</span><span class="n">G</span><span class="w">  </span><span class="mi">23</span><span class="o">%</span><span class="w"> </span><span class="o">/</span><span class="nf">var</span>
+<span class="o">/</span><span class="n">dev</span><span class="o">/</span><span class="n">nvme0n1p5</span><span class="w">                                                  </span><span class="mf">1.7</span><span class="n">T</span><span class="w">   </span><span class="mi">33</span><span class="n">M</span><span class="w">  </span><span class="mf">1.7</span><span class="n">T</span><span class="w">   </span><span class="mi">1</span><span class="o">%</span><span class="w"> </span><span class="o">/</span><span class="k">local</span>
+</code></pre></div>
+
+<p>Next I tried doing an update, which did include some updates to the kernel and systemd but alas the issue persisted.</p>
+<p>After pulling my hair out for a few days my only option was to take a known good image from another node class
+and rebuild our image.  In the end, this worked but has still left puzzled as to what actually happened here.</p>
+<p>If anyone has experienced this before on BCM or other cluster management software please reach out and let me
+know what you found or possibly did to resolve it.</p>
+  </div>
+  <div class="tag-cloud">
+    <p>
+      <a href="https://blog.kail.io/tag/linux.html">linux</a>
+      <a href="https://blog.kail.io/tag/systemd.html">systemd</a>
+      <a href="https://blog.kail.io/tag/bright.html">bright</a>
+    </p>
+  </div>
+
+
+
+
+
+
+</article>
+
+<footer>
+<p>
+  &copy;   - This work is licensed under a <a rel="license" href="http://creativecommons.org/licenses/by-sa/4.0/deed.en_US" target="_blank">Creative Commons Attribution-ShareAlike</a>
+</p>
+<p>
+Built with <a href="http://getpelican.com" target="_blank">Pelican</a> using <a href="http://bit.ly/flex-pelican" target="_blank">Flex</a> theme
+</p><p>
+  <a rel="license"
+     href="http://creativecommons.org/licenses/by-sa/4.0/"
+     target="_blank">
+    <img alt="Creative Commons License"
+         title="Creative Commons License"
+         style="border-width:0"
+           src="https://i.creativecommons.org/l/by-sa/4.0/80x15.png"
+         width="80"
+         height="15"/>
+  </a>
+</p></footer>  </main>
+
+<script type="application/ld+json">
+{
+  "@context" : "http://schema.org",
+  "@type" : "Blog",
+  "name": " Andrew Kail's Blog ",
+  "url" : "https://blog.kail.io",
+  "image": "https://blog.kail.io/images/profile.png",
+  "description": "The personal blog of Andrew Kail, an HPC enthusiast, PhD Student, and homelaber."
+}
+</script>
+  <script src="https://blog.kail.io/theme/copy/copy.js"></script>
+</body>
+</html>

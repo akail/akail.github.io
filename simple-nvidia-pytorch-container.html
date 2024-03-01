@@ -1,0 +1,242 @@
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="utf-8" />
+  <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+  <meta name="HandheldFriendly" content="True" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <meta name="robots" content="" />
+  <meta name="google-site-verification" content="ZlfC6LPbIl8QMogAf9hWUt9xNqocwt4niXcpc56reIs" />
+
+  <link href="https://fonts.googleapis.com/css2?family=Source+Code+Pro:ital,wght@0,400;0,700;1,400&family=Source+Sans+Pro:ital,wght@0,300;0,400;0,700;1,400&display=swap" rel="stylesheet">
+
+    <link rel="stylesheet" type="text/css" href="https://blog.kail.io/theme/stylesheet/style.min.css">
+
+
+    <link id="pygments-light-theme" rel="stylesheet" type="text/css"
+          href="https://blog.kail.io/theme/pygments/gruvbox-dark.min.css">
+
+
+
+  <link rel="stylesheet" type="text/css" href="https://blog.kail.io/theme/font-awesome/css/fontawesome.css">
+  <link rel="stylesheet" type="text/css" href="https://blog.kail.io/theme/font-awesome/css/brands.css">
+  <link rel="stylesheet" type="text/css" href="https://blog.kail.io/theme/font-awesome/css/solid.css">
+
+  <link rel="stylesheet" type="text/css" href="https://blog.kail.io/static/custom.css">
+  <link rel="stylesheet" type="text/css" href="https://blog.kail.io/theme//copy/copy.css">
+
+  <link rel="shortcut icon" href="/images/favicon.ico" type="image/x-icon">
+  <link rel="icon" href="/images/favicon.ico" type="image/x-icon">
+
+
+  <link href="https://blog.kail.io/feeds/all.atom.xml" type="application/atom+xml" rel="alternate" title="Andrew Kail's Blog Atom">
+
+
+
+
+<script defer data-domain="blog.kail.io" src="https://plausible.kail.io/js/script.js"></script>
+
+
+
+
+ 
+
+<meta name="author" content="Andrew Kail" />
+<meta name="description" content="Another quick Apptainer example for getting pytorch quickly up and running. The Definition File Bootstrap: docker From: nvidia/cuda:11.7.1-runtime-ubuntu22.04 %post apt-get -y update apt install -y python3 python3-pip pip3 install torch torchvision torchaudio pip3 install ipykernel Build the Container apptainer build pytorch.sif pytorch.def …" />
+<meta name="keywords" content="apptainer, jupyter, nvidia, pytorch">
+
+
+  <meta property="og:site_name" content="Andrew Kail's Blog"/>
+  <meta property="og:title" content="Simple Nvidia PyTorch Container"/>
+  <meta property="og:description" content="Another quick Apptainer example for getting pytorch quickly up and running. The Definition File Bootstrap: docker From: nvidia/cuda:11.7.1-runtime-ubuntu22.04 %post apt-get -y update apt install -y python3 python3-pip pip3 install torch torchvision torchaudio pip3 install ipykernel Build the Container apptainer build pytorch.sif pytorch.def …"/>
+  <meta property="og:locale" content="en_US"/>
+  <meta property="og:url" content="https://blog.kail.io/simple-nvidia-pytorch-container.html"/>
+  <meta property="og:type" content="article"/>
+  <meta property="article:published_time" content="2023-09-06 00:00:00-04:00"/>
+  <meta property="article:modified_time" content=""/>
+  <meta property="article:author" content="https://blog.kail.io/author/andrew-kail.html">
+  <meta property="article:section" content="Python"/>
+  <meta property="article:tag" content="apptainer"/>
+  <meta property="article:tag" content="jupyter"/>
+  <meta property="article:tag" content="nvidia"/>
+  <meta property="article:tag" content="pytorch"/>
+  <meta property="og:image" content="https://blog.kail.io/images/profile.png">
+
+  <title>Andrew Kail's Blog &ndash; Simple Nvidia PyTorch Container</title>
+
+
+</head>
+<body class="light-theme">
+
+<aside>
+  <div>
+    <a href="https://blog.kail.io/">
+      <img src="https://blog.kail.io/images/profile.png" alt="Andrew Kail's Blog" title="Andrew Kail's Blog">
+    </a>
+
+    <h1>
+      <a href="https://blog.kail.io/">Andrew Kail's Blog</a>
+    </h1>
+
+    <p>Somewhat HPC related blog</p>
+
+
+    <nav>
+      <ul class="list">
+
+
+            <li>
+              <a target="_self"
+                 href="https://blog.kail.io/pages/about.html#about">
+                About
+              </a>
+            </li>
+            <li>
+              <a target="_self"
+                 href="https://blog.kail.io/pages/get-in-touch.html#get-in-touch">
+                Get in Touch
+              </a>
+            </li>
+            <li>
+              <a target="_self"
+                 href="https://blog.kail.io/pages/projects.html#projects">
+                Projects
+              </a>
+            </li>
+
+          <li>
+            <a target="_self" href="https://github.com/akail/Configs" >My Configs</a>
+          </li>
+      </ul>
+    </nav>
+
+    <ul class="social">
+      <li>
+        <a class="sc-github"
+           href="https://github.com/akail"
+           target="_blank">
+          <i class="fa-brands fa-github"></i>
+        </a>
+      </li>
+      <li>
+        <a class="sc-rss"
+           href="/feeds/all.atom.xml"
+           target="_blank">
+          <i class="fa-solid fa-rss"></i>
+        </a>
+      </li>
+      <li>
+        <a class="sc-linkedin"
+           href="https://www.linkedin.com/in/andrewkail/"
+           target="_blank">
+          <i class="fa-brands fa-linkedin"></i>
+        </a>
+      </li>
+      <li>
+        <a class="sc-mastodon"
+rel="me"           href="https://fosstodon.org/@akail"
+           target="_blank">
+          <i class="fa-brands fa-mastodon"></i>
+        </a>
+      </li>
+    </ul>
+  </div>
+
+</aside>
+  <main>
+
+<nav>
+  <a href="https://blog.kail.io/">Home</a>
+
+  <a href="/archives.html">Archives</a>
+  <a href="/categories.html">Categories</a>
+  <a href="/tags.html">Tags</a>
+
+  <a href="https://blog.kail.io/feeds/all.atom.xml">Atom</a>
+
+</nav>
+
+<article class="single">
+  <header>
+      
+    <h1 id="simple-nvidia-pytorch-container">Simple Nvidia PyTorch Container</h1>
+    <p>
+      Posted on Wed 06 September 2023 in <a href="https://blog.kail.io/category/python.html">Python</a>
+
+    </p>
+  </header>
+
+
+  <div>
+    <p>Another quick Apptainer example for getting pytorch quickly up and
+running.</p>
+<p><strong>The Definition File</strong></p>
+<div class="highlight"><pre><span></span><code><span class="k">Bootstrap</span>:<span class="w"> </span>docker
+<span class="k">From</span>:<span class="w"> </span>nvidia/cuda:<span class="m">11.7.1</span>-runtime-ubuntu22<span class="m">.04</span>
+
+<span class="gh">%post</span>
+<span class="w">    </span>apt-get<span class="w"> </span>-y<span class="w"> </span>update
+<span class="w">    </span>apt<span class="w"> </span>install<span class="w"> </span>-y<span class="w"> </span>python3<span class="w"> </span>python3-pip
+<span class="w">    </span>pip3<span class="w"> </span>install<span class="w"> </span>torch<span class="w"> </span>torchvision<span class="w"> </span>torchaudio
+<span class="w">    </span>pip3<span class="w"> </span>install<span class="w"> </span>ipykernel
+</code></pre></div>
+
+<p><strong>Build the Container</strong></p>
+<div class="highlight"><pre><span></span><code>apptainer build pytorch.sif pytorch.def
+</code></pre></div>
+
+<p><strong>Test</strong></p>
+<p>Passing <code>--nv</code> tells apptainer to setup apptainer for running with the Nvidia GPU.</p>
+<div class="highlight"><pre><span></span><code><span class="n">apptainer</span> <span class="n">exec</span> <span class="o">--</span><span class="n">nv</span> <span class="n">pytorch</span><span class="o">.</span><span class="n">sif</span> <span class="n">python3</span> <span class="o">-</span><span class="n">c</span> <span class="s2">&quot;import torch; print(torch.cuda.is_available())&quot;</span>
+<span class="kc">True</span>
+</code></pre></div>
+  </div>
+  <div class="tag-cloud">
+    <p>
+      <a href="https://blog.kail.io/tag/apptainer.html">apptainer</a>
+      <a href="https://blog.kail.io/tag/jupyter.html">jupyter</a>
+      <a href="https://blog.kail.io/tag/nvidia.html">nvidia</a>
+      <a href="https://blog.kail.io/tag/pytorch.html">pytorch</a>
+    </p>
+  </div>
+
+
+
+
+
+
+</article>
+
+<footer>
+<p>
+  &copy;   - This work is licensed under a <a rel="license" href="http://creativecommons.org/licenses/by-sa/4.0/deed.en_US" target="_blank">Creative Commons Attribution-ShareAlike</a>
+</p>
+<p>
+Built with <a href="http://getpelican.com" target="_blank">Pelican</a> using <a href="http://bit.ly/flex-pelican" target="_blank">Flex</a> theme
+</p><p>
+  <a rel="license"
+     href="http://creativecommons.org/licenses/by-sa/4.0/"
+     target="_blank">
+    <img alt="Creative Commons License"
+         title="Creative Commons License"
+         style="border-width:0"
+           src="https://i.creativecommons.org/l/by-sa/4.0/80x15.png"
+         width="80"
+         height="15"/>
+  </a>
+</p></footer>  </main>
+
+<script type="application/ld+json">
+{
+  "@context" : "http://schema.org",
+  "@type" : "Blog",
+  "name": " Andrew Kail's Blog ",
+  "url" : "https://blog.kail.io",
+  "image": "https://blog.kail.io/images/profile.png",
+  "description": "The personal blog of Andrew Kail, an HPC enthusiast, PhD Student, and homelaber."
+}
+</script>
+  <script src="https://blog.kail.io/theme/copy/copy.js"></script>
+</body>
+</html>
