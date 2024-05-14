@@ -21,3 +21,7 @@ article img {
   display: block;
   max-width: 80%;
 }
+
+#container main article pre, #container main section pre {
+    background-color: #282828
+}

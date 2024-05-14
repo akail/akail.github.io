@@ -1,5 +1,5 @@
 //const copyButtonLabel = "Copy Code";
-const copyButtonLabel = '<i class="fa-solid fa-clipboard"></i>';
+const copyButtonLabel = '<i class="far fa-clipboard"></i>';
 
 // use a class selector if available
 let blocks = document.querySelectorAll("td.code > div > pre, div.highlight > pre");

@@ -1,0 +1,241 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+        <meta charset="utf-8"/>
+        <meta name="viewport" content="width=device-width, initial-scale=1.0">
+        <meta http-equiv="X-UA-Compatible" content="ie=edge">
+        <meta name="google-site-verification" content="ZlfC6LPbIl8QMogAf9hWUt9xNqocwt4niXcpc56reIs" />
+        <title>Kail's Blog - Running Ansible Against Chroot Directories</title>
+        <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/normalize/8.0.1/normalize.min.css"/>
+        <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.2/css/all.min.css"/>
+        <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Roboto+Slab|Ruda"/>
+        <link rel="stylesheet" type="text/css" href="https://blog.kail.io/theme/css/main.css"/>
+        <link rel="stylesheet" type="text/css" href="https://blog.kail.io/theme//copy/copy.css">
+        <link href="https://blog.kail.io/feeds/all.atom.xml" type="application/atom+xml" rel="alternate" title="Kail's Blog Atom Feed"/>
+
+<meta name="tags" content="ansible" />
+<meta name="tags" content="chroot" />
+</head>
+<body>
+<style>.github-corner:hover .octo-arm {
+    animation: octocat-wave 560ms ease-in-out
+}
+@keyframes octocat-wave {
+    0%, 100% {
+        transform: rotate(0)
+    }
+    20%, 60% {
+        transform: rotate(-25deg)
+    }
+    40%, 80% {
+        transform: rotate(10deg)
+    }
+}
+@media (max-width: 500px) {
+    .github-corner:hover .octo-arm {
+        animation: none
+    }
+
+    .github-corner .octo-arm {
+        animation: octocat-wave 560ms ease-in-out
+    }
+}</style><div id="container">
+    <header>
+        <h1><a href="https://blog.kail.io/">Kail's Blog</a></h1>
+            <ul class="social-media">
+                    <li><a href="https://github.com/akail"><i class="fab fa-github fa-lg" aria-hidden="true"></i></a></li>
+                    <li><a href="https://www.linkedin.com/in/andrewkail/"><i class="fab fa-linkedin fa-lg" aria-hidden="true"></i></a></li>
+                    <li><a href="https://fosstodon.org/@akail"><i class="fab fa-mastodon fa-lg" aria-hidden="true"></i></a></li>
+                    <li><a href="mailto:andrew@kail.io"><i class="fas fa-envelope fa-lg" aria-hidden="true"></i></a></li>
+                    <li><a href="https://blog.kail.io/feeds/all.atom.xml" type="application/atom+xml" rel="alternate"><i class="fa fa-rss fa-lg" aria-hidden="true"></i></a></li>
+            </ul>
+        <p><em>Somewhat HPC related blog</em></p>
+    </header>
+    <nav>
+        <ul>
+            <li><a href="/index.html">Home</a></li>
+            <li><a href="/archives.html">Archives</a></li>
+            <li><a href="/categories.html">Categories</a></li>
+            <li><a href="/tags.html">Tags</a></li>
+                    <li><a href="https://blog.kail.io/pages/about.html">About</a></li>
+                    <li><a href="https://blog.kail.io/pages/projects.html">Projects</a></li>
+        </ul>
+    </nav>
+<main>
+    <article>
+        <h1>Running Ansible Against Chroot Directories</h1>
+        
+        <aside>
+            <ul>
+                <li>
+                    <time datetime="2024-05-15 12:00:00-04:00">May 15, 2024</time>
+                </li>
+                <li>
+                    Categories:
+                    <a href="https://blog.kail.io/category/ansible.html"><em>Ansible</em></a>
+                </li>
+                <li>
+                    Tags:
+                    <a href="https://blog.kail.io/tag/ansible.html"><em>#ansible</em></a>
+                    <a href="https://blog.kail.io/tag/chroot.html"><em>#chroot</em></a>
+                </li>
+            </ul>
+        </aside>
+        <p>Several cluster managers, including BCM, Warewulf, and Scyld use chroot's or chroot like methods for provisioning.  This method allows the systemd administator to build a golden
+image with the requisite packages and configurations, then the cluster manager
+will usually via it's own methods handle final configurations during provisioning.</p>
+<p>Some of these cluster managers have documented methods for using Ansible, such as BCM's use ssh chroot directories (I'll break this method down in a future article), or document a post
+boot script to run Ansible once the node is up.</p>
+<p>Several conversations I have had and witnessed show most are unfamiliar with running
+Ansible directly against an existing chroot directory using an existing <a href="https://docs.ansible.com/ansible/latest/collections/community/general/chroot_connection.html">Ansible connector</a>.
+This connector is not very well documented, but allows one to target an image directly as if it were a target host for an ssh connection.</p>
+<p>I'll cover how to get started as well as some of the gotcha's I've found running this
+in produciton environments.</p>
+<h2>Chroot Setup</h2>
+<p>I'll be running on an up to date rocky9 host, but this should work on other EL distributions with equivalent commands for Debian based systemd.</p>
+<p>An example chroot install, pulled from the warewulf documentation, will work here:</p>
+<div class="highlight"><pre><span></span><code>yum<span class="w"> </span>install<span class="w"> </span>--installroot<span class="w"> </span>/tmp/newroot<span class="w"> </span>--releasever<span class="w"> </span><span class="m">9</span><span class="w"> </span>basesystem<span class="w"> </span>bash<span class="w"> </span><span class="se">\</span>
+<span class="w">    </span>chkconfig<span class="w"> </span>coreutils<span class="w"> </span>e2fsprogs<span class="w"> </span>ethtool<span class="w"> </span>filesystem<span class="w"> </span>findutils<span class="w"> </span><span class="se">\</span>
+<span class="w">    </span>gawk<span class="w"> </span>grep<span class="w"> </span>initscripts<span class="w"> </span>iproute<span class="w"> </span>iputils<span class="w"> </span>net-tools<span class="w"> </span>nfs-utils<span class="w"> </span>pam<span class="w"> </span><span class="se">\</span>
+<span class="w">    </span>psmisc<span class="w"> </span>rsync<span class="w"> </span>sed<span class="w"> </span>setup<span class="w"> </span>shadow-utils<span class="w"> </span>rsyslog<span class="w"> </span>tzdata<span class="w"> </span>util-linux<span class="w"> </span><span class="se">\</span>
+<span class="w">    </span>words<span class="w"> </span>zlib<span class="w"> </span>tar<span class="w"> </span>less<span class="w"> </span>gzip<span class="w"> </span>which<span class="w"> </span>util-linux<span class="w"> </span>openssh-clients<span class="w"> </span><span class="se">\</span>
+<span class="w">    </span>openssh-server<span class="w"> </span>dhclient<span class="w"> </span>pciutils<span class="w"> </span>vim-minimal<span class="w"> </span>shadow-utils<span class="w"> </span><span class="se">\</span>
+<span class="w">    </span>strace<span class="w"> </span>cronie<span class="w"> </span>crontabs<span class="w"> </span>cpio<span class="w"> </span>wget<span class="w"> </span>rocky-release<span class="w"> </span>ipmitool<span class="w"> </span>yum<span class="w"> </span><span class="se">\</span>
+<span class="w">    </span>NetworkManager
+</code></pre></div>
+
+<!-- !!! note -->
+<!--     All commands here are run as `root`. -->
+
+<!-- TODO: Can this be stripped down?  Its for warewulf afterall -->
+
+<p>It is then possible to install packages and navigate as the root filesystem using 
+the <code>chroot</code> command</p>
+<div class="highlight"><pre><span></span><code><span class="gp">[root@rocky9 ~]# </span>chroot<span class="w"> </span>/tmp/newroot/
+<span class="go">bash-5.1# yum search slurm</span>
+<span class="go">Failed to set locale, defaulting to C.UTF-8</span>
+<span class="go">Last metadata expiration check: 0:02:22 ago on Tue May 14 17:03:08 2024.</span>
+<span class="go">================================ Name &amp; Summary Matched: slurm ================================</span>
+<span class="go">pcp-pmda-slurm.x86_64 : Performance Co-Pilot (PCP) metrics for the SLURM Workload Manager</span>
+<span class="go">bash-5.1#</span>
+</code></pre></div>
+
+<p>Also, in order to resolve dns, we will need to add a default entry to <code>/etc/resolv.conf</code>.  Normally this gets handled by the cluster managers, but in our "minimal" image we will need to provide it ourselves.</p>
+<div class="highlight"><pre><span></span><code><span class="c1"># From within the chroot shell</span>
+<span class="nb">echo</span><span class="w"> </span><span class="s2">&quot;nameserver 1.1.1.1&quot;</span><span class="w"> </span>&gt;&gt;<span class="w"> </span>/etc/resolv.conf<span class="s2">&quot;</span>
+</code></pre></div>
+
+<h2>Ansible Setup</h2>
+<p>The chroot plugin will already be included with an ansible install, which we'll create
+using the virtualenv module.</p>
+<div class="highlight"><pre><span></span><code><span class="c1"># Create the virtual environment</span>
+python3<span class="w"> </span>-m<span class="w"> </span>venv<span class="w"> </span>venv
+<span class="c1"># Activate the environment</span>
+<span class="nb">source</span><span class="w"> </span>./venv/bin/activate
+<span class="c1"># Upgrade pip to savoid some warning</span>
+pip<span class="w"> </span>install<span class="w"> </span>--upgrade<span class="w"> </span>pip
+<span class="c1"># Install ansible</span>
+pip<span class="w"> </span>install<span class="w"> </span>ansible
+</code></pre></div>
+
+<p>Next we'll create a simple inventory file <code>inventory.cfg</code>, pointing to the chroot directory created above 
+and specifying the following:</p>
+<div class="highlight"><pre><span></span><code><span class="na">/tmp/newroot ansible_connection</span><span class="o">=</span><span class="s">chroot</span>
+</code></pre></div>
+
+<h2>Running Ansible</h2>
+<p>Finally we'll create a test playbook to install the <code>nmap</code> package
+into the image.</p>
+<p>For Example:</p>
+<div class="highlight"><pre><span></span><code><span class="p p-Indicator">-</span><span class="w"> </span><span class="nt">hosts</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">all</span>
+<span class="w">  </span><span class="nt">tasks</span><span class="p">:</span>
+<span class="w">    </span><span class="p p-Indicator">-</span><span class="w"> </span><span class="nt">name</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">Install nmap</span><span class="w">  </span>
+<span class="w">      </span><span class="nt">ansible.builtin.package</span><span class="p">:</span>
+<span class="w">        </span><span class="nt">name</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">nmap</span>
+<span class="w">        </span><span class="nt">state</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">present</span>
+</code></pre></div>
+
+<p>Then its a matter of running the playbook.</p>
+<div class="highlight"><pre><span></span><code><span class="gp gp-VirtualEnv">(venv)</span> <span class="gp">[root@rocky9 ~]# </span>ansible-playbook<span class="w"> </span>-i<span class="w"> </span>inventory.cfg<span class="w"> </span>playbook.yml
+
+<span class="go">PLAY [all] *******************************************************************************************************</span>
+
+<span class="go">TASK [Gathering Facts] *******************************************************************************************</span>
+<span class="go">ok: [/tmp/newroot]</span>
+
+<span class="go">TASK [Install nmap] **********************************************************************************************</span>
+<span class="go">changed: [/tmp/newroot]</span>
+
+<span class="go">PLAY RECAP *******************************************************************************************************</span>
+<span class="go">/tmp/newroot               : ok=2    changed=1    unreachable=0    failed=0    skipped=0    rescued=0    ignored=0</span>
+</code></pre></div>
+
+<p>And there we go.  Direct management of a chroot image using Ansible.</p>
+<h2>Caveats</h2>
+<p>There are a few caveats that one should be aware of when using the plugin
+- Caveats
+    - Can be run on warewulf's "containers" before they are built
+- systemd services have to be take into account</p>
+<h3>Systemd Services</h3>
+<p>Systemd cannot be directly managed using ansible as it is not running in this environment.  You will instead have to apply some logic to the playbooks or roles to take this into account.  Thankfully, ansible provides a variable <code>ansible_is_chroot</code>, which can be referenced within the playbooks.</p>
+<p>As an example to enable slurmd:</p>
+<div class="highlight"><pre><span></span><code><span class="p p-Indicator">-</span><span class="w"> </span><span class="nt">name</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">Start slurmd service</span>
+<span class="w">  </span><span class="nt">ansible.builtin.service</span><span class="p">:</span>
+<span class="w">    </span><span class="nt">name</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">slurmd</span>
+<span class="w">    </span><span class="nt">state</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">started</span>
+<span class="w">    </span><span class="nt">enabled</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">true</span>
+<span class="w">  </span><span class="nt">when</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">not ansible_is_chroot</span>
+
+<span class="p p-Indicator">-</span><span class="w"> </span><span class="nt">name</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">Enable slurmd in Chroot</span>
+<span class="w">  </span><span class="nt">ansible.builtin.shell</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">systemctl enable slurmd</span>
+<span class="w">  </span><span class="nt">when</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">ansible_is_chroot</span>
+</code></pre></div>
+
+<h3>Warewulf "containers"</h3>
+<p>While Warewulf containers are built using Dockerfiles, it is possible to
+run Ansible against them after they have been downloaded, and before they
+are built into a tarball.</p>
+<p>The images are typically located</p>
+<h3>Run as root</h3>
+<p>Unfortunately, you have to run ansible as the root user when using the chroot
+connector. There is no option to use become.  </p>
+<p>After digging through the internals I have found a way to inject a call to sudo
+into the commands, however it is cludgey confusing when the sudo prompt appears in the middle of execution.  I hope to fork the plugin one day and add support for become so ansible
+can be run outside of root.</p>
+<h2>Conclusion</h2>
+<p>We use the plugin a lot since we manage several Bright Clusters.  It has made it easier
+to maintain consistency in our images, reuse roles across clients, and make it easier
+to track what has been done to our images.  </p>
+<p>Next I plan to show how you can use ssh to connect to a chroot based image, bypassing
+the builtin chroot plugin.</p>
+    </article>
+    <section class="series-nav">
+
+        <h3>This post is Part <built-in method index of str object at 0x7effda7e0b30> of the "" series:</h3>
+        <ol class="parts">
+        </ol>
+
+    </section>
+    <section class="post-nav">
+        <div id="left-page">
+            <div id="left-link">
+            </div>
+        </div>
+        <div id="right-page">
+            <div id="right-link">
+            </div>
+        </div>
+    </section>
+    <div>
+    </div>
+</main>
+    <footer>
+        <h6>
+            Rendered by <a href="http://getpelican.com/">Pelican</a> &nbsp;&bull;&nbsp; Theme by <a href="https://github.com/aleylara/Peli-Kiera">Peli-Kiera</a> 
+            &nbsp;&bull;&nbsp; Copyright &copy2024  &nbsp;&#8209;&nbsp; Andrew Kail         </h6>
+    </footer>
+</div>
+<script defer data-domain="blog.kail.io" src="https://plausible.kail.io/js/script.js"></script>
+<script src="https://blog.kail.io/theme/copy/copy.js"></script>
+</body>
+</html>
