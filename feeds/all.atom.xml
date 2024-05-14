@@ -1,5 +1,134 @@
 <?xml version="1.0" encoding="utf-8"?>
-<feed xmlns="http://www.w3.org/2005/Atom"><title>Kail's Blog</title><link href="https://blog.kail.io/" rel="alternate"></link><link href="https://blog.kail.io/feeds/all.atom.xml" rel="self"></link><id>https://blog.kail.io/</id><updated>2023-12-08T00:00:00-05:00</updated><subtitle>Somewhat HPC related blog</subtitle><entry><title>Comparison of Provisioning/Cluster Managers in HPC</title><link href="https://blog.kail.io/comparison-of-provisioningcluster-managers-in-hpc.html" rel="alternate"></link><published>2023-12-08T00:00:00-05:00</published><updated>2023-12-08T00:00:00-05:00</updated><author><name>Andrew Kail</name></author><id>tag:blog.kail.io,2023-12-08:/comparison-of-provisioningcluster-managers-in-hpc.html</id><summary type="html">&lt;p&gt;We are primarily a &lt;del&gt;Bright Cluster Manager&lt;/del&gt; Base Command Manager (BCM) 
+<feed xmlns="http://www.w3.org/2005/Atom"><title>Kail's Blog</title><link href="https://blog.kail.io/" rel="alternate"></link><link href="https://blog.kail.io/feeds/all.atom.xml" rel="self"></link><id>https://blog.kail.io/</id><updated>2024-05-14T12:00:00-04:00</updated><subtitle>Somewhat HPC related blog</subtitle><entry><title>Running Ansible Against Chroot Directories</title><link href="https://blog.kail.io/running-ansible-against-chroot-directories.html" rel="alternate"></link><published>2024-05-14T12:00:00-04:00</published><updated>2024-05-14T12:00:00-04:00</updated><author><name>Andrew Kail</name></author><id>tag:blog.kail.io,2024-05-14:/running-ansible-against-chroot-directories.html</id><summary type="html">&lt;p&gt;Several cluster managers, including BCM, Warewulf, and Scyld use chroot's or chroot like methods for provisioning.  This method allows the systemd administator to build a golden
+image with the requisite packages and configurations, then the cluster manager
+will usually via it's own methods handle final configurations during provisioning.&lt;/p&gt;
+&lt;p&gt;Some of …&lt;/p&gt;</summary><content type="html">&lt;p&gt;Several cluster managers, including BCM, Warewulf, and Scyld use chroot's or chroot like methods for provisioning.  This method allows the systemd administator to build a golden
+image with the requisite packages and configurations, then the cluster manager
+will usually via it's own methods handle final configurations during provisioning.&lt;/p&gt;
+&lt;p&gt;Some of these cluster managers have documented methods for using Ansible, such as BCM's use ssh chroot directories (I'll break this method down in a future article), or document a post
+boot script to run Ansible once the node is up.&lt;/p&gt;
+&lt;p&gt;Several conversations I have had and witnessed show most are unfamiliar with running
+Ansible directly against an existing chroot directory using an existing &lt;a href="https://docs.ansible.com/ansible/latest/collections/community/general/chroot_connection.html"&gt;Ansible connector&lt;/a&gt;.
+This connector is not very well documented, but allows one to target an image directly as if it were a target host for an ssh connection.&lt;/p&gt;
+&lt;p&gt;I'll cover how to get started as well as some of the gotcha's I've found running this
+in produciton environments.&lt;/p&gt;
+&lt;h2&gt;Chroot Setup&lt;/h2&gt;
+&lt;p&gt;I'll be running on an up to date rocky9 host, but this should work on other EL distributions with equivalent commands for Debian based systemd.&lt;/p&gt;
+&lt;p&gt;An example chroot install, pulled from the warewulf documentation, will work here:&lt;/p&gt;
+&lt;div class="highlight"&gt;&lt;pre&gt;&lt;span&gt;&lt;/span&gt;&lt;code&gt;yum&lt;span class="w"&gt; &lt;/span&gt;install&lt;span class="w"&gt; &lt;/span&gt;--installroot&lt;span class="w"&gt; &lt;/span&gt;/tmp/newroot&lt;span class="w"&gt; &lt;/span&gt;--releasever&lt;span class="w"&gt; &lt;/span&gt;&lt;span class="m"&gt;9&lt;/span&gt;&lt;span class="w"&gt; &lt;/span&gt;basesystem&lt;span class="w"&gt; &lt;/span&gt;bash&lt;span class="w"&gt; &lt;/span&gt;&lt;span class="se"&gt;\&lt;/span&gt;
+&lt;span class="w"&gt;    &lt;/span&gt;chkconfig&lt;span class="w"&gt; &lt;/span&gt;coreutils&lt;span class="w"&gt; &lt;/span&gt;e2fsprogs&lt;span class="w"&gt; &lt;/span&gt;ethtool&lt;span class="w"&gt; &lt;/span&gt;filesystem&lt;span class="w"&gt; &lt;/span&gt;findutils&lt;span class="w"&gt; &lt;/span&gt;&lt;span class="se"&gt;\&lt;/span&gt;
+&lt;span class="w"&gt;    &lt;/span&gt;gawk&lt;span class="w"&gt; &lt;/span&gt;grep&lt;span class="w"&gt; &lt;/span&gt;initscripts&lt;span class="w"&gt; &lt;/span&gt;iproute&lt;span class="w"&gt; &lt;/span&gt;iputils&lt;span class="w"&gt; &lt;/span&gt;net-tools&lt;span class="w"&gt; &lt;/span&gt;nfs-utils&lt;span class="w"&gt; &lt;/span&gt;pam&lt;span class="w"&gt; &lt;/span&gt;&lt;span class="se"&gt;\&lt;/span&gt;
+&lt;span class="w"&gt;    &lt;/span&gt;psmisc&lt;span class="w"&gt; &lt;/span&gt;rsync&lt;span class="w"&gt; &lt;/span&gt;sed&lt;span class="w"&gt; &lt;/span&gt;setup&lt;span class="w"&gt; &lt;/span&gt;shadow-utils&lt;span class="w"&gt; &lt;/span&gt;rsyslog&lt;span class="w"&gt; &lt;/span&gt;tzdata&lt;span class="w"&gt; &lt;/span&gt;util-linux&lt;span class="w"&gt; &lt;/span&gt;&lt;span class="se"&gt;\&lt;/span&gt;
+&lt;span class="w"&gt;    &lt;/span&gt;words&lt;span class="w"&gt; &lt;/span&gt;zlib&lt;span class="w"&gt; &lt;/span&gt;tar&lt;span class="w"&gt; &lt;/span&gt;less&lt;span class="w"&gt; &lt;/span&gt;gzip&lt;span class="w"&gt; &lt;/span&gt;which&lt;span class="w"&gt; &lt;/span&gt;util-linux&lt;span class="w"&gt; &lt;/span&gt;openssh-clients&lt;span class="w"&gt; &lt;/span&gt;&lt;span class="se"&gt;\&lt;/span&gt;
+&lt;span class="w"&gt;    &lt;/span&gt;openssh-server&lt;span class="w"&gt; &lt;/span&gt;dhclient&lt;span class="w"&gt; &lt;/span&gt;pciutils&lt;span class="w"&gt; &lt;/span&gt;vim-minimal&lt;span class="w"&gt; &lt;/span&gt;shadow-utils&lt;span class="w"&gt; &lt;/span&gt;&lt;span class="se"&gt;\&lt;/span&gt;
+&lt;span class="w"&gt;    &lt;/span&gt;strace&lt;span class="w"&gt; &lt;/span&gt;cronie&lt;span class="w"&gt; &lt;/span&gt;crontabs&lt;span class="w"&gt; &lt;/span&gt;cpio&lt;span class="w"&gt; &lt;/span&gt;wget&lt;span class="w"&gt; &lt;/span&gt;rocky-release&lt;span class="w"&gt; &lt;/span&gt;ipmitool&lt;span class="w"&gt; &lt;/span&gt;yum&lt;span class="w"&gt; &lt;/span&gt;&lt;span class="se"&gt;\&lt;/span&gt;
+&lt;span class="w"&gt;    &lt;/span&gt;NetworkManager
+&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;
+
+&lt;!-- !!! note --&gt;
+&lt;!--     All commands here are run as `root`. --&gt;
+
+&lt;!-- TODO: Can this be stripped down?  Its for warewulf afterall --&gt;
+
+&lt;p&gt;It is then possible to install packages and navigate as the root filesystem using 
+the &lt;code&gt;chroot&lt;/code&gt; command&lt;/p&gt;
+&lt;div class="highlight"&gt;&lt;pre&gt;&lt;span&gt;&lt;/span&gt;&lt;code&gt;&lt;span class="gp"&gt;[root@rocky9 ~]# &lt;/span&gt;chroot&lt;span class="w"&gt; &lt;/span&gt;/tmp/newroot/
+&lt;span class="go"&gt;bash-5.1# yum search slurm&lt;/span&gt;
+&lt;span class="go"&gt;Failed to set locale, defaulting to C.UTF-8&lt;/span&gt;
+&lt;span class="go"&gt;Last metadata expiration check: 0:02:22 ago on Tue May 14 17:03:08 2024.&lt;/span&gt;
+&lt;span class="go"&gt;================================ Name &amp;amp; Summary Matched: slurm ================================&lt;/span&gt;
+&lt;span class="go"&gt;pcp-pmda-slurm.x86_64 : Performance Co-Pilot (PCP) metrics for the SLURM Workload Manager&lt;/span&gt;
+&lt;span class="go"&gt;bash-5.1#&lt;/span&gt;
+&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;
+
+&lt;p&gt;Also, in order to resolve dns, we will need to add a default entry to &lt;code&gt;/etc/resolv.conf&lt;/code&gt;.  Normally this gets handled by the cluster managers, but in our "minimal" image we will need to provide it ourselves.&lt;/p&gt;
+&lt;div class="highlight"&gt;&lt;pre&gt;&lt;span&gt;&lt;/span&gt;&lt;code&gt;&lt;span class="c1"&gt;# From within the chroot shell&lt;/span&gt;
+&lt;span class="nb"&gt;echo&lt;/span&gt;&lt;span class="w"&gt; &lt;/span&gt;&lt;span class="s2"&gt;&amp;quot;nameserver 1.1.1.1&amp;quot;&lt;/span&gt;&lt;span class="w"&gt; &lt;/span&gt;&amp;gt;&amp;gt;&lt;span class="w"&gt; &lt;/span&gt;/etc/resolv.conf&lt;span class="s2"&gt;&amp;quot;&lt;/span&gt;
+&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;
+
+&lt;h2&gt;Ansible Setup&lt;/h2&gt;
+&lt;p&gt;The chroot plugin will already be included with an ansible install, which we'll create
+using the virtualenv module.&lt;/p&gt;
+&lt;div class="highlight"&gt;&lt;pre&gt;&lt;span&gt;&lt;/span&gt;&lt;code&gt;&lt;span class="c1"&gt;# Create the virtual environment&lt;/span&gt;
+python3&lt;span class="w"&gt; &lt;/span&gt;-m&lt;span class="w"&gt; &lt;/span&gt;venv&lt;span class="w"&gt; &lt;/span&gt;venv
+&lt;span class="c1"&gt;# Activate the environment&lt;/span&gt;
+&lt;span class="nb"&gt;source&lt;/span&gt;&lt;span class="w"&gt; &lt;/span&gt;./venv/bin/activate
+&lt;span class="c1"&gt;# Upgrade pip to savoid some warning&lt;/span&gt;
+pip&lt;span class="w"&gt; &lt;/span&gt;install&lt;span class="w"&gt; &lt;/span&gt;--upgrade&lt;span class="w"&gt; &lt;/span&gt;pip
+&lt;span class="c1"&gt;# Install ansible&lt;/span&gt;
+pip&lt;span class="w"&gt; &lt;/span&gt;install&lt;span class="w"&gt; &lt;/span&gt;ansible
+&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;
+
+&lt;p&gt;Next we'll create a simple inventory file &lt;code&gt;inventory.cfg&lt;/code&gt;, pointing to the chroot directory created above 
+and specifying the following:&lt;/p&gt;
+&lt;div class="highlight"&gt;&lt;pre&gt;&lt;span&gt;&lt;/span&gt;&lt;code&gt;&lt;span class="na"&gt;/tmp/newroot ansible_connection&lt;/span&gt;&lt;span class="o"&gt;=&lt;/span&gt;&lt;span class="s"&gt;chroot&lt;/span&gt;
+&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;
+
+&lt;h2&gt;Running Ansible&lt;/h2&gt;
+&lt;p&gt;Finally we'll create a test playbook to install the &lt;code&gt;nmap&lt;/code&gt; package
+into the image.&lt;/p&gt;
+&lt;p&gt;For Example:&lt;/p&gt;
+&lt;div class="highlight"&gt;&lt;pre&gt;&lt;span&gt;&lt;/span&gt;&lt;code&gt;&lt;span class="p p-Indicator"&gt;-&lt;/span&gt;&lt;span class="w"&gt; &lt;/span&gt;&lt;span class="nt"&gt;hosts&lt;/span&gt;&lt;span class="p"&gt;:&lt;/span&gt;&lt;span class="w"&gt; &lt;/span&gt;&lt;span class="l l-Scalar l-Scalar-Plain"&gt;all&lt;/span&gt;
+&lt;span class="w"&gt;  &lt;/span&gt;&lt;span class="nt"&gt;tasks&lt;/span&gt;&lt;span class="p"&gt;:&lt;/span&gt;
+&lt;span class="w"&gt;    &lt;/span&gt;&lt;span class="p p-Indicator"&gt;-&lt;/span&gt;&lt;span class="w"&gt; &lt;/span&gt;&lt;span class="nt"&gt;name&lt;/span&gt;&lt;span class="p"&gt;:&lt;/span&gt;&lt;span class="w"&gt; &lt;/span&gt;&lt;span class="l l-Scalar l-Scalar-Plain"&gt;Install nmap&lt;/span&gt;&lt;span class="w"&gt;  &lt;/span&gt;
+&lt;span class="w"&gt;      &lt;/span&gt;&lt;span class="nt"&gt;ansible.builtin.package&lt;/span&gt;&lt;span class="p"&gt;:&lt;/span&gt;
+&lt;span class="w"&gt;        &lt;/span&gt;&lt;span class="nt"&gt;name&lt;/span&gt;&lt;span class="p"&gt;:&lt;/span&gt;&lt;span class="w"&gt; &lt;/span&gt;&lt;span class="l l-Scalar l-Scalar-Plain"&gt;nmap&lt;/span&gt;
+&lt;span class="w"&gt;        &lt;/span&gt;&lt;span class="nt"&gt;state&lt;/span&gt;&lt;span class="p"&gt;:&lt;/span&gt;&lt;span class="w"&gt; &lt;/span&gt;&lt;span class="l l-Scalar l-Scalar-Plain"&gt;present&lt;/span&gt;
+&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;
+
+&lt;p&gt;Then its a matter of running the playbook.&lt;/p&gt;
+&lt;div class="highlight"&gt;&lt;pre&gt;&lt;span&gt;&lt;/span&gt;&lt;code&gt;&lt;span class="gp gp-VirtualEnv"&gt;(venv)&lt;/span&gt; &lt;span class="gp"&gt;[root@rocky9 ~]# &lt;/span&gt;ansible-playbook&lt;span class="w"&gt; &lt;/span&gt;-i&lt;span class="w"&gt; &lt;/span&gt;inventory.cfg&lt;span class="w"&gt; &lt;/span&gt;playbook.yml
+
+&lt;span class="go"&gt;PLAY [all] *******************************************************************************************************&lt;/span&gt;
+
+&lt;span class="go"&gt;TASK [Gathering Facts] *******************************************************************************************&lt;/span&gt;
+&lt;span class="go"&gt;ok: [/tmp/newroot]&lt;/span&gt;
+
+&lt;span class="go"&gt;TASK [Install nmap] **********************************************************************************************&lt;/span&gt;
+&lt;span class="go"&gt;changed: [/tmp/newroot]&lt;/span&gt;
+
+&lt;span class="go"&gt;PLAY RECAP *******************************************************************************************************&lt;/span&gt;
+&lt;span class="go"&gt;/tmp/newroot               : ok=2    changed=1    unreachable=0    failed=0    skipped=0    rescued=0    ignored=0&lt;/span&gt;
+&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;
+
+&lt;p&gt;And there we go.  Direct management of a chroot image using Ansible.&lt;/p&gt;
+&lt;h2&gt;Caveats&lt;/h2&gt;
+&lt;p&gt;There are a few caveats that one should be aware of when using the plugin
+- Caveats
+    - Can be run on warewulf's "containers" before they are built
+- systemd services have to be take into account&lt;/p&gt;
+&lt;h3&gt;Systemd Services&lt;/h3&gt;
+&lt;p&gt;Systemd cannot be directly managed using ansible as it is not running in this environment.  You will instead have to apply some logic to the playbooks or roles to take this into account.  Thankfully, ansible provides a variable &lt;code&gt;ansible_is_chroot&lt;/code&gt;, which can be referenced within the playbooks.&lt;/p&gt;
+&lt;p&gt;As an example to enable slurmd:&lt;/p&gt;
+&lt;div class="highlight"&gt;&lt;pre&gt;&lt;span&gt;&lt;/span&gt;&lt;code&gt;&lt;span class="p p-Indicator"&gt;-&lt;/span&gt;&lt;span class="w"&gt; &lt;/span&gt;&lt;span class="nt"&gt;name&lt;/span&gt;&lt;span class="p"&gt;:&lt;/span&gt;&lt;span class="w"&gt; &lt;/span&gt;&lt;span class="l l-Scalar l-Scalar-Plain"&gt;Start slurmd service&lt;/span&gt;
+&lt;span class="w"&gt;  &lt;/span&gt;&lt;span class="nt"&gt;ansible.builtin.service&lt;/span&gt;&lt;span class="p"&gt;:&lt;/span&gt;
+&lt;span class="w"&gt;    &lt;/span&gt;&lt;span class="nt"&gt;name&lt;/span&gt;&lt;span class="p"&gt;:&lt;/span&gt;&lt;span class="w"&gt; &lt;/span&gt;&lt;span class="l l-Scalar l-Scalar-Plain"&gt;slurmd&lt;/span&gt;
+&lt;span class="w"&gt;    &lt;/span&gt;&lt;span class="nt"&gt;state&lt;/span&gt;&lt;span class="p"&gt;:&lt;/span&gt;&lt;span class="w"&gt; &lt;/span&gt;&lt;span class="l l-Scalar l-Scalar-Plain"&gt;started&lt;/span&gt;
+&lt;span class="w"&gt;    &lt;/span&gt;&lt;span class="nt"&gt;enabled&lt;/span&gt;&lt;span class="p"&gt;:&lt;/span&gt;&lt;span class="w"&gt; &lt;/span&gt;&lt;span class="l l-Scalar l-Scalar-Plain"&gt;true&lt;/span&gt;
+&lt;span class="w"&gt;  &lt;/span&gt;&lt;span class="nt"&gt;when&lt;/span&gt;&lt;span class="p"&gt;:&lt;/span&gt;&lt;span class="w"&gt; &lt;/span&gt;&lt;span class="l l-Scalar l-Scalar-Plain"&gt;not ansible_is_chroot&lt;/span&gt;
+
+&lt;span class="p p-Indicator"&gt;-&lt;/span&gt;&lt;span class="w"&gt; &lt;/span&gt;&lt;span class="nt"&gt;name&lt;/span&gt;&lt;span class="p"&gt;:&lt;/span&gt;&lt;span class="w"&gt; &lt;/span&gt;&lt;span class="l l-Scalar l-Scalar-Plain"&gt;Enable slurmd in Chroot&lt;/span&gt;
+&lt;span class="w"&gt;  &lt;/span&gt;&lt;span class="nt"&gt;ansible.builtin.shell&lt;/span&gt;&lt;span class="p"&gt;:&lt;/span&gt;&lt;span class="w"&gt; &lt;/span&gt;&lt;span class="l l-Scalar l-Scalar-Plain"&gt;systemctl enable slurmd&lt;/span&gt;
+&lt;span class="w"&gt;  &lt;/span&gt;&lt;span class="nt"&gt;when&lt;/span&gt;&lt;span class="p"&gt;:&lt;/span&gt;&lt;span class="w"&gt; &lt;/span&gt;&lt;span class="l l-Scalar l-Scalar-Plain"&gt;ansible_is_chroot&lt;/span&gt;
+&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;
+
+&lt;h3&gt;Warewulf "containers"&lt;/h3&gt;
+&lt;p&gt;While Warewulf containers are built using Dockerfiles, it is possible to
+run Ansible against them after they have been downloaded, and before they
+are built into a tarball.&lt;/p&gt;
+&lt;p&gt;The images are typically located&lt;/p&gt;
+&lt;h3&gt;Run as root&lt;/h3&gt;
+&lt;p&gt;Unfortunately, you have to run ansible as the root user when using the chroot
+connector. There is no option to use become.  &lt;/p&gt;
+&lt;p&gt;After digging through the internals I have found a way to inject a call to sudo
+into the commands, however it is cludgey confusing when the sudo prompt appears in the middle of execution.  I hope to fork the plugin one day and add support for become so ansible
+can be run outside of root.&lt;/p&gt;
+&lt;h2&gt;Conclusion&lt;/h2&gt;
+&lt;p&gt;We use the plugin a lot since we manage several Bright Clusters.  It has made it easier
+to maintain consistency in our images, reuse roles across clients, and make it easier
+to track what has been done to our images.  &lt;/p&gt;
+&lt;p&gt;Next I plan to show how you can use ssh to connect to a chroot based image, bypassing
+the builtin chroot plugin.&lt;/p&gt;</content><category term="Ansible"></category><category term="ansible"></category><category term="chroot"></category></entry><entry><title>Comparison of Provisioning/Cluster Managers in HPC</title><link href="https://blog.kail.io/comparison-of-provisioningcluster-managers-in-hpc.html" rel="alternate"></link><published>2023-12-08T00:00:00-05:00</published><updated>2023-12-08T00:00:00-05:00</updated><author><name>Andrew Kail</name></author><id>tag:blog.kail.io,2023-12-08:/comparison-of-provisioningcluster-managers-in-hpc.html</id><summary type="html">&lt;p&gt;We are primarily a &lt;del&gt;Bright Cluster Manager&lt;/del&gt; Base Command Manager (BCM) 
 shop and recently some
 uncertainty has arisen around the future of BCM after its purchase by Nvidia last year.
 More specifically how 
