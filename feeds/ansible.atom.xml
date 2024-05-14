@@ -25,9 +25,10 @@ in produciton environments.&lt;/p&gt;
 &lt;span class="w"&gt;    &lt;/span&gt;NetworkManager
 &lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;
 
-&lt;!-- !!! note --&gt;
-&lt;!--     All commands here are run as `root`. --&gt;
-
+&lt;div class="admonition note"&gt;
+&lt;p class="admonition-title"&gt;Note&lt;/p&gt;
+&lt;p&gt;All commands here are run as &lt;code&gt;root&lt;/code&gt;.&lt;/p&gt;
+&lt;/div&gt;
 &lt;!-- TODO: Can this be stripped down?  Its for warewulf afterall --&gt;
 
 &lt;p&gt;It is then possible to install packages and navigate as the root filesystem using 
@@ -93,10 +94,7 @@ into the image.&lt;/p&gt;
 
 &lt;p&gt;And there we go.  Direct management of a chroot image using Ansible.&lt;/p&gt;
 &lt;h2&gt;Caveats&lt;/h2&gt;
-&lt;p&gt;There are a few caveats that one should be aware of when using the plugin
-- Caveats
-    - Can be run on warewulf's "containers" before they are built
-- systemd services have to be take into account&lt;/p&gt;
+&lt;p&gt;There are a few caveats that one should be aware of when using the plugin.&lt;/p&gt;
 &lt;h3&gt;Systemd Services&lt;/h3&gt;
 &lt;p&gt;Systemd cannot be directly managed using ansible as it is not running in this environment.  You will instead have to apply some logic to the playbooks or roles to take this into account.  Thankfully, ansible provides a variable &lt;code&gt;ansible_is_chroot&lt;/code&gt;, which can be referenced within the playbooks.&lt;/p&gt;
 &lt;p&gt;As an example to enable slurmd:&lt;/p&gt;
