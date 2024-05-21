@@ -5,7 +5,7 @@
         <meta name="viewport" content="width=device-width, initial-scale=1.0">
         <meta http-equiv="X-UA-Compatible" content="ie=edge">
         <meta name="google-site-verification" content="ZlfC6LPbIl8QMogAf9hWUt9xNqocwt4niXcpc56reIs" />
-        <title>Kail's Blog - Running A Jupyter Kernel In Apptainer</title>
+        <title>Kail's Blog - Running A Julia Kernel In Apptainer</title>
         <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/normalize/8.0.1/normalize.min.css"/>
         <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.2/css/all.min.css"/>
         <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Roboto+Slab|Ruda"/>
@@ -13,8 +13,9 @@
         <link rel="stylesheet" type="text/css" href="https://blog.kail.io/theme//copy/copy.css">
         <link href="https://blog.kail.io/feeds/all.atom.xml" type="application/atom+xml" rel="alternate" title="Kail's Blog Atom Feed"/>
 
+<meta name="description" content="Run Julia Jupyter kernels using Apptainer" />
 <meta name="tags" content="apptainer" />
-<meta name="tags" content="jupyter" />
+<meta name="tags" content="julia" />
 </head>
 <body>
 <style>.github-corner:hover .octo-arm {
@@ -63,12 +64,12 @@
     </nav>
 <main>
     <article>
-        <h1>Running A Jupyter Kernel In Apptainer</h1>
+        <h1>Running A Julia Kernel In Apptainer</h1>
         
         <aside>
             <ul>
                 <li>
-                    <time datetime="2023-08-30 00:00:00-04:00">Aug 30, 2023</time>
+                    <time datetime="2024-05-20 12:00:00-04:00">May 20, 2024</time>
                 </li>
                 <li>
                     Categories:
@@ -77,52 +78,65 @@
                 <li>
                     Tags:
                     <a href="https://blog.kail.io/tag/apptainer.html"><em>#apptainer</em></a>
-                    <a href="https://blog.kail.io/tag/jupyter.html"><em>#jupyter</em></a>
+                    <a href="https://blog.kail.io/tag/julia.html"><em>#julia</em></a>
                 </li>
             </ul>
         </aside>
-        <p>Just a quick example of running a Jupyter kernel inside an <del>Singularity</del> 
-Apptainer container.</p>
-<p>First define a container with all the required applications, in particular <code>ipykernel</code>.</p>
+        <p>In a previous article <a href="https://blog.kail.io/running-a-jupyter-kernel-in-apptainer.html">Singularity Jupyter Kernel</a> 
+I went through setting up an Apptainer container to run iPython kernels in Jupyterlab.</p>
+<p>Recently I started looking into Julia and wanted to do the same setup.  It turned
+out to not be as straightforward for me as I was not familiar with working with Julia and
+it's virtual environments, but did eventually get it worked out.</p>
+<p>First we'll define a minimal apptainer definition file and install the one requisite package <code>IJulia</code>.</p>
 <div class="highlight"><pre><span></span><code><span class="k">bootstrap</span>:<span class="w"> </span>docker
-<span class="k">From</span>:<span class="w"> </span>python:<span class="m">3.11</span>-slim-buster
-
-<span class="gh">%runscript</span>
-<span class="w">    </span><span class="nb">echo</span><span class="w"> </span><span class="s2">&quot;Hello... I am a new Singularity container&quot;</span>
+<span class="k">From</span>:<span class="w"> </span>julia:<span class="m">1.10</span>-bookworm
 
 <span class="gh">%labels</span>
 <span class="w">    </span>AUTHOR<span class="w"> </span>andrew@kail.io
 
 <span class="gh">%post</span>
-<span class="w">    </span>apt-get<span class="w"> </span>update<span class="w"> </span><span class="o">&amp;&amp;</span><span class="w"> </span>apt-get<span class="w"> </span>install<span class="w"> </span>-y<span class="w"> </span>python-pip<span class="w"> </span>python-dev<span class="w"> </span>build-essential
-<span class="w">    </span>pip<span class="w"> </span>install<span class="w"> </span>--upgrade<span class="w"> </span>pip
-<span class="w">    </span>pip<span class="w"> </span>install<span class="w"> </span>numpy
-<span class="w">    </span>pip<span class="w"> </span>install<span class="w"> </span>ipykernel
+<span class="w">    </span><span class="nb">export</span><span class="w"> </span><span class="nv">JULIA_DEPOT_PATH</span><span class="o">=</span><span class="s2">&quot;/usr/local/julia/local/share/julia&quot;</span>
+<span class="w">    </span>julia<span class="w"> </span>--project<span class="o">=</span><span class="s2">&quot;/opt/.&quot;</span><span class="w"> </span>-e<span class="w"> </span><span class="s1">&#39;using Pkg; Pkg.add(&quot;IJulia&quot;);&#39;</span>
 </code></pre></div>
 
-<p>Build the container image.</p>
+<p>One thing to note for those not familiar with Julia is <code>--project="/opt/."</code>.  Julia by default
+installs packages in a user's home directory under <code>.julia</code> if on Linux.  During the build process,
+this home directory is local to the container's root user, and later if the user launching the container
+has their own Julia packages installed, those may come into conflict with what is expected with the container.
+Specifying <code>--project</code> tells
+Julia to use that directory as its virtual environment and install packages local to the container and can
+be referenced later during the kernel launch.</p>
+<p>Building the container is as straight forward as before:</p>
 <div class="highlight"><pre><span></span><code>apptainer<span class="w"> </span>build<span class="w"> </span>ipykernel.sif<span class="w"> </span>ipykernel.def
 </code></pre></div>
 
 <p>Finally, add the following to kernel specification under <code>/home/&lt;user&gt;/.local/share/jupyter/kernels/&lt;kernelname&gt;/kernel.json</code></p>
 <div class="highlight"><pre><span></span><code><span class="p">{</span>
-<span class="w"> </span><span class="nt">&quot;argv&quot;</span><span class="p">:</span><span class="w"> </span><span class="p">[</span>
-<span class="w">   </span><span class="s2">&quot;singularity&quot;</span><span class="p">,</span>
-<span class="w">   </span><span class="s2">&quot;exec&quot;</span><span class="p">,</span>
-<span class="w">   </span><span class="s2">&quot;--cleanenv&quot;</span><span class="p">,</span>
-<span class="w">   </span><span class="s2">&quot;/home/akail/Projects/singularity/kernel/ipykernel.sif&quot;</span><span class="p">,</span>
-<span class="w">   </span><span class="s2">&quot;python&quot;</span><span class="p">,</span>
-<span class="w">   </span><span class="s2">&quot;-m&quot;</span><span class="p">,</span>
-<span class="w">   </span><span class="s2">&quot;ipykernel&quot;</span><span class="p">,</span>
-<span class="w">   </span><span class="s2">&quot;-f&quot;</span><span class="p">,</span>
-<span class="w">   </span><span class="s2">&quot;{connection_file}&quot;</span>
-<span class="w"> </span><span class="p">],</span>
-<span class="w"> </span><span class="nt">&quot;language&quot;</span><span class="p">:</span><span class="w"> </span><span class="s2">&quot;python&quot;</span><span class="p">,</span>
-<span class="w"> </span><span class="nt">&quot;display_name&quot;</span><span class="p">:</span><span class="w"> </span><span class="s2">&quot;singularity-kernel&quot;</span>
+<span class="w">  </span><span class="nt">&quot;display_name&quot;</span><span class="p">:</span><span class="w"> </span><span class="s2">&quot;Julia&quot;</span><span class="p">,</span>
+<span class="w">  </span><span class="nt">&quot;argv&quot;</span><span class="p">:</span><span class="w"> </span><span class="p">[</span>
+<span class="w">    </span><span class="s2">&quot;apptainer&quot;</span><span class="p">,</span>
+<span class="w">    </span><span class="s2">&quot;exec&quot;</span><span class="p">,</span>
+<span class="w">    </span><span class="s2">&quot;--cleanenv&quot;</span><span class="p">,</span>
+<span class="w">    </span><span class="s2">&quot;/home/akail/Projects/Finance/julia/kernel.sif&quot;</span><span class="p">,</span>
+<span class="w">    </span><span class="s2">&quot;julia&quot;</span><span class="p">,</span>
+<span class="w">    </span><span class="s2">&quot;-i&quot;</span><span class="p">,</span>
+<span class="w">    </span><span class="s2">&quot;--color=yes&quot;</span><span class="p">,</span>
+<span class="w">    </span><span class="s2">&quot;-O3&quot;</span><span class="p">,</span>
+<span class="w">    </span><span class="s2">&quot;--project=/opt/&quot;</span><span class="p">,</span>
+<span class="w">    </span><span class="s2">&quot;/usr/local/julia/local/share/julia/packages/IJulia/Vo51o/src/kernel.jl&quot;</span><span class="p">,</span>
+<span class="w">    </span><span class="s2">&quot;{connection_file}&quot;</span>
+<span class="w">  </span><span class="p">],</span>
+<span class="w">  </span><span class="nt">&quot;language&quot;</span><span class="p">:</span><span class="w"> </span><span class="s2">&quot;julia&quot;</span><span class="p">,</span>
+<span class="w">  </span><span class="nt">&quot;interrupt_mode&quot;</span><span class="p">:</span><span class="w"> </span><span class="s2">&quot;signal&quot;</span>
 <span class="p">}</span>
 </code></pre></div>
 
-<p>Restart Jupyter or Jupyter lab and you're all set.</p>
+<div class="admonition warning">
+<p class="admonition-title">Warning</p>
+<p>This path <code>/usr/local/julia/local/share/julia/packages/IJulia/Vo51o/src/kernel.jl</code> is not guaranteed to be correct.
+I am still working to figure the <code>Vo51o</code> portion out.</p>
+</div>
+<p>Restart Jupyter or Jupyter lab and the kernel should now be available.</p>
     </article>
     <section class="series-nav">
 
@@ -131,13 +145,11 @@ Apptainer container.</p>
     <section class="post-nav">
         <div id="left-page">
             <div id="left-link">
-                <div id="left-arrow"><i class="fa fa-chevron-circle-left"></i></div>
-                <a href="https://blog.kail.io/simple-nvidia-pytorch-container.html"> Simple Nvidia PyTorch Container</a>
             </div>
         </div>
         <div id="right-page">
             <div id="right-link">
-                <a href="https://blog.kail.io/integrating-anaconda-with-lmod.html">Integrating Anaconda with Lmod </a>
+                <a href="https://blog.kail.io/running-ansible-against-chroot-directories.html">Running Ansible Against Chroot Directories </a>
                 <div id="right-arrow"><i class="fa fa-chevron-circle-right"></i></div>
             </div>
         </div>

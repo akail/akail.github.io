@@ -1,5 +1,62 @@
 <?xml version="1.0" encoding="utf-8"?>
-<feed xmlns="http://www.w3.org/2005/Atom"><title>Kail's Blog</title><link href="https://blog.kail.io/" rel="alternate"></link><link href="https://blog.kail.io/feeds/all.atom.xml" rel="self"></link><id>https://blog.kail.io/</id><updated>2024-05-14T12:00:00-04:00</updated><subtitle>Somewhat HPC related blog</subtitle><entry><title>Running Ansible Against Chroot Directories</title><link href="https://blog.kail.io/running-ansible-against-chroot-directories.html" rel="alternate"></link><published>2024-05-14T12:00:00-04:00</published><updated>2024-05-14T12:00:00-04:00</updated><author><name>Andrew Kail</name></author><id>tag:blog.kail.io,2024-05-14:/running-ansible-against-chroot-directories.html</id><summary type="html">&lt;p&gt;Several cluster managers, including BCM, Warewulf, and Scyld use chroot's or chroot like methods for provisioning.  This method allows the systemd administator to build a golden
+<feed xmlns="http://www.w3.org/2005/Atom"><title>Kail's Blog</title><link href="https://blog.kail.io/" rel="alternate"></link><link href="https://blog.kail.io/feeds/all.atom.xml" rel="self"></link><id>https://blog.kail.io/</id><updated>2024-05-20T12:00:00-04:00</updated><subtitle>Somewhat HPC related blog</subtitle><entry><title>Running A Julia Kernel In Apptainer</title><link href="https://blog.kail.io/running-a-julia-kernel-in-apptainer.html" rel="alternate"></link><published>2024-05-20T12:00:00-04:00</published><updated>2024-05-20T12:00:00-04:00</updated><author><name>Andrew Kail</name></author><id>tag:blog.kail.io,2024-05-20:/running-a-julia-kernel-in-apptainer.html</id><summary type="html">&lt;p&gt;In a previous article &lt;a href="https://blog.kail.io/running-a-jupyter-kernel-in-apptainer.html"&gt;Singularity Jupyter Kernel&lt;/a&gt; 
+I went through setting up an Apptainer container to run iPython kernels in Jupyterlab.&lt;/p&gt;
+&lt;p&gt;Recently I started looking into Julia and wanted to do the same setup.  It turned
+out to not be as straightforward for me as I was not familiar with …&lt;/p&gt;</summary><content type="html">&lt;p&gt;In a previous article &lt;a href="https://blog.kail.io/running-a-jupyter-kernel-in-apptainer.html"&gt;Singularity Jupyter Kernel&lt;/a&gt; 
+I went through setting up an Apptainer container to run iPython kernels in Jupyterlab.&lt;/p&gt;
+&lt;p&gt;Recently I started looking into Julia and wanted to do the same setup.  It turned
+out to not be as straightforward for me as I was not familiar with working with Julia and
+it's virtual environments, but did eventually get it worked out.&lt;/p&gt;
+&lt;p&gt;First we'll define a minimal apptainer definition file and install the one requisite package &lt;code&gt;IJulia&lt;/code&gt;.&lt;/p&gt;
+&lt;div class="highlight"&gt;&lt;pre&gt;&lt;span&gt;&lt;/span&gt;&lt;code&gt;&lt;span class="k"&gt;bootstrap&lt;/span&gt;:&lt;span class="w"&gt; &lt;/span&gt;docker
+&lt;span class="k"&gt;From&lt;/span&gt;:&lt;span class="w"&gt; &lt;/span&gt;julia:&lt;span class="m"&gt;1.10&lt;/span&gt;-bookworm
+
+&lt;span class="gh"&gt;%labels&lt;/span&gt;
+&lt;span class="w"&gt;    &lt;/span&gt;AUTHOR&lt;span class="w"&gt; &lt;/span&gt;andrew@kail.io
+
+&lt;span class="gh"&gt;%post&lt;/span&gt;
+&lt;span class="w"&gt;    &lt;/span&gt;&lt;span class="nb"&gt;export&lt;/span&gt;&lt;span class="w"&gt; &lt;/span&gt;&lt;span class="nv"&gt;JULIA_DEPOT_PATH&lt;/span&gt;&lt;span class="o"&gt;=&lt;/span&gt;&lt;span class="s2"&gt;&amp;quot;/usr/local/julia/local/share/julia&amp;quot;&lt;/span&gt;
+&lt;span class="w"&gt;    &lt;/span&gt;julia&lt;span class="w"&gt; &lt;/span&gt;--project&lt;span class="o"&gt;=&lt;/span&gt;&lt;span class="s2"&gt;&amp;quot;/opt/.&amp;quot;&lt;/span&gt;&lt;span class="w"&gt; &lt;/span&gt;-e&lt;span class="w"&gt; &lt;/span&gt;&lt;span class="s1"&gt;&amp;#39;using Pkg; Pkg.add(&amp;quot;IJulia&amp;quot;);&amp;#39;&lt;/span&gt;
+&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;
+
+&lt;p&gt;One thing to note for those not familiar with Julia is &lt;code&gt;--project="/opt/."&lt;/code&gt;.  Julia by default
+installs packages in a user's home directory under &lt;code&gt;.julia&lt;/code&gt; if on Linux.  During the build process,
+this home directory is local to the container's root user, and later if the user launching the container
+has their own Julia packages installed, those may come into conflict with what is expected with the container.
+Specifying &lt;code&gt;--project&lt;/code&gt; tells
+Julia to use that directory as its virtual environment and install packages local to the container and can
+be referenced later during the kernel launch.&lt;/p&gt;
+&lt;p&gt;Building the container is as straight forward as before:&lt;/p&gt;
+&lt;div class="highlight"&gt;&lt;pre&gt;&lt;span&gt;&lt;/span&gt;&lt;code&gt;apptainer&lt;span class="w"&gt; &lt;/span&gt;build&lt;span class="w"&gt; &lt;/span&gt;ipykernel.sif&lt;span class="w"&gt; &lt;/span&gt;ipykernel.def
+&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;
+
+&lt;p&gt;Finally, add the following to kernel specification under &lt;code&gt;/home/&amp;lt;user&amp;gt;/.local/share/jupyter/kernels/&amp;lt;kernelname&amp;gt;/kernel.json&lt;/code&gt;&lt;/p&gt;
+&lt;div class="highlight"&gt;&lt;pre&gt;&lt;span&gt;&lt;/span&gt;&lt;code&gt;&lt;span class="p"&gt;{&lt;/span&gt;
+&lt;span class="w"&gt;  &lt;/span&gt;&lt;span class="nt"&gt;&amp;quot;display_name&amp;quot;&lt;/span&gt;&lt;span class="p"&gt;:&lt;/span&gt;&lt;span class="w"&gt; &lt;/span&gt;&lt;span class="s2"&gt;&amp;quot;Julia&amp;quot;&lt;/span&gt;&lt;span class="p"&gt;,&lt;/span&gt;
+&lt;span class="w"&gt;  &lt;/span&gt;&lt;span class="nt"&gt;&amp;quot;argv&amp;quot;&lt;/span&gt;&lt;span class="p"&gt;:&lt;/span&gt;&lt;span class="w"&gt; &lt;/span&gt;&lt;span class="p"&gt;[&lt;/span&gt;
+&lt;span class="w"&gt;    &lt;/span&gt;&lt;span class="s2"&gt;&amp;quot;apptainer&amp;quot;&lt;/span&gt;&lt;span class="p"&gt;,&lt;/span&gt;
+&lt;span class="w"&gt;    &lt;/span&gt;&lt;span class="s2"&gt;&amp;quot;exec&amp;quot;&lt;/span&gt;&lt;span class="p"&gt;,&lt;/span&gt;
+&lt;span class="w"&gt;    &lt;/span&gt;&lt;span class="s2"&gt;&amp;quot;--cleanenv&amp;quot;&lt;/span&gt;&lt;span class="p"&gt;,&lt;/span&gt;
+&lt;span class="w"&gt;    &lt;/span&gt;&lt;span class="s2"&gt;&amp;quot;/home/akail/Projects/Finance/julia/kernel.sif&amp;quot;&lt;/span&gt;&lt;span class="p"&gt;,&lt;/span&gt;
+&lt;span class="w"&gt;    &lt;/span&gt;&lt;span class="s2"&gt;&amp;quot;julia&amp;quot;&lt;/span&gt;&lt;span class="p"&gt;,&lt;/span&gt;
+&lt;span class="w"&gt;    &lt;/span&gt;&lt;span class="s2"&gt;&amp;quot;-i&amp;quot;&lt;/span&gt;&lt;span class="p"&gt;,&lt;/span&gt;
+&lt;span class="w"&gt;    &lt;/span&gt;&lt;span class="s2"&gt;&amp;quot;--color=yes&amp;quot;&lt;/span&gt;&lt;span class="p"&gt;,&lt;/span&gt;
+&lt;span class="w"&gt;    &lt;/span&gt;&lt;span class="s2"&gt;&amp;quot;-O3&amp;quot;&lt;/span&gt;&lt;span class="p"&gt;,&lt;/span&gt;
+&lt;span class="w"&gt;    &lt;/span&gt;&lt;span class="s2"&gt;&amp;quot;--project=/opt/&amp;quot;&lt;/span&gt;&lt;span class="p"&gt;,&lt;/span&gt;
+&lt;span class="w"&gt;    &lt;/span&gt;&lt;span class="s2"&gt;&amp;quot;/usr/local/julia/local/share/julia/packages/IJulia/Vo51o/src/kernel.jl&amp;quot;&lt;/span&gt;&lt;span class="p"&gt;,&lt;/span&gt;
+&lt;span class="w"&gt;    &lt;/span&gt;&lt;span class="s2"&gt;&amp;quot;{connection_file}&amp;quot;&lt;/span&gt;
+&lt;span class="w"&gt;  &lt;/span&gt;&lt;span class="p"&gt;],&lt;/span&gt;
+&lt;span class="w"&gt;  &lt;/span&gt;&lt;span class="nt"&gt;&amp;quot;language&amp;quot;&lt;/span&gt;&lt;span class="p"&gt;:&lt;/span&gt;&lt;span class="w"&gt; &lt;/span&gt;&lt;span class="s2"&gt;&amp;quot;julia&amp;quot;&lt;/span&gt;&lt;span class="p"&gt;,&lt;/span&gt;
+&lt;span class="w"&gt;  &lt;/span&gt;&lt;span class="nt"&gt;&amp;quot;interrupt_mode&amp;quot;&lt;/span&gt;&lt;span class="p"&gt;:&lt;/span&gt;&lt;span class="w"&gt; &lt;/span&gt;&lt;span class="s2"&gt;&amp;quot;signal&amp;quot;&lt;/span&gt;
+&lt;span class="p"&gt;}&lt;/span&gt;
+&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;
+
+&lt;div class="admonition warning"&gt;
+&lt;p class="admonition-title"&gt;Warning&lt;/p&gt;
+&lt;p&gt;This path &lt;code&gt;/usr/local/julia/local/share/julia/packages/IJulia/Vo51o/src/kernel.jl&lt;/code&gt; is not guaranteed to be correct.
+I am still working to figure the &lt;code&gt;Vo51o&lt;/code&gt; portion out.&lt;/p&gt;
+&lt;/div&gt;
+&lt;p&gt;Restart Jupyter or Jupyter lab and the kernel should now be available.&lt;/p&gt;</content><category term="Containers"></category><category term="apptainer"></category><category term="julia"></category></entry><entry><title>Running Ansible Against Chroot Directories</title><link href="https://blog.kail.io/running-ansible-against-chroot-directories.html" rel="alternate"></link><published>2024-05-14T12:00:00-04:00</published><updated>2024-05-14T12:00:00-04:00</updated><author><name>Andrew Kail</name></author><id>tag:blog.kail.io,2024-05-14:/running-ansible-against-chroot-directories.html</id><summary type="html">&lt;p&gt;Several cluster managers, including BCM, Warewulf, and Scyld use chroot's or chroot like methods for provisioning.  This method allows the systemd administator to build a golden
 image with the requisite packages and configurations, then the cluster manager
 will usually via it's own methods handle final configurations during provisioning.&lt;/p&gt;
 &lt;p&gt;Some of …&lt;/p&gt;</summary><content type="html">&lt;p&gt;Several cluster managers, including BCM, Warewulf, and Scyld use chroot's or chroot like methods for provisioning.  This method allows the systemd administator to build a golden
@@ -545,7 +602,7 @@ Apptainer container.&lt;/p&gt;
 &lt;span class="p"&gt;}&lt;/span&gt;
 &lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;
 
-&lt;p&gt;Restart Jupyter or Jupyter lab and you're all set.&lt;/p&gt;</content><category term="Python"></category><category term="apptainer"></category><category term="jupyter"></category></entry><entry><title>Integrating Anaconda with Lmod</title><link href="https://blog.kail.io/integrating-anaconda-with-lmod.html" rel="alternate"></link><published>2023-08-22T12:00:00-04:00</published><updated>2023-08-22T12:00:00-04:00</updated><author><name>Andrew Kail</name></author><id>tag:blog.kail.io,2023-08-22:/integrating-anaconda-with-lmod.html</id><summary type="html">&lt;p&gt;In a previous &lt;a href="https://blog.kail.io/performance-impact-of-anaconda-initialization.html"&gt;post&lt;/a&gt; I looked into performance issues with Anaconda initialization.  To
+&lt;p&gt;Restart Jupyter or Jupyter lab and you're all set.&lt;/p&gt;</content><category term="Containers"></category><category term="apptainer"></category><category term="jupyter"></category></entry><entry><title>Integrating Anaconda with Lmod</title><link href="https://blog.kail.io/integrating-anaconda-with-lmod.html" rel="alternate"></link><published>2023-08-22T12:00:00-04:00</published><updated>2023-08-22T12:00:00-04:00</updated><author><name>Andrew Kail</name></author><id>tag:blog.kail.io,2023-08-22:/integrating-anaconda-with-lmod.html</id><summary type="html">&lt;p&gt;In a previous &lt;a href="https://blog.kail.io/performance-impact-of-anaconda-initialization.html"&gt;post&lt;/a&gt; I looked into performance issues with Anaconda initialization.  To
 get around users modifying their &lt;code&gt;.bashrc&lt;/code&gt; and breaking their environment, 
 I have instead written an Lmod modulefile that handles setting and unsetting the variables and
 fuctions it needs.  This works for both bash and csh.&lt;/p&gt;
