@@ -5,13 +5,15 @@
         <meta name="viewport" content="width=device-width, initial-scale=1.0">
         <meta http-equiv="X-UA-Compatible" content="ie=edge">
         <meta name="google-site-verification" content="ZlfC6LPbIl8QMogAf9hWUt9xNqocwt4niXcpc56reIs" />
-        <title>Kail's Blog - jupyter</title>
+        <title>Kail's Blog - HPC Bottlenecks Part 1</title>
         <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/normalize/8.0.1/normalize.min.css"/>
         <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.2/css/all.min.css"/>
         <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Roboto+Slab|Ruda"/>
         <link rel="stylesheet" type="text/css" href="https://blog.kail.io/theme/css/main.css"/>
         <link rel="stylesheet" type="text/css" href="https://blog.kail.io/theme//copy/copy.css">
         <link href="https://blog.kail.io/feeds/all.atom.xml" type="application/atom+xml" rel="alternate" title="Kail's Blog Atom Feed"/>
+
+<meta name="tags" content="benchmark" />
 </head>
 <body>
 <style>.github-corner:hover .octo-arm {
@@ -57,25 +59,74 @@
                     <li><a href="https://blog.kail.io/pages/about.html">About</a></li>
         </ul>
     </nav>
-    <main>
-        <section id="list">
-            <h2>#jupyter</h2>
+<main>
+    <article>
+        <h1>HPC Bottlenecks Part 1</h1>
+        
+        <aside>
             <ul>
-                    <li>
-                        <a href="https://blog.kail.io/simple-nvidia-pytorch-container.html">Simple Nvidia PyTorch Container</a>
-                        <time>Sep 2023</time>
-                    </li>
-                    <li>
-                        <a href="https://blog.kail.io/running-a-jupyter-kernel-in-apptainer.html">Running A Jupyter Kernel In Apptainer</a>
-                        <time>Aug 2023</time>
-                    </li>
-                    <li>
-                        <a href="https://blog.kail.io/adding-anaconda-environment-to-jupyter.html">Adding Anaconda Environment to Jupyter</a>
-                        <time>Feb 2023</time>
-                    </li>
+                <li>
+                    <time datetime="2101-01-01 12:00:00-05:00">Jan 01, 2101</time>
+                </li>
+                <li>
+                    Categories:
+                    <a href="https://blog.kail.io/category/hpc.html"><em>HPC</em></a>
+                </li>
+                <li>
+                    Tags:
+                    <a href="https://blog.kail.io/tag/benchmark.html"><em>#benchmark</em></a>
+                </li>
             </ul>
-        </section>
-    </main>
+        </aside>
+        <p>This will likely be a multipart series on HPC Bottlnecks</p>
+<ul>
+<li>Part 1 ish<ul>
+<li>What are the bottlenecks?</li>
+</ul>
+</li>
+<li>Part 2 ish</li>
+</ul>
+<p>Broken into 3 groups</p>
+<ul>
+<li>cpu<ul>
+<li>will encompass gpu</li>
+<li>how does caching play ingo</li>
+</ul>
+</li>
+<li>io<ul>
+<li>network</li>
+<li>disk</li>
+<li>filesystem<ul>
+<li>zfs vdevs for instance</li>
+</ul>
+</li>
+</ul>
+</li>
+<li>memory<ul>
+<li>size</li>
+<li>speed</li>
+<li>ecc</li>
+</ul>
+</li>
+</ul>
+    </article>
+    <section class="series-nav">
+
+
+    </section>
+    <section class="post-nav">
+        <div id="left-page">
+            <div id="left-link">
+            </div>
+        </div>
+        <div id="right-page">
+            <div id="right-link">
+            </div>
+        </div>
+    </section>
+    <div>
+    </div>
+</main>
     <footer>
         <h6>
             Rendered by <a href="http://getpelican.com/">Pelican</a> &nbsp;&bull;&nbsp; Theme by <a href="https://github.com/aleylara/Peli-Kiera">Peli-Kiera</a> 

@@ -1,5 +1,47 @@
 <?xml version="1.0" encoding="utf-8"?>
-<feed xmlns="http://www.w3.org/2005/Atom"><title>Kail's Blog - Proxmox</title><link href="https://blog.kail.io/" rel="alternate"></link><link href="https://blog.kail.io/feeds/proxmox.atom.xml" rel="self"></link><id>https://blog.kail.io/</id><updated>2023-04-05T01:00:00-04:00</updated><subtitle>Somewhat HPC related blog</subtitle><entry><title>PXE Booting on Proxmox</title><link href="https://blog.kail.io/pxe-booting-on-proxmox.html" rel="alternate"></link><published>2023-04-05T01:00:00-04:00</published><updated>2023-04-05T01:00:00-04:00</updated><author><name>Andrew Kail</name></author><id>tag:blog.kail.io,2023-04-05:/pxe-booting-on-proxmox.html</id><summary type="html">&lt;p&gt;In last's week post I &lt;a href="https://blog.kail.io/running-netbootxyz-from-opnsense.html"&gt;installed netboot.xyz on an OPNSense firewall&lt;/a&gt;. Now its
+<feed xmlns="http://www.w3.org/2005/Atom"><title>Kail's Blog - Proxmox</title><link href="https://blog.kail.io/" rel="alternate"></link><link href="https://blog.kail.io/feeds/proxmox.atom.xml" rel="self"></link><id>https://blog.kail.io/</id><updated>2024-06-05T00:00:00-04:00</updated><subtitle>Somewhat HPC related blog</subtitle><entry><title>Testing OpenSUSE Aeon in Proxmox</title><link href="https://blog.kail.io/testing-opensuse-aeon-in-proxmox.html" rel="alternate"></link><published>2024-06-05T00:00:00-04:00</published><updated>2024-06-05T00:00:00-04:00</updated><author><name>Andrew Kail</name></author><id>tag:blog.kail.io,2024-06-05:/testing-opensuse-aeon-in-proxmox.html</id><summary type="html">&lt;ul&gt;
+&lt;li&gt;Recently saw some news about Aeon and wanted to give it a try&lt;/li&gt;
+&lt;li&gt;normally been an endeavouros user &lt;/li&gt;
+&lt;li&gt;enjoy having the latest hardware&lt;/li&gt;
+&lt;li&gt;highly updated core those is beginning to bug me sometimes&lt;/li&gt;
+&lt;li&gt;With distrobox and flathub maybe I can get around it&lt;/li&gt;
+&lt;li&gt;Would like to try it out for …&lt;/li&gt;&lt;/ul&gt;</summary><content type="html">&lt;ul&gt;
+&lt;li&gt;Recently saw some news about Aeon and wanted to give it a try&lt;/li&gt;
+&lt;li&gt;normally been an endeavouros user &lt;/li&gt;
+&lt;li&gt;enjoy having the latest hardware&lt;/li&gt;
+&lt;li&gt;highly updated core those is beginning to bug me sometimes&lt;/li&gt;
+&lt;li&gt;With distrobox and flathub maybe I can get around it&lt;/li&gt;
+&lt;li&gt;Would like to try it out for a bit in proxmox&lt;/li&gt;
+&lt;li&gt;
+&lt;p&gt;Will need to be multiple attempts&lt;/p&gt;
+&lt;/li&gt;
+&lt;li&gt;
+&lt;p&gt;Download the raw image from opensuse&lt;/p&gt;
+&lt;/li&gt;
+&lt;/ul&gt;
+&lt;div class="admonition warning"&gt;
+&lt;p class="admonition-title"&gt;Warning&lt;/p&gt;
+&lt;p&gt;This is a beta image right now&lt;/p&gt;
+&lt;/div&gt;
+&lt;p&gt;TODO Add download image
+- currenltly they only provide a raw image, not an iso&lt;/p&gt;
+&lt;p&gt;extract the file&lt;/p&gt;
+&lt;div class="highlight"&gt;&lt;pre&gt;&lt;span&gt;&lt;/span&gt;&lt;code&gt;&lt;span class="go"&gt;╭─akail@bluefalcon ~/Downloads&lt;/span&gt;
+&lt;span class="go"&gt;╰─➤  xz -d openSUSE-Aeon-Installer.x86_64.raw.xz&lt;/span&gt;
+&lt;span class="go"&gt;╭─akail@bluefalcon ~/Downloads&lt;/span&gt;
+&lt;span class="go"&gt;╰─➤  ls -al openSUSE-Aeon-Installer.x86_64.raw&lt;/span&gt;
+&lt;span class="go"&gt;-rw-r--r-- 1 akail akail 7438598144 Jun  5 10:20 openSUSE-Aeon-Installer.x86_64.raw&lt;/span&gt;
+&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;
+
+&lt;ul&gt;
+&lt;li&gt;Next we upload to proxmox&lt;/li&gt;
+&lt;li&gt;since its a raw file had to name it to ISO&lt;/li&gt;
+&lt;/ul&gt;
+&lt;p&gt;TODO Add upload image&lt;/p&gt;
+&lt;ul&gt;
+&lt;li&gt;did 2 cores, 32 GB disk, 4 GB of RAM&lt;/li&gt;
+&lt;/ul&gt;
+&lt;p&gt;And it failed&lt;/p&gt;</content><category term="Proxmox"></category><category term="opensuse"></category><category term="proxmox"></category></entry><entry><title>PXE Booting on Proxmox</title><link href="https://blog.kail.io/pxe-booting-on-proxmox.html" rel="alternate"></link><published>2023-04-05T01:00:00-04:00</published><updated>2023-04-05T01:00:00-04:00</updated><author><name>Andrew Kail</name></author><id>tag:blog.kail.io,2023-04-05:/pxe-booting-on-proxmox.html</id><summary type="html">&lt;p&gt;In last's week post I &lt;a href="https://blog.kail.io/running-netbootxyz-from-opnsense.html"&gt;installed netboot.xyz on an OPNSense firewall&lt;/a&gt;. Now its
 time to test the PXE boot process on a VM on my Proxmox Host.  Its very
 straightforward, but there are a few caveats I found with netboot.&lt;/p&gt;
 &lt;p&gt;First, start the VM Creation process in Proxmox.  You …&lt;/p&gt;</summary><content type="html">&lt;p&gt;In last's week post I &lt;a href="https://blog.kail.io/running-netbootxyz-from-opnsense.html"&gt;installed netboot.xyz on an OPNSense firewall&lt;/a&gt;. Now its

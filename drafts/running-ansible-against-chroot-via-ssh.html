@@ -5,13 +5,16 @@
         <meta name="viewport" content="width=device-width, initial-scale=1.0">
         <meta http-equiv="X-UA-Compatible" content="ie=edge">
         <meta name="google-site-verification" content="ZlfC6LPbIl8QMogAf9hWUt9xNqocwt4niXcpc56reIs" />
-        <title>Kail's Blog - jupyter</title>
+        <title>Kail's Blog - Running Ansible Against Chroot Via SSh</title>
         <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/normalize/8.0.1/normalize.min.css"/>
         <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.2/css/all.min.css"/>
         <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Roboto+Slab|Ruda"/>
         <link rel="stylesheet" type="text/css" href="https://blog.kail.io/theme/css/main.css"/>
         <link rel="stylesheet" type="text/css" href="https://blog.kail.io/theme//copy/copy.css">
         <link href="https://blog.kail.io/feeds/all.atom.xml" type="application/atom+xml" rel="alternate" title="Kail's Blog Atom Feed"/>
+
+<meta name="tags" content="ansible" />
+<meta name="tags" content="chroot" />
 </head>
 <body>
 <style>.github-corner:hover .octo-arm {
@@ -57,25 +60,78 @@
                     <li><a href="https://blog.kail.io/pages/about.html">About</a></li>
         </ul>
     </nav>
-    <main>
-        <section id="list">
-            <h2>#jupyter</h2>
+<main>
+    <article>
+        <h1>Running Ansible Against Chroot Via SSh</h1>
+        
+        <aside>
             <ul>
-                    <li>
-                        <a href="https://blog.kail.io/simple-nvidia-pytorch-container.html">Simple Nvidia PyTorch Container</a>
-                        <time>Sep 2023</time>
-                    </li>
-                    <li>
-                        <a href="https://blog.kail.io/running-a-jupyter-kernel-in-apptainer.html">Running A Jupyter Kernel In Apptainer</a>
-                        <time>Aug 2023</time>
-                    </li>
-                    <li>
-                        <a href="https://blog.kail.io/adding-anaconda-environment-to-jupyter.html">Adding Anaconda Environment to Jupyter</a>
-                        <time>Feb 2023</time>
-                    </li>
+                <li>
+                    <time datetime="2101-01-02 12:00:00-05:00">Jan 02, 2101</time>
+                </li>
+                <li>
+                    Categories:
+                    <a href="https://blog.kail.io/category/ansible.html"><em>Ansible</em></a>
+                </li>
+                <li>
+                    Tags:
+                    <a href="https://blog.kail.io/tag/ansible.html"><em>#ansible</em></a>
+                    <a href="https://blog.kail.io/tag/chroot.html"><em>#chroot</em></a>
+                </li>
             </ul>
-        </section>
-    </main>
+        </aside>
+        <p>In the previous article I walked through running Ansible against a golden 
+image using the chroot connector plugin.  An alternative method, that doesn't
+require running as root, uses openssh server directives to set the root directory
+of an incoming ssh connection as the chroot directory</p>
+<p>This method still has some of the limitations as before with managing systemd
+so that will need to be taken into account, but it does remove one extra requirement.</p>
+<p>I encountered this method with using the playbooks made for Base Command Manager,
+and therefore can be integrated into an Ansible playbook to setup and teardown
+these connections for multiple images over multiple ports.</p>
+<div class="admonition warning">
+<p class="admonition-title">Warning</p>
+<p>It is recommended to not leave these ports up and open as it will open up your images
+to access on the network.</p>
+</div>
+<h2>Modifying ssh</h2>
+<p>As before I'll be working</p>
+<div class="highlight"><pre><span></span><code>ChrootDirectory=/tmp/new
+</code></pre></div>
+
+<ul>
+<li>
+<p>Add port to top</p>
+</li>
+<li>
+<p>Match the local port to a specific tunnel</p>
+</li>
+</ul>
+<div class="highlight"><pre><span></span><code><span class="x">Match LocalPort </span><span class="cp">{{</span> <span class="nv">software_image.tunnel</span> <span class="cp">}}</span>
+<span class="x">  ChrootDirectory /cm/images/</span><span class="cp">{{</span> <span class="nv">software_image.name</span> <span class="cp">}}</span>
+<span class="x">  X11Forwarding no</span>
+</code></pre></div>
+    </article>
+    <section class="series-nav">
+
+        <h3>This post is Part <built-in method index of str object at 0x7fd8ac77c2f0> of the "" series:</h3>
+        <ol class="parts">
+        </ol>
+
+    </section>
+    <section class="post-nav">
+        <div id="left-page">
+            <div id="left-link">
+            </div>
+        </div>
+        <div id="right-page">
+            <div id="right-link">
+            </div>
+        </div>
+    </section>
+    <div>
+    </div>
+</main>
     <footer>
         <h6>
             Rendered by <a href="http://getpelican.com/">Pelican</a> &nbsp;&bull;&nbsp; Theme by <a href="https://github.com/aleylara/Peli-Kiera">Peli-Kiera</a> 
