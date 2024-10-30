@@ -1,12 +1,48 @@
 @import url("pygment.css");
 
+:root {
+    --gruvbox-bg-color: #282828;
+    --gruvbox-bg0_h-color: #1d2021;
+    --gruvbox-bg0-color: #282828;
+    --gruvbox-bg1-color: #3c3836;
+    --gruvbox-bg2-color: #504945;
+    --gruvbox-bg3-color: #665c54;
+    --gruvbox-bg4-color: #7c6f64;
+    --gruvbox-bg0_s-color: #32302f;
+
+    --gruvbox-fg0-color: #fbf1c7;
+    --gruvbox-fg1-color: #ebdbb2;
+    --gruvbox-fg2-color: #d5c4a1;
+    --gruvbox-fg3-color: #bdae93;
+    --gruvbox-fg4-color: #a89984;
+
+    --gruvbox-gray-color: #928374;
+    --gruvbox-gray-bright-color: #a89984;
+
+    --gruvbox-red-color: #cc241d;
+    --gruvbox-red-bright-color: #fb4934;
+    --gruvbox-green-color: #98971a;
+    --gruvbox-green-bright-color: #b8bb26;
+    --gruvbox-yellow-color: #d79921;
+    --gruvbox-yellow-bright-color: #fabd2f;
+    --gruvbox-blue-color: #458588;
+    --gruvbox-blue-bright-color: #83a598;
+    --gruvbox-purple-color: #b16286;
+    --gruvbox-purple-bright-color: #d3869b;
+    --gruvbox-aqua-color: #689d6a;
+    --gruvbox-aqua-bright-color: #8ec07c;
+    --gruvbox-orange-color: #d65d0e;
+    --gruvbox-orange-bright-color: #fe8019;
+
+}
+
 body {
   margin: 0;
   padding: 0;
   overflow-x: hidden;
   font-family: "Roboto Slab", serif;
-  color: #333333;
-  background-color: #fff;
+  color: var(--gruvbox-fg1-color);
+  background-color: var(--gruvbox-bg-color);
 }
 
 h1,
@@ -17,6 +53,16 @@ h5,
 h6,
 time {
   font-family: "Ruda", sans-serif;
+}
+
+h2,
+h3,
+h4,
+h5,
+h6 {
+  font-family: "Ruda", sans-serif;
+  padding-bottom: 0.5em;
+  border-bottom: solid 1px var(--gruvbox-bg1-color);
 }
 
 #container {
@@ -48,8 +94,15 @@ time {
   font-size: 2.8rem;
 }
 
+#container header h1 a:hover {
+  font-size: 2.8rem;
+  color: var(--gruvbox-gray-bright-color);
+}
+
+
 #container header h1 a {
-  color: #000000;
+  /* color: #000000; */
+  color: var(--gruvbox-gray-color);
   font-size: 2.8rem;
 }
 
@@ -77,7 +130,7 @@ time {
 
 #container nav {
   /* border-bottom: solid 3px #cecece; */
-  border-bottom: solid 3px #ffba33;
+  border-bottom: solid 3px var(--gruvbox-orange-bright-color);
   padding-bottom: 0.5em;
   font-family: "Ruda", sans-serif;
 }
@@ -103,7 +156,7 @@ time {
 
 #container main {
   flex: 1 0 0;
-  line-height: 1.5;
+  line-height: 1.7em;
   font-size: 1rem;
 }
 
@@ -127,6 +180,22 @@ time {
   color: #666666;
 }
 */
+#container h1 a:hover {
+    /* color: #83a598; */
+    color: var(--gruvbox-orange-color);
+}
+#container h1 a{
+    /* color: #98971a; */
+    color: var(--gruvbox-aqua-color);
+}
+
+#container article h1,
+#container section h1 {
+    /* color: #98971a; */
+    color: var(--gruvbox-fg1-color);
+}
+
+
 
 #container p a {
   font-style: italic;
@@ -168,7 +237,7 @@ time {
   padding: 0.5em 0;
   display: flex;
   justify-content: space-between;
-  border-top: 1px solid #f7f7f7;
+  border-top: 1px solid var(--gruvbox-gray-color);
   font-size: 0.9em;
 }
 
@@ -176,7 +245,7 @@ time {
   margin: 0.5em 0;
   padding: 0.5em 0;
   justify-content: center;
-  border-top: 1px solid #f7f7f7;
+  border-top: 1px solid var(--gruvbox-gray-color);
   font-size: 0.9em;
 }
 
@@ -204,11 +273,15 @@ time {
 
 #container main article pre,
 #container main section pre {
-  background-color: #282828;
+  /* background-color: #282828; */
+  background-color: var(--gruvbox-bg1-color);
   overflow-x: auto;
   padding: 0.8em 0.1em 0.8em 0.8em;
   font-size: 0.8em;
-  box-shadow: 0 -1px 0 #bbbbbb inset;
+  /* box-shadow: 0 -1px 0 #ebdbb2 inset; */
+  border-color: var(--gruvbox-bg1-color);
+  border-style: solid;
+  border-width: 1px;
 }
 
 #container main article pre code,
@@ -219,7 +292,10 @@ time {
 #container main article p code,
 #container main section p code {
   padding: 0.2em;
-  background-color: #f5f5f5;
+  /* background-color: #ebdbb2; */
+  /* color: #282828; */
+  background-color: var(--gruvbox-bg1-color);
+  color: #fe8019;
   font-size: 0.8em;
 }
 
@@ -234,10 +310,10 @@ time {
   background-color: #f5f5f5;
   border-width: 1px;
   border-style: solid;
-  border-color: #cccccc #cccccc #bbbbbb;
+  border-color: #cccccc #cccccc var(--gruvbox-fg1-color);
   border-image: none;
   border-radius: 3px;
-  box-shadow: 0 -1px 0 #bbbbbb inset;
+  box-shadow: 0 -1px 0 var(--gruvbox-fg1-color) inset;
 }
 
 #container main h1 {
@@ -245,7 +321,7 @@ time {
 }
 
 #container footer {
-  border-top: solid 1px #cecece;
+  border-top: solid 1px var(--gruvbox-gray-color);
 }
 
 #container footer h6 {
@@ -257,7 +333,7 @@ time {
 #container main article aside {
   margin: 0.5em 0;
   font-family: "Ruda", sans-serif;
-  color: #909090;
+  color: #d5c4a1;
   font-size: 0.8em;
 }
 
@@ -277,7 +353,7 @@ time {
 }
 
 a {
-  color: #666666;
+  color: var(--gruvbox-gray-bright-color);
   text-decoration: none;
 }
 
@@ -285,14 +361,14 @@ a {
 figure img,
 img {
   width: 100%;
-  box-shadow: 0 3px 3px #bbbbbb;
+  box-shadow: 0 3px 3px var(--gruvbox-fg1-color);
 }
 
 .full-image,
 figure.full img,
 img[src*="full"] {
   width: 100%;
-  box-shadow: 0 3px 3px #bbbbbb;
+  box-shadow: 0 3px 3px var(--gruvbox-fg1-color);
 }
 
 @supports (width: 100vw) {
@@ -312,7 +388,7 @@ img[src*="full"] {
 figure.mid img,
 img[src*="mid"] {
   width: 100%;
-  box-shadow: 0 3px 3px #bbbbbb;
+  box-shadow: 0 3px 3px var(--gruvbox-fg1-color);
 }
 
 @supports (width: 100vw) {
@@ -345,7 +421,7 @@ img[src*="float-left"] {
   width: 300px;
   float: left;
   margin: 0 1em 1em -3em;
-  box-shadow: 0 3px 3px #bbbbbb;
+  box-shadow: 0 3px 3px var(--gruvbox-fg1-color);
 }
 
 @media only screen and (max-width: 800px) {
@@ -364,7 +440,7 @@ img[src*="float-right"] {
   width: 300px;
   float: right;
   margin: 0 -3em 1em 1em;
-  box-shadow: 0 3px 3px #bbbbbb;
+  box-shadow: 0 3px 3px var(--gruvbox-fg1-color);
 }
 
 @media only screen and (max-width: 800px) {
@@ -414,7 +490,8 @@ table {
 }
 
 table thead {
-  background-color: #cecece;
+  background-color: var(--gruvbox-fg1-color);
+  color: #3c3836;
 }
 
 blockquote {
@@ -423,7 +500,7 @@ blockquote {
   padding: 0.5em 2em;
   position: relative;
   background-color: #efefef;
-  box-shadow: 0 -1px 0 #bbbbbb inset;
+  box-shadow: 0 -1px 0 var(--gruvbox-fg1-color)inset;
 }
 
 blockquote::before {
@@ -506,9 +583,9 @@ div.admonition ul, div.admonition ol {
 /* -- danger, error -- */
 div.danger,
 div.error {
-  color: #b94a48;
-  background-color: #f2dede;
-  border-color: #eed3d7;
+  color: var(--gruvbox-bg-color);
+    background-color: var(--gruvbox-red-bright-color);
+    border-color: var(--gruvbox-red-color);
 }
 
 
@@ -517,22 +594,27 @@ div.warning,
 div.caution,
 div.attention {
 
+    color: var(--gruvbox-bg-color);
+    background-color: var(--gruvbox-yellow-bright-color);
+    border-color: var(--gruvbox-yellow-color);
+
 }
 
 /* -- note, important -- */
 div.note,
 div.important {
-  color: #468847;
-  background-color: #dff0d8;
-  border-color: #d6e9c6;
+  color: var(--gruvbox-bg-color);
+    background-color: var(--gruvbox-aqua-bright-color);
+    border-color: var(--gruvbox-aqua-color);
 }
 
 /* -- hint, tip -- */
 div.hint,
 div.tip {
-  color: #3a87ad;
-  background-color: #d9edf7;
-  border-color: #bce8f1;
+  color: var(--gruvbox-bg-color);
+  /* color: var(--gruvbox-bg-color); */
+    background-color: var(--gruvbox-blue-bright-color);
+    border-color: var(--gruvbox-blue-color);
 }
 
 div.danger p.admonition-title:before,

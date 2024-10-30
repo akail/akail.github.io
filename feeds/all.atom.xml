@@ -1,47 +1,5 @@
 <?xml version="1.0" encoding="utf-8"?>
-<feed xmlns="http://www.w3.org/2005/Atom"><title>Kail's Blog</title><link href="https://blog.kail.io/" rel="alternate"></link><link href="https://blog.kail.io/feeds/all.atom.xml" rel="self"></link><id>https://blog.kail.io/</id><updated>2024-07-20T12:00:00-04:00</updated><subtitle>Somewhat HPC related blog</subtitle><entry><title>Top500 Review 20240</title><link href="https://blog.kail.io/top500-review-20240.html" rel="alternate"></link><published>2024-07-20T12:00:00-04:00</published><updated>2024-07-20T12:00:00-04:00</updated><author><name>Andrew Kail</name></author><id>tag:blog.kail.io,2024-07-20:/top500-review-20240.html</id><content type="html"></content><category term="HPC"></category><category term="apptainer"></category><category term="julia"></category></entry><entry><title>Testing OpenSUSE Aeon in Proxmox</title><link href="https://blog.kail.io/testing-opensuse-aeon-in-proxmox.html" rel="alternate"></link><published>2024-06-05T00:00:00-04:00</published><updated>2024-06-05T00:00:00-04:00</updated><author><name>Andrew Kail</name></author><id>tag:blog.kail.io,2024-06-05:/testing-opensuse-aeon-in-proxmox.html</id><summary type="html">&lt;ul&gt;
-&lt;li&gt;Recently saw some news about Aeon and wanted to give it a try&lt;/li&gt;
-&lt;li&gt;normally been an endeavouros user &lt;/li&gt;
-&lt;li&gt;enjoy having the latest hardware&lt;/li&gt;
-&lt;li&gt;highly updated core those is beginning to bug me sometimes&lt;/li&gt;
-&lt;li&gt;With distrobox and flathub maybe I can get around it&lt;/li&gt;
-&lt;li&gt;Would like to try it out for …&lt;/li&gt;&lt;/ul&gt;</summary><content type="html">&lt;ul&gt;
-&lt;li&gt;Recently saw some news about Aeon and wanted to give it a try&lt;/li&gt;
-&lt;li&gt;normally been an endeavouros user &lt;/li&gt;
-&lt;li&gt;enjoy having the latest hardware&lt;/li&gt;
-&lt;li&gt;highly updated core those is beginning to bug me sometimes&lt;/li&gt;
-&lt;li&gt;With distrobox and flathub maybe I can get around it&lt;/li&gt;
-&lt;li&gt;Would like to try it out for a bit in proxmox&lt;/li&gt;
-&lt;li&gt;
-&lt;p&gt;Will need to be multiple attempts&lt;/p&gt;
-&lt;/li&gt;
-&lt;li&gt;
-&lt;p&gt;Download the raw image from opensuse&lt;/p&gt;
-&lt;/li&gt;
-&lt;/ul&gt;
-&lt;div class="admonition warning"&gt;
-&lt;p class="admonition-title"&gt;Warning&lt;/p&gt;
-&lt;p&gt;This is a beta image right now&lt;/p&gt;
-&lt;/div&gt;
-&lt;p&gt;TODO Add download image
-- currenltly they only provide a raw image, not an iso&lt;/p&gt;
-&lt;p&gt;extract the file&lt;/p&gt;
-&lt;div class="highlight"&gt;&lt;pre&gt;&lt;span&gt;&lt;/span&gt;&lt;code&gt;&lt;span class="go"&gt;╭─akail@bluefalcon ~/Downloads&lt;/span&gt;
-&lt;span class="go"&gt;╰─➤  xz -d openSUSE-Aeon-Installer.x86_64.raw.xz&lt;/span&gt;
-&lt;span class="go"&gt;╭─akail@bluefalcon ~/Downloads&lt;/span&gt;
-&lt;span class="go"&gt;╰─➤  ls -al openSUSE-Aeon-Installer.x86_64.raw&lt;/span&gt;
-&lt;span class="go"&gt;-rw-r--r-- 1 akail akail 7438598144 Jun  5 10:20 openSUSE-Aeon-Installer.x86_64.raw&lt;/span&gt;
-&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;
-
-&lt;ul&gt;
-&lt;li&gt;Next we upload to proxmox&lt;/li&gt;
-&lt;li&gt;since its a raw file had to name it to ISO&lt;/li&gt;
-&lt;/ul&gt;
-&lt;p&gt;TODO Add upload image&lt;/p&gt;
-&lt;ul&gt;
-&lt;li&gt;did 2 cores, 32 GB disk, 4 GB of RAM&lt;/li&gt;
-&lt;/ul&gt;
-&lt;p&gt;And it failed&lt;/p&gt;</content><category term="Proxmox"></category><category term="opensuse"></category><category term="proxmox"></category></entry><entry><title>Running A Julia Kernel In Apptainer</title><link href="https://blog.kail.io/running-a-julia-kernel-in-apptainer.html" rel="alternate"></link><published>2024-05-20T12:00:00-04:00</published><updated>2024-05-20T12:00:00-04:00</updated><author><name>Andrew Kail</name></author><id>tag:blog.kail.io,2024-05-20:/running-a-julia-kernel-in-apptainer.html</id><summary type="html">&lt;p&gt;In a previous article &lt;a href="https://blog.kail.io/running-a-jupyter-kernel-in-apptainer.html"&gt;Singularity Jupyter Kernel&lt;/a&gt; 
+<feed xmlns="http://www.w3.org/2005/Atom"><title>Kail's Blog</title><link href="https://blog.kail.io/" rel="alternate"></link><link href="https://blog.kail.io/feeds/all.atom.xml" rel="self"></link><id>https://blog.kail.io/</id><updated>2024-05-20T12:00:00-04:00</updated><subtitle>Somewhat HPC related blog</subtitle><entry><title>Running A Julia Kernel In Apptainer</title><link href="https://blog.kail.io/running-a-julia-kernel-in-apptainer.html" rel="alternate"></link><published>2024-05-20T12:00:00-04:00</published><updated>2024-05-20T12:00:00-04:00</updated><author><name>Andrew Kail</name></author><id>tag:blog.kail.io,2024-05-20:/running-a-julia-kernel-in-apptainer.html</id><summary type="html">&lt;p&gt;In a previous article &lt;a href="https://blog.kail.io/running-a-jupyter-kernel-in-apptainer.html"&gt;Singularity Jupyter Kernel&lt;/a&gt; 
 I went through setting up an Apptainer container to run iPython kernels in Jupyterlab.&lt;/p&gt;
 &lt;p&gt;Recently I started looking into Julia and wanted to do the same setup.  It turned
 out to not be as straightforward for me as I was not familiar with …&lt;/p&gt;</summary><content type="html">&lt;p&gt;In a previous article &lt;a href="https://blog.kail.io/running-a-jupyter-kernel-in-apptainer.html"&gt;Singularity Jupyter Kernel&lt;/a&gt; 
@@ -242,7 +200,7 @@ has served us well in both the features it provides and the support from Nvidia.
 one HPC Cluster we manage runs BCM. &lt;/p&gt;
 &lt;p&gt;Our lone outlier is a unique test case were we needed to manage both Linux
 and Windows nodes in the same environment, so we instead went with another
-provisioning software (Cobbler)[https://cobbler.github.io/] which had the ability
+provisioning software &lt;a href="https://cobbler.github.io/"&gt;Cobbler&lt;/a&gt; which had the ability
 to support a Windows node.  We quickly however
 realized there were many features missing we needed to fill via other means and the
 Windows support proved more difficult that we like.&lt;/p&gt;
